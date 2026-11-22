@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Avis Favorable ! Le jeu télé de la prévention incendie, en équipe, à projeter.">
+<title>Avis Favorable !</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Monoton&family=Chakra+Petch:wght@400;500;600;700&display=swap">
+<style>
+/* Plateau de jeu télé néon : un écran plein cadre, projeté. Panneaux sombres cerclés de néon, rose = équipe 1, cyan = équipe 2. */
+:root{
+  --bg:#07070F; --panel:#0E0E1E; --panel2:#15152B; --line:#2C2C4C;
+  --fg:#EDEBFF; --muted:#A9A6CF;
+  --pink:#FF2E88; --cyan:#2EF2FF; --amber:#FFC93C; --violet:#A47BFF; --lime:#B6FF3B; --bad:#FF5A5A;
+  --f-title:'Monoton', 'Chakra Petch', system-ui, sans-serif;
+  --f-ui:'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:16px;overflow:hidden;
+  background-image:linear-gradient(rgba(46,242,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(46,242,255,.06) 1px,transparent 1px);background-size:40px 40px}
+#app{height:100%;box-sizing:border-box;padding-block:clamp(12px,2.2vh,28px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:clamp(10px,2vh,22px);overflow-y:auto}
+button,input,select{font-family:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+h1,h2,h3,p{margin:0}
+h2{text-wrap:balance}
+
+/* Titres néon */
+.neon-p{color:#fff;text-shadow:0 0 6px var(--pink),0 0 22px var(--pink),0 0 44px var(--pink)}
+.neon-c{color:#fff;text-shadow:0 0 6px var(--cyan),0 0 20px var(--cyan),0 0 40px var(--cyan)}
+.logo{font-family:var(--f-title);font-weight:400;letter-spacing:.05em;line-height:1;text-align:center}
+.eyebrow{font-size:clamp(12px,1.4vw,15px);font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan)}
+
+/* Barre du haut */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.top .mini{font-family:var(--f-title);font-size:clamp(18px,2.2vw,26px)}
+.top .tools{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Boutons façon menu de console */
+.btn{appearance:none;border:2px solid var(--line);background:var(--panel);border-radius:16px;padding:12px 20px;font-size:clamp(15px,1.6vw,19px);font-weight:700;cursor:pointer;transition:transform .12s, box-shadow .12s, border-color .12s;min-height:48px}
+.btn:hover{transform:translateY(-2px) scale(1.02);border-color:var(--cyan);box-shadow:0 0 16px rgba(46,242,255,.35)}
+.btn:active{transform:scale(.97)}
+.btn.big{font-size:clamp(18px,2.4vw,28px);padding:18px 30px;border-radius:22px;min-height:64px}
+.btn.pink{border-color:var(--pink);box-shadow:0 0 14px rgba(255,46,136,.35)}
+.btn.pink:hover{box-shadow:0 0 22px rgba(255,46,136,.6)}
+.btn.cyan{border-color:var(--cyan);box-shadow:0 0 14px rgba(46,242,255,.3)}
+.btn.ghost{background:transparent;border-color:var(--line);font-weight:600;font-size:14px;padding:8px 14px;min-height:44px;border-radius:12px}
+.btn.ok{border-color:var(--lime);color:var(--lime)}
+.btn.no{border-color:var(--bad);color:var(--bad)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+
+.panel{background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:clamp(14px,2vw,24px)}
+.glow-p{border-color:var(--pink);box-shadow:0 0 18px rgba(255,46,136,.4),inset 0 0 18px rgba(255,46,136,.18)}
+.glow-c{border-color:var(--cyan);box-shadow:0 0 18px rgba(46,242,255,.35),inset 0 0 18px rgba(46,242,255,.15)}
+.muted{color:var(--muted)}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.grow{flex:1 1 auto;min-height:0}
+.row{display:flex;gap:clamp(10px,1.6vw,20px);flex-wrap:wrap;align-items:center}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.8em;height:1.8em;padding:0 .4em;border:2px solid currentColor;border-radius:8px;font-weight:700;font-size:.9em}
+
+/* Écran titre */
+.title-screen .logo-a{font-size:clamp(64px,12vw,170px)}
+.title-screen .logo-b{font-size:clamp(34px,6.2vw,88px)}
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(820px,100%)}
+@media (max-width:640px){.menu{grid-template-columns:1fr}}
+.menu .btn{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left}
+.menu .btn small{font-size:14px;font-weight:500;color:var(--muted)}
+
+/* Équipes */
+.teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,2vw,24px)}
+@media (max-width:720px){.teams{grid-template-columns:1fr}}
+.team-card{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.team-card input[type=text]{background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:10px 14px;font-size:clamp(18px,2vw,24px);font-weight:700;text-align:center;width:min(320px,100%)}
+.emblems{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.emblem{width:56px;height:56px;border-radius:14px;border:2px solid var(--line);background:var(--panel2);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.emblem[aria-pressed=true]{border-color:currentColor;box-shadow:0 0 12px currentColor}
+.buzzcheck{font-size:15px;font-weight:600;padding:8px 14px;border-radius:999px;border:2px dashed var(--line);color:var(--muted)}
+.buzzcheck.on{border-style:solid;border-color:var(--lime);color:var(--lime)}
+.stepper{display:inline-flex;align-items:center;gap:10px;font-weight:700}
+.stepper button{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);font-size:22px;font-weight:700;cursor:pointer}
+
+/* Scores */
+.scorebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.score{display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:18px;padding:8px 14px;background:var(--panel)}
+.score .name{font-weight:700;font-size:clamp(15px,1.6vw,20px);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score .pts{margin-left:auto;font-size:clamp(24px,3vw,40px);font-weight:700;font-variant-numeric:tabular-nums}
+.score.t0{border-color:var(--pink)} .score.t0 .pts{color:var(--pink)}
+.score.t1{border-color:var(--cyan)} .score.t1 .pts{color:var(--cyan)}
+.score.flash{animation:flash .5s 2}
+@keyframes flash{50%{background:var(--panel2);transform:scale(1.03)}}
+
+/* Plateau */
+.board{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:24px 4px 10px}
+.node{position:relative;flex:1 0 150px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.node::before{content:"";position:absolute;top:44px;left:0;right:0;height:6px;background:var(--line);z-index:0}
+.node:first-child::before{left:50%} .node:last-child::before{right:50%}
+.node.done::before{background:var(--lime)}
+.node .disc{position:relative;z-index:1;width:92px;height:92px;border-radius:50%;background:var(--panel);border:4px solid var(--line);display:flex;align-items:center;justify-content:center}
+.node.done .disc{border-color:var(--lime);box-shadow:0 0 14px rgba(182,255,59,.45)}
+.node.now .disc{border-color:var(--amber);box-shadow:0 0 22px rgba(255,201,60,.65);animation:pulse 1.4s infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.node .lbl{font-weight:700;font-size:clamp(14px,1.4vw,17px)}
+.node .sub{font-size:13px;color:var(--muted)}
+.node.now .lbl{color:var(--amber)}
+
+/* Comment jouer */
+.howto{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(14px,2vw,26px);width:min(1100px,100%)}
+@media (max-width:760px){.howto{grid-template-columns:1fr}}
+.howto ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:10px;font-size:clamp(16px,1.7vw,21px);line-height:1.4}
+.ctl{display:flex;align-items:center;gap:12px;font-size:clamp(15px,1.5vw,19px);font-weight:600}
+.ctl-list{display:flex;flex-direction:column;gap:14px}
+
+/* Compte à rebours */
+#overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(7,7,15,.78);z-index:50;pointer-events:none}
+#overlay .cd{font-family:var(--f-title);font-size:clamp(90px,20vw,260px);animation:pop .7s ease-out both}
+@keyframes pop{from{transform:scale(2.2);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* Question */
+.qcard{display:flex;flex-direction:column;gap:clamp(10px,1.6vh,18px)}
+.qmeta{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:clamp(13px,1.3vw,16px);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.qtext{font-size:clamp(22px,3vw,42px);font-weight:700;line-height:1.2;text-wrap:balance}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:clamp(28px,3.4vw,48px);color:var(--amber)}
+.timer.low{color:var(--bad);animation:flash .5s infinite}
+.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,1.4vw,16px)}
+@media (max-width:640px){.answers{grid-template-columns:1fr}}
+.ans{display:flex;align-items:center;gap:14px;border-radius:18px;padding:clamp(10px,1.6vh,18px) 18px;border:3px solid var(--c);background:var(--panel);font-size:clamp(17px,2vw,26px);font-weight:600;transition:opacity .3s, transform .3s, box-shadow .3s}
+.ans .let{flex:0 0 auto;width:1.7em;height:1.7em;border-radius:10px;background:var(--c);color:#07070F;display:flex;align-items:center;justify-content:center;font-weight:700}
+.ans.good{box-shadow:0 0 28px var(--c);transform:scale(1.03)}
+.ans.dim{opacity:.25}
+.c0{--c:var(--pink)} .c1{--c:var(--cyan)} .c2{--c:var(--amber)} .c3{--c:var(--violet)}
+.expl{font-size:clamp(14px,1.5vw,18px);color:var(--muted);line-height:1.4}
+
+/* 4 coins */
+.room{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,1.4vw,16px)}
+.corner{border-radius:20px;border:3px solid var(--c);padding:clamp(12px,2vh,22px);display:flex;flex-direction:column;gap:6px;background:var(--panel);transition:opacity .3s, box-shadow .3s}
+.corner .where{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--c)}
+.corner .txt{font-size:clamp(17px,2.1vw,27px);font-weight:700}
+.corner.good{box-shadow:0 0 30px var(--c)} .corner.dim{opacity:.25}
+.count{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.count{grid-template-columns:1fr}}
+
+/* Money Drop */
+.md{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.md{grid-template-columns:1fr}}
+.md-team{display:flex;flex-direction:column;gap:10px}
+.md-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:clamp(15px,1.6vw,20px)}
+.md-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.slot{border:3px solid var(--c);border-radius:14px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--panel2);overflow:hidden}
+.slot .n{font-size:clamp(22px,2.6vw,34px);font-weight:700;font-variant-numeric:tabular-nums}
+.slot .pm{display:flex;gap:4px}
+.slot .pm button{width:40px;height:40px;border-radius:10px;border:2px solid var(--line);background:var(--panel);font-size:20px;font-weight:700;cursor:pointer}
+.slot.drop .n{animation:drop .9s ease-in forwards}
+.slot.drop{opacity:.35}
+@keyframes drop{to{transform:translateY(120px);opacity:0}}
+.chips{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;min-height:14px}
+.chip{width:12px;height:12px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px var(--amber)}
+
+/* Tabou */
+.tabou-card{width:min(440px,100%);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.tabou-word{font-size:clamp(30px,4vw,54px);font-weight:700;line-height:1.05}
+.forbid{display:flex;flex-direction:column;gap:8px;width:100%}
+.forbid span{border-radius:12px;padding:8px;background:var(--panel2);border:2px solid var(--bad);font-size:clamp(17px,1.9vw,24px);font-weight:600;text-decoration:line-through;text-decoration-color:var(--bad)}
+
+/* Finale */
+.duel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lane{display:flex;align-items:center;gap:12px;border-radius:18px;border:3px solid var(--c);padding:10px 14px;background:var(--panel)}
+.lane.t0{--c:var(--pink)} .lane.t1{--c:var(--cyan)}
+.pips{display:flex;gap:6px;margin-left:auto}
+.pip{width:clamp(18px,2.2vw,28px);height:clamp(18px,2.2vw,28px);border-radius:6px;border:2px solid var(--c)}
+.pip.on{background:var(--c);box-shadow:0 0 10px var(--c)}
+.lane.buzz{animation:flash .35s 3;box-shadow:0 0 30px var(--c)}
+.hand{font-size:clamp(20px,2.4vw,32px);font-weight:700;text-align:center;min-height:1.4em}
+.stamp{font-family:'Chakra Petch',sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(46px,9vw,130px);line-height:.95;color:var(--pink);border:10px double var(--pink);border-radius:16px;padding:.15em .35em;transform:rotate(-8deg);text-shadow:0 0 18px rgba(255,46,136,.6);animation:stamp .45s cubic-bezier(.2,1.6,.4,1) both;text-align:center}
+@keyframes stamp{from{transform:rotate(-8deg) scale(3);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
+
+/* Résultats */
+.res{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:min(900px,100%)}
+@media (max-width:640px){.res{grid-template-columns:1fr}}
+.res .panel{display:flex;flex-direction:column;align-items:center;gap:10px}
+.res .gain{font-size:clamp(40px,6vw,80px);font-weight:700;font-variant-numeric:tabular-nums}
+.bounce{animation:bounce 1s ease-in-out infinite}
+@keyframes bounce{50%{transform:translateY(-10px)}}
+
+/* Régie */
+#regie{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--panel);border-left:2px solid var(--amber);z-index:40;box-sizing:border-box;padding:20px max(16px,env(safe-area-inset-right,0px)) 20px 20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;box-shadow:-10px 0 40px rgba(0,0,0,.6)}
+#regie h3{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber)}
+#regie .ans-key{font-size:22px;font-weight:700;color:var(--lime)}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:14px;align-items:center}
+
+/* Banque / composition */
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.form-grid{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border:2px solid var(--line);border-radius:14px;background:var(--panel2);cursor:pointer;font-weight:600}
+.opt input{width:22px;height:22px;accent-color:var(--pink)}
+.opt.soon{opacity:.45;cursor:default}
+.opt .d{margin-left:auto;font-size:13px;color:var(--muted);font-weight:500}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600;background:var(--panel2);cursor:pointer;min-height:40px}
+.tag[aria-pressed=true]{border-color:var(--cyan);color:var(--cyan)}
+select{background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;min-height:44px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+th{color:var(--muted);font-weight:600}
+.scroll{overflow:auto;max-height:44vh}
+.note{font-size:14px;color:var(--muted);line-height:1.45}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div id="app" aria-live="polite"></div>
+<div id="overlay" hidden><div class="cd neon-p" id="cdtext"></div></div>
+<aside id="regie" hidden aria-label="Régie de l'animateur"></aside>
+
+<script>
+"use strict";
+/* ============ DONNÉES ============ */
+/* Questions de démonstration (bonne réponse en premier, mélangée à l'affichage). À faire valider par un PRV2. */
+const DEMO_Q = [
+["SSI",1,"Quel équipement ferme automatiquement une porte coupe-feu sur alarme ?",["Un DAS","Un BAES","Un ECS","Un RIA"],"DAS : dispositif actionné de sécurité (ferme-porte, clapet, volet…)."],
+["Moyens de secours",1,"Que signifie BAES ?",["Bloc autonome d'éclairage de sécurité","Bouton d'arrêt d'urgence de sécurité","Boîtier d'alarme électrique standard","Bloc d'alimentation électrique secouru"],""],
+["Classement des ERP",1,"Que signifie ERP ?",["Établissement recevant du public","Établissement à risque particulier","Espace de rassemblement public","Établissement réglementé de proximité"],""],
+["Classement des ERP",1,"Combien de catégories d'ERP existe-t-il ?",["5","3","4","6"],""],
+["Classement des ERP",2,"À partir de quel effectif un ERP est-il classé en 1re catégorie ?",["Plus de 1 500 personnes","Plus de 700 personnes","Plus de 300 personnes","Plus de 3 000 personnes"],"1re : plus de 1 500 ; 2e : 701 à 1 500 ; 3e : 301 à 700 ; 4e : 300 et moins, hors 5e."],
+["Classement des ERP",1,"Quel type d'ERP correspond aux restaurants et débits de boissons ?",["Type N","Type R","Type O","Type M"],""],
+["Classement des ERP",1,"Le type O correspond aux…",["Hôtels et autres hébergements","Établissements de soins","Salles de spectacles","Bureaux"],""],
+["Classement des ERP",1,"Le type L regroupe…",["Les salles d'audition, de réunion et de spectacles","Les magasins de vente","Les établissements d'enseignement","Les bibliothèques"],""],
+["Classement des ERP",2,"Le type U correspond aux…",["Établissements de soins","Établissements sportifs couverts","Établissements de culte","Musées"],""],
+["Classement des ERP",2,"Le type M correspond aux…",["Magasins de vente et centres commerciaux","Musées","Salles de danse et de jeux","Établissements flottants"],""],
+["SSI",1,"Que signifie CMSI ?",["Centralisateur de mise en sécurité incendie","Central de mesure du signal incendie","Commande manuelle de sécurité incendie","Coffret de maintenance du système incendie"],""],
+["SSI",2,"Quel est le rôle de l'ECS ?",["Recevoir les signaux des détecteurs et signaler le feu","Ouvrir les exutoires de désenfumage","Alimenter les BAES","Couper l'électricité du bâtiment"],"ECS : équipement de contrôle et de signalisation de la détection."],
+["Dégagements",1,"Que signifie « UP » dans les dégagements ?",["Unité de passage","Unité de protection","Usage permanent","Unité de personnel"],""],
+["Dégagements",2,"Quelle est la largeur d'un dégagement de 1 UP ?",["0,90 m","0,60 m","0,80 m","1,20 m"],"1 UP = 0,90 m ; 2 UP = 1,40 m ; au-delà, n × 0,60 m."],
+["Dégagements",2,"Quelle est la largeur d'un dégagement de 2 UP ?",["1,40 m","1,20 m","1,80 m","1,00 m"],"1 UP = 0,90 m ; 2 UP = 1,40 m ; au-delà, n × 0,60 m."],
+["Moyens de secours",1,"À quoi sert une colonne sèche ?",["Amener l'eau des engins aux étages","Stocker l'eau d'extinction","Évacuer les fumées","Alimenter les RIA en permanence"],""],
+["Moyens de secours",1,"Que signifie RIA ?",["Robinet d'incendie armé","Réseau d'intervention automatique","Relais d'incendie alimenté","Réserve incendie autonome"],""],
+["Résistance au feu",2,"Sur une porte, que signifie « EI 60 » ?",["Étanche et isolante 60 minutes","Ignifugée pendant 60 minutes","Ferme-porte réglé à 60 secondes","Résistante à 60 °C"],"E : étanchéité aux flammes et aux gaz chauds ; I : isolation thermique."],
+["Résistance au feu",2,"Dans le classement « R 30 », que désigne la lettre R ?",["La capacité portante","La réaction au feu","Le rayonnement","La résistance aux chocs"],""],
+["Résistance au feu",1,"Une porte coupe-feu doit être…",["Fermée, ou à fermeture automatique sur alarme","Calée ouverte en journée","Toujours verrouillée à clé","Laissée entrouverte pour l'aération"],""],
+["Réaction au feu",2,"En Euroclasses, que signifie la classe A1 ?",["Matériau incombustible","Matériau très inflammable","Matériau qui ne produit pas de fumée","Matériau résistant 1 heure"],""],
+["Désenfumage",1,"Quel est le but principal du désenfumage ?",["Garder les cheminements praticables et limiter la propagation","Éteindre le feu","Refroidir la structure","Ventiler les cuisines"],""],
+["Responsabilités & commissions",1,"Qui est responsable de la sécurité incendie d'un ERP en exploitation ?",["L'exploitant","Le SDIS","La commission de sécurité","Le préfet"],""],
+["Responsabilités & commissions",2,"Qui autorise l'ouverture au public d'un ERP ?",["Le maire, après avis de la commission","Le préventionniste","Le directeur du SDIS","Le bureau de contrôle"],""],
+["Responsabilités & commissions",2,"L'avis de la commission de sécurité est…",["Consultatif","Obligatoirement suivi par le maire","Une décision de justice","Valable sans limite de durée"],"C'est l'autorité de police, le maire, qui prend la décision."],
+["Responsabilités & commissions",1,"Où l'exploitant consigne-t-il vérifications, exercices et travaux ?",["Dans le registre de sécurité","Dans le PV de commission","Sur le plan d'intervention","Dans le règlement intérieur"],""],
+["Implantation & accès",1,"À quoi sert une voie engins ?",["À la circulation et au stationnement des engins de secours","À la livraison des marchandises","Au parking du personnel","À l'évacuation du public"],""],
+["Implantation & accès",2,"À quoi sert une voie échelles ?",["À mettre en station une échelle aérienne","À accéder aux toitures à pied","À stocker les échelles à coulisse","À desservir les sous-sols"],""],
+["Service de sécurité",1,"Que signifie SSIAP ?",["Service de sécurité incendie et d'assistance à personnes","Système de sécurité incendie automatique et portatif","Service spécialisé d'intervention en ascenseurs","Section de surveillance incendie des ateliers publics"],""],
+["Alerte & alarme",2,"Quel équipement d'alarme est le plus complet ?",["Le type 1","Le type 2b","Le type 3","Le type 4"],"Le type 1 associe détection automatique et SSI de catégorie A."],
+["Résistance au feu",1,"Quel est le but du compartimentage ?",["Limiter la propagation du feu et des fumées","Faciliter l'entretien","Isoler du bruit","Réduire l'effectif"],""],
+["Science du feu",1,"Quels sont les trois éléments du triangle du feu ?",["Combustible, comburant, énergie d'activation","Eau, air, chaleur","Flamme, fumée, braise","Oxygène, azote, carbone"],""],
+["Science du feu",2,"Qu'est-ce qu'un embrasement généralisé éclair (flashover) ?",["Le passage brutal d'un feu localisé à tout le volume","Une explosion de gaz de ville","Une reprise de feu après extinction","L'effondrement d'une toiture"],""],
+["Science du feu",3,"Qu'est-ce qu'un backdraft ?",["L'inflammation brutale des fumées après un apport d'air","Un retour de flamme dans une lance","Un feu de cheminée","La propagation par les gaines techniques"],""],
+["SSI",3,"De quoi se compose un SSI de catégorie A ?",["Un SDI et un SMSI","Un SMSI seul","De déclencheurs manuels seuls","D'une alarme de type 4"],""],
+["SSI",3,"Que signifie SDI ?",["Système de détection incendie","Service départemental d'incendie","Signal de déclenchement immédiat","Sortie de dégagement intérieure"],""],
+["Moyens de secours",2,"Quel extincteur convient à un feu de friteuse ?",["Un extincteur classe F","Un extincteur à eau sans additif","Un seau d'eau","Un extincteur à poudre BC uniquement"],""]
+];
+const TABOU = [
+["Colonne sèche",["eau","tuyau","étage","raccord"]],["Porte coupe-feu",["porte","feu","fermer","couloir"]],
+["Extincteur",["éteindre","feu","rouge","poudre"]],["BAES",["lumière","éclairage","bloc","panne"]],
+["Désenfumage",["fumée","fenêtre","ouvrir","air"]],["Commission de sécurité",["visite","maire","avis","réunion"]],
+["Registre de sécurité",["cahier","vérification","signer","exploitant"]],["Dégagement",["sortie","couloir","évacuer","passage"]],
+["Détecteur de fumée",["plafond","bip","alarme","fumée"]],["Voie engins",["route","camion","pompiers","accès"]],
+["Point de rassemblement",["évacuation","dehors","compter","groupe"]],["Déclencheur manuel",["bouton","rouge","vitre","alarme"]],
+["Exercice d'évacuation",["sortir","alarme","entraînement","chronomètre"]],["Effectif",["nombre","personnes","public","calcul"]],
+["Sprinkleur",["eau","plafond","automatique","arrosage"]],["RIA",["robinet","tuyau","enrouleur","eau"]],
+["Plan d'intervention",["carte","pompiers","bâtiment","dessin"]],["Agent SSIAP",["sécurité","surveiller","ronde","diplôme"]],
+["Clapet coupe-feu",["gaine","ventilation","fermer","feu"]],["Flashover",["embrasement","feu","pièce","chaleur"]],
+["Chef d'agrès",["pompier","camion","chef","équipe"]],["Compartimentage",["mur","feu","diviser","porte"]]
+];
+const EMBLEMS = [
+ '<path d="M32 14l5 10 11 1.6-8 7.8 1.9 11L32 39.4 22.1 44.4 24 33.4l-8-7.8 11-1.6z"/>',
+ '<path d="M32 12c4 8 12 12 12 22a12 12 0 0 1-24 0c0-5 3-8 5-11 1 4 3 6 5 6-2-6 0-12 2-17z"/>',
+ '<path d="M32 12c6 9 12 16 12 23a12 12 0 0 1-24 0c0-7 6-14 12-23z"/>',
+ '<path d="M36 10L20 34h10l-4 20 18-26H34z"/>'
+];
+const GAMES = {
+  coins:   {nom:"Les 4 coins", sub:"Questions", min:8, icon:'<rect x="14" y="14" width="14" height="14" rx="3"/><rect x="36" y="14" width="14" height="14" rx="3"/><rect x="14" y="36" width="14" height="14" rx="3"/><rect x="36" y="36" width="14" height="14" rx="3"/>'},
+  tabou:   {nom:"Tabou", sub:"Communication", min:8, icon:'<path d="M14 20h36v20H30l-10 8v-8h-6z"/><path d="M22 30h20" stroke-width="5"/>'},
+  money:   {nom:"Money Drop", sub:"Questions", min:10, icon:'<circle cx="32" cy="32" r="16"/><circle cx="32" cy="32" r="8"/>'},
+  saboteur:{nom:"Le Saboteur", sub:"Bluff", min:3, icon:'<circle cx="32" cy="26" r="10"/><path d="M14 52c2-10 10-14 18-14s16 4 18 14"/><path d="M22 24h20" stroke-width="5"/>'},
+  finale:  {nom:"Le Coup de tampon", sub:"Finale", min:8, icon:'<rect x="24" y="12" width="16" height="18" rx="4"/><path d="M14 36h36v10H14z"/><path d="M18 52h28"/>'},
+  desamorcage:{nom:"Désamorçage", sub:"Bientôt", soon:true, min:8},
+  premier:{nom:"Premier sur les lieux", sub:"Bientôt", soon:true, min:7},
+  lances:{nom:"Guerre des lances", sub:"Bientôt", soon:true, min:10},
+  tribunal:{nom:"Le Tribunal", sub:"Bientôt", soon:true, min:7}
+};
+const PRESET = ["coins","tabou","money","saboteur","finale"];
+const LETTERS = ["A","B","C","D"];
+const CORNERS = ["Coin avant gauche","Coin avant droit","Coin arrière gauche","Coin arrière droit"];
+
+/* ============ ÉTAT ============ */
+let BANK = DEMO_Q.map((r,i)=>({id:"d"+i, t:r[0], n:r[1], q:r[2], o:r[3], c:0, e:r[4]}));
+let BANK_SRC = "demo";
+try{ const s = localStorage.getItem("af-bank"); if(s){ const b = JSON.parse(s); if(Array.isArray(b) && b.length){ BANK = b; BANK_SRC = "import"; } } }catch(e){}
+const bankLabel = () => ({demo:"de démonstration", import:"importées", tournee:"de la Tournée du Préventionniste"})[BANK_SRC];
+function loadTournee(){
+  return fetch("questions.json").then(r => r.ok ? r.json() : Promise.reject()).then(b => {
+    if(!Array.isArray(b) || !b.length) return;
+    TOURNEE = b; if(BANK_SRC !== "import"){ BANK = b; BANK_SRC = "tournee"; G.used = []; }
+    if(document.querySelector(".title-screen")) screenTitle();
+  }).catch(() => {});
+}
+let TOURNEE = null;
+
+function freshGame(){
+  return {
+    teams:[{name:"Équipe Rose", emb:1, players:4, pts:0},{name:"Équipe Cyan", emb:2, players:4, pts:0}],
+    plan:PRESET.slice(), step:0, used:[], themes:[], qPer:4, level:"ca", saboteur:true
+  };
+}
+let G = freshGame();
+let CUR = null;       // gestionnaire de l'écran en cours : {onBuzz, onKey, regie}
+let TIMER = null;
+let SOUND = true;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const TCOL = ["var(--pink)","var(--cyan)"];
+const TCLS = ["neon-p","neon-c"];
+
+/* ============ SONS ============ */
+let AC = null;
+function tone(f, d=.15, type="square", v=.08, when=0){
+  if(!SOUND) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const t = AC.currentTime + when, o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(g).connect(AC.destination); o.start(t); o.stop(t + d + .02);
+  }catch(e){}
+}
+const SFX = {
+  blip:()=>tone(660,.07,"square",.05),
+  tick:()=>tone(880,.05,"sine",.06),
+  go:()=>{tone(523,.12);tone(784,.25,"square",.08,.12)},
+  buzz:(t)=>{tone(t?392:330,.35,"sawtooth",.09)},
+  good:()=>{[523,659,784,1047].forEach((f,i)=>tone(f,.14,"square",.07,i*.09))},
+  bad:()=>{tone(180,.4,"sawtooth",.09);tone(140,.45,"sawtooth",.07,.1)},
+  drop:()=>{tone(300,.5,"triangle",.1);tone(120,.6,"triangle",.1,.2)},
+  stamp:()=>{tone(90,.35,"square",.18);tone(60,.5,"sine",.2,.05)},
+  fanfare:()=>{[523,523,659,784,659,784,1047].forEach((f,i)=>tone(f,.18,"square",.07,i*.14))}
+};
+
+/* ============ OUTILS ============ */
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function avatar(t, size=64){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 40a26 26 0 0 1 52 0z" fill="${TCOL[t]}"/><rect x="2" y="40" width="60" height="8" rx="4" fill="${TCOL[t]}"/><g fill="#07070F" transform="translate(16 6) scale(.5)">${EMBLEMS[G.teams[t].emb]}</g></svg>`;
+}
+function gameIcon(k, size=48){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GAMES[k].icon||""}</svg>`;
+}
+function scorebar(){
+  return `<div class="scorebar">${[0,1].map(t=>`<div class="score t${t}" id="sc${t}">${avatar(t,44)}<span class="name">${esc(G.teams[t].name)}</span><span class="pts" id="pts${t}">${G.teams[t].pts}</span></div>`).join("")}</div>`;
+}
+function addPts(t, n){
+  G.teams[t].pts = Math.max(0, G.teams[t].pts + n);
+  const p = $("#pts"+t); if(p){ p.textContent = G.teams[t].pts; const s = $("#sc"+t); s.classList.remove("flash"); void s.offsetWidth; s.classList.add("flash"); }
+  refreshRegie();
+}
+function topbar(label){
+  return `<div class="top"><span class="mini neon-p">Avis Favorable !</span><span class="eyebrow">${label||""}</span><span class="tools"><button class="btn ghost" data-act="regie">Régie <span class="kbd">R</span></button><button class="btn ghost" data-act="sound" id="sndbtn">${SOUND?"Son : oui":"Son : non"}</button><button class="btn ghost" data-act="full">Plein écran</button></span></div>`;
+}
+function stopTimer(){ if(TIMER){ clearInterval(TIMER); TIMER = null; } }
+function startTimer(sec, onEnd){
+  stopTimer(); let left = sec; const el = () => $("#timer");
+  const draw = () => { const e = el(); if(e){ e.textContent = left + " s"; e.classList.toggle("low", left <= 5); } };
+  draw();
+  TIMER = setInterval(()=>{ left--; if(left <= 5 && left > 0) SFX.tick(); draw(); if(left <= 0){ stopTimer(); onEnd && onEnd(); } }, 1000);
+  return { add:(s)=>{ left += s; draw(); } };
+}
+function countdown(done){
+  const ov = $("#overlay"), tx = $("#cdtext"); ov.hidden = false;
+  const seq = ["Prêts ?","3","2","1","GO !"]; let i = 0;
+  const step = () => {
+    if(i >= seq.length){ ov.hidden = true; done(); return; }
+    tx.textContent = seq[i]; tx.style.animation = "none"; void tx.offsetWidth; tx.style.animation = "";
+    tx.style.fontSize = i === 0 ? "clamp(60px,11vw,150px)" : "";
+    i === seq.length-1 ? SFX.go() : SFX.tick(); i++;
+    setTimeout(step, i === 1 ? 1000 : 700);
+  };
+  step();
+}
+function pickQ(n, sortByLevel, opt){
+  opt = opt || {};
+  let pool = BANK.filter(q => !G.used.includes(q.id));
+  if(opt.minOpts){ const p = pool.filter(q => q.o.length >= opt.minOpts); if(p.length >= n) pool = p; }
+  if(G.themes.length) pool = pool.filter(q => G.themes.includes(q.t));
+  const lv = {mix:[1,2,3], decouverte:[1], ca:[1,2], prv2:[2,3]}[G.level] || [1,2,3];
+  let p2 = opt.allLevels ? pool : pool.filter(q => lv.includes(+q.n || 1));
+  if(p2.length < n) p2 = pool;
+  if(p2.length < n){ G.used = []; p2 = BANK.slice(); }
+  let out = shuffle(p2).slice(0, n);
+  if(sortByLevel) out.sort((a,b)=>(+a.n||1)-(+b.n||1));
+  out.forEach(q => G.used.push(q.id));
+  return out.map(q => { const idx = shuffle([0,1,2,3].slice(0, q.o.length)); return {...q, o: idx.map(i=>q.o[i]), c: idx.indexOf(q.c)}; });
+}
+function render(html){ stopTimer(); $("#app").innerHTML = html; $("#app").scrollTop = 0; }
+
+/* ============ ÉCRANS GÉNÉRAUX ============ */
+function screenTitle(){
+  CUR = null;
+  render(`<div class="grow center title-screen" style="gap:clamp(18px,3vh,36px)">
+    <span class="eyebrow">Le jeu télé de la prévention</span>
+    <h1 class="logo"><span class="logo-a neon-p" style="display:block">AVIS</span><span class="logo-b neon-c" style="display:block">FAVORABLE !</span></h1>
+    <p class="muted" style="font-size:clamp(16px,1.8vw,21px);max-width:60ch;line-height:1.45">Deux équipes, un présentateur, des buzzers, et un seul établissement à faire ouvrir : le Complexe des Dunes.</p>
+    <div class="menu">
+      <button class="btn big pink" data-act="preset">Émission complète<small>5 épreuves, environ 45 minutes, prête à jouer</small></button>
+      <button class="btn big cyan" data-act="compose">Composer ma séance<small>Choisir les épreuves, les thèmes et le niveau</small></button>
+      <button class="btn" data-act="bank">Banque de questions<small>${BANK.length} questions ${bankLabel()}</small></button>
+      <button class="btn" data-act="kit">Brancher les buzzers<small>Tester les touches et les manettes</small></button>
+    </div>
+  </div>`);
+}
+function screenKit(){
+  CUR = { onBuzz:(t)=>{ const b = $("#kb"+t); b.classList.add("on"); b.textContent = "Buzzer " + (t+1) + " reçu !"; SFX.buzz(t); } };
+  render(`${topbar("Brancher les buzzers")}
+  <div class="grow center" style="gap:24px">
+    <h2 style="font-size:clamp(26px,3vw,40px)">Appuyez sur chaque buzzer</h2>
+    <div class="row" style="justify-content:center">
+      <span class="buzzcheck" id="kb0" style="font-size:20px">Équipe 1 : touche <span class="kbd">A</span> ou manette 1</span>
+      <span class="buzzcheck" id="kb1" style="font-size:20px">Équipe 2 : touche <span class="kbd">P</span> ou manette 2</span>
+    </div>
+    <div class="panel" style="max-width:760px;text-align:left">
+      <p class="note">Les buzzers USB du commerce se comportent comme un clavier ou une manette : réglez-les sur les touches A et P, ou branchez deux manettes (n'importe quel bouton). Pendant le jeu, l'animateur utilise <span class="kbd">V</span> bonne réponse, <span class="kbd">X</span> mauvaise réponse, <span class="kbd">Espace</span> révéler ou continuer, <span class="kbd">R</span> ouvrir la régie.</p>
+    </div>
+    <button class="btn big" data-act="home">Retour</button>
+  </div>`);
+}
+function screenBank(){
+  CUR = null;
+  const byT = {}; BANK.forEach(q => byT[q.t] = (byT[q.t]||0) + 1);
+  render(`${topbar("Banque de questions")}
+  <div class="form-grid">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <h2 style="font-size:24px">${BANK.length} questions ${bankLabel()}</h2>
+      <p class="note">${({demo:"Ces questions servent à tester le jeu. Elles sont à faire valider par un PRV2 avant une vraie séance.", tournee:"La base commune de la Tournée du Préventionniste : PRV1, PRV2, découverte, règlement, science du feu et NFPA 921. Questions à choix unique de 2 à 4 réponses.", import:"Questions importées depuis votre fichier, enregistrées dans ce navigateur uniquement."})[BANK_SRC]}</p>
+      <div class="scroll"><table><thead><tr><th>Thème</th><th>Questions</th></tr></thead><tbody>${Object.entries(byT).map(([t,n])=>`<tr><td>${esc(t)}</td><td>${n}</td></tr>`).join("")}</tbody></table></div>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <h2 style="font-size:24px">Importer votre base</h2>
+      <p class="note">Fichier CSV (séparateur ; ou ,) avec une ligne d'en-têtes. Colonnes reconnues : <strong>Thème</strong>, <strong>Question</strong>, <strong>A</strong>, <strong>B</strong>, <strong>C</strong>, <strong>D</strong> (ou Réponse 1 à 4), <strong>Bonne réponse</strong> (lettre, numéro ou texte), <strong>Explication</strong>, <strong>Niveau</strong> (1 à 3). L'export CSV de la Tournée du Préventionniste convient s'il contient ces colonnes.</p>
+      <label class="btn cyan" for="csvfile" style="text-align:center">Choisir un fichier CSV</label>
+      <input type="file" id="csvfile" accept=".csv,text/csv" hidden>
+      <p id="impmsg" class="note" role="status"></p>
+      <button class="btn ghost" data-act="resetbank">${TOURNEE ? "Revenir à la base de la Tournée" : "Revenir aux questions de démonstration"}</button>
+    </div>
+  </div>
+  <div><button class="btn" data-act="home">Retour</button></div>`);
+  $("#csvfile").addEventListener("change", importCSV);
+}
+function parseCSV(txt){
+  txt = txt.replace(/^﻿/, "");
+  const first = txt.split(/\r?\n/)[0] || ""; const sep = (first.match(/;/g)||[]).length >= (first.match(/,/g)||[]).length ? ";" : ",";
+  const rows = []; let row = [], cell = "", q = false;
+  for(let i=0;i<txt.length;i++){
+    const ch = txt[i];
+    if(q){ if(ch === '"'){ if(txt[i+1] === '"'){ cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if(ch === '"') q = true;
+    else if(ch === sep){ row.push(cell); cell = ""; }
+    else if(ch === "\n" || ch === "\r"){ if(ch === "\r" && txt[i+1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += ch;
+  }
+  if(cell || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim()));
+}
+function importCSV(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    const rows = parseCSV(String(rd.result)); const msg = $("#impmsg");
+    if(rows.length < 2){ msg.textContent = "Le fichier est vide ou n'a pas de ligne d'en-têtes."; return; }
+    const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").trim();
+    const H = rows[0].map(norm); const find = re => H.findIndex(h => re.test(h));
+    const iq = find(/question|intitule|enonce/), it = find(/theme|categ/), ie = find(/expli|justif|commentaire/), inv = find(/niveau|level/), ic = find(/bonne|correct|solution/);
+    let io = ["a","b","c","d"].map((l,k) => H.findIndex(h => h === l || h === "reponse "+l || h === "reponse"+(k+1) || h === "reponse "+(k+1) || h === "choix "+(k+1) || h === "option "+(k+1)));
+    if(iq < 0 || ic < 0 || io.filter(x=>x>=0).length < 2){ msg.textContent = "Colonnes introuvables. Il faut au moins Question, deux réponses (A, B…) et Bonne réponse."; return; }
+    const out = []; let skip = 0;
+    rows.slice(1).forEach((r,k) => {
+      const opts = io.filter(x=>x>=0).map(x => (r[x]||"").trim()).filter(Boolean);
+      const qs = (r[iq]||"").trim(); const raw = (r[ic]||"").trim();
+      let c = -1;
+      if(/^[a-d]$/i.test(raw)) c = "abcd".indexOf(raw.toLowerCase());
+      else if(/^[1-4]$/.test(raw)) c = +raw - 1;
+      else c = opts.findIndex(o => norm(o) === norm(raw));
+      if(!qs || opts.length < 2 || c < 0 || c >= opts.length){ skip++; return; }
+      out.push({id:"i"+k, t:(it>=0 && r[it]?.trim()) || "Général", n:Math.min(3, Math.max(1, parseInt(inv>=0 ? r[inv] : 1) || 1)), q:qs, o:opts, c, e:(ie>=0 ? r[ie] : "") || ""});
+    });
+    if(!out.length){ msg.textContent = "Aucune question valide trouvée (" + skip + " lignes ignorées)."; return; }
+    BANK = out; BANK_SRC = "import"; G.used = []; G.themes = [];
+    try{ localStorage.setItem("af-bank", JSON.stringify(out)); }catch(e){}
+    screenBank(); $("#impmsg").textContent = out.length + " questions importées" + (skip ? ", " + skip + " lignes ignorées (réponse manquante ou illisible)." : ".");
+  };
+  rd.readAsText(f, "utf-8");
+}
+
+/* ---- Composer ---- */
+function screenCompose(){
+  CUR = null;
+  const themes = [...new Set(BANK.map(q=>q.t))];
+  const tot = G.plan.reduce((a,k)=>a+GAMES[k].min,0);
+  render(`${topbar("Composer ma séance")}
+  <div class="form-grid">
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <h2 style="font-size:24px">Épreuves</h2>
+      ${Object.entries(GAMES).map(([k,g])=>`<label class="opt ${g.soon?"soon":""}"><input type="checkbox" ${g.soon?"disabled":""} ${G.plan.includes(k)?"checked":""} data-game="${k}"> ${esc(g.nom)}<span class="d">${g.soon?"bientôt":"≈ "+g.min+" min"}</span></label>`).join("")}
+      <p class="note">La finale monte toujours en difficulté jusqu'au niveau PRV2.</p>
+      <p class="note">Durée estimée : <strong id="tot">${tot}</strong> minutes, plus l'accueil. La finale se joue toujours en dernier.</p>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      <h2 style="font-size:24px">Questions</h2>
+      <label for="lvl" class="muted">Niveau</label>
+      <select id="lvl"><option value="ca">Chef d'agrès (niveaux 1-2)</option><option value="decouverte">Découverte (niveau 1)</option><option value="prv2">PRV2 (niveaux 2-3)</option><option value="mix">Tous niveaux</option></select>
+      <label for="qper" class="muted">Questions par manche</label>
+      <select id="qper">${[3,4,5,6].map(n=>`<option ${G.qPer===n?"selected":""}>${n}</option>`).join("")}</select>
+      <span class="muted">Thèmes (aucun choisi = tous)</span>
+      <div class="tags">${themes.map(t=>`<button class="tag" aria-pressed="${G.themes.includes(t)}" data-theme="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+    </div>
+  </div>
+  <div class="row"><button class="btn" data-act="home">Retour</button><button class="btn big pink" data-act="toteams">Créer les équipes</button></div>`);
+  $("#lvl").value = G.level;
+  $("#lvl").onchange = e => G.level = e.target.value;
+  $("#qper").onchange = e => G.qPer = +e.target.value;
+  document.querySelectorAll("[data-game]").forEach(cb => cb.onchange = () => {
+    const k = cb.dataset.game;
+    if(cb.checked){ if(!G.plan.includes(k)) G.plan.push(k); } else G.plan = G.plan.filter(x=>x!==k);
+    G.plan = Object.keys(GAMES).filter(x => G.plan.includes(x)); // ordre du catalogue, finale en dernier
+    G.saboteur = G.plan.includes("saboteur");
+    $("#tot").textContent = G.plan.reduce((a,x)=>a+GAMES[x].min,0);
+  });
+  document.querySelectorAll("[data-theme]").forEach(b => b.onclick = () => {
+    const t = b.dataset.theme; const on = !G.themes.includes(t);
+    G.themes = on ? [...G.themes, t] : G.themes.filter(x=>x!==t); b.setAttribute("aria-pressed", on);
+  });
+}
+
+/* ---- Équipes ---- */
+function screenTeams(){
+  CUR = { onBuzz:(t)=>{ const b = $("#bz"+t); if(b){ b.classList.add("on"); b.textContent = "Buzzer prêt !"; } SFX.buzz(t); } };
+  render(`${topbar("Les équipes")}
+  <div class="teams">${[0,1].map(t=>`
+    <div class="panel team-card ${t?"glow-c":"glow-p"}">
+      <div class="bounce">${avatar(t,110)}</div>
+      <label for="tn${t}" class="muted">Nom de l'équipe</label>
+      <input type="text" id="tn${t}" value="${esc(G.teams[t].name)}" maxlength="24">
+      <div class="emblems" style="color:${TCOL[t]}">${EMBLEMS.map((e,i)=>`<button class="emblem" aria-label="Emblème ${i+1}" aria-pressed="${G.teams[t].emb===i}" data-emb="${t}-${i}"><svg width="34" height="34" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">${e}</svg></button>`).join("")}</div>
+      <div class="stepper"><span class="muted">Joueurs</span><button aria-label="Un joueur de moins" data-pl="${t}|-1">−</button><span id="pl${t}" style="font-size:24px;min-width:1.2em">${G.teams[t].players}</span><button aria-label="Un joueur de plus" data-pl="${t}|1">+</button></div>
+      <span class="buzzcheck" id="bz${t}">Appuyez sur votre buzzer (<span class="kbd">${t?"P":"A"}</span>)</span>
+    </div>`).join("")}
+  </div>
+  ${G.saboteur ? `<div class="panel" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><strong style="color:var(--amber)">Le Saboteur</strong><span class="note" style="flex:1 1 300px">Avant de commencer, chaque joueur tire une carte pliée. Une carte par équipe porte « Saboteur ». Son but : faire perdre son équipe sans se faire repérer. Vote juste avant la finale.</span></div>` : ""}
+  <div class="row"><button class="btn" data-act="home">Retour</button><button class="btn big pink" data-act="start">C'est parti !</button></div>`);
+  [0,1].forEach(t => $("#tn"+t).oninput = e => G.teams[t].name = e.target.value || ("Équipe " + (t+1)));
+  document.querySelectorAll("[data-emb]").forEach(b => b.onclick = () => { const [t,i] = b.dataset.emb.split("-").map(Number); G.teams[t].emb = i; SFX.blip(); screenTeams(); });
+  document.querySelectorAll("[data-pl]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.pl.split("|").map(Number); G.teams[t].players = Math.min(8, Math.max(1, G.teams[t].players + d)); $("#pl"+t).textContent = G.teams[t].players; SFX.blip(); });
+}
+
+/* ---- Plateau ---- */
+function screenBoard(){
+  CUR = { onKey:(k)=>{ if(k==="Enter"||k===" ") launch(); } };
+  if(G.step >= G.plan.length) return screenEnd();
+  render(`${topbar("Le plateau")}${scorebar()}
+  <div class="panel grow" style="display:flex;flex-direction:column;justify-content:center;gap:20px">
+    <h2 style="font-size:clamp(22px,2.6vw,34px);text-align:center">Tournée du Complexe des Dunes</h2>
+    <div class="board">${G.plan.map((k,i)=>`<div class="node ${i<G.step?"done":i===G.step?"now":""}"><div class="disc" style="color:${i<G.step?"var(--lime)":i===G.step?"var(--amber)":"var(--muted)"}">${gameIcon(k,52)}</div><span class="lbl">${esc(GAMES[k].nom)}</span><span class="sub">${esc(GAMES[k].sub)}</span></div>`).join("")}</div>
+  </div>
+  <div class="center" style="gap:8px"><button class="btn big pink" data-act="launch">Épreuve suivante : ${esc(GAMES[G.plan[G.step]].nom)}</button><span class="muted">ou <span class="kbd">Entrée</span></span></div>`);
+}
+function launch(){ SFX.blip(); screenHowto(G.plan[G.step]); }
+function endGame(before){
+  G.step++;
+  const gain = [0,1].map(t => G.teams[t].pts - before[t]);
+  const k = G.plan[G.step-1];
+  if(k === "finale") return screenEnd();
+  const win = gain[0] === gain[1] ? -1 : (gain[0] > gain[1] ? 0 : 1);
+  SFX.fanfare();
+  CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") screenBoard(); } };
+  render(`${topbar("Résultats")}
+  <div class="grow center" style="gap:24px">
+    <h2 style="font-size:clamp(28px,4vw,54px)" class="${win<0?"neon-c":TCLS[win]}">${win<0 ? "Égalité !" : esc(G.teams[win].name) + " remporte l'épreuve !"}</h2>
+    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}"><div class="${t===win?"bounce":""}">${avatar(t,96)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">+${gain[t]}</span><span class="muted">Total : ${G.teams[t].pts} points</span></div>`).join("")}</div>
+    <button class="btn big cyan" data-act="board">Retour au plateau</button>
+  </div>`);
+}
+
+/* ---- Comment jouer ---- */
+const HOWTO = {
+  coins:{ rules:["Une question s'affiche avec quatre réponses.","Chaque réponse correspond à un coin de la salle.","Tout le monde se lève et va dans le coin de son choix avant la fin du chrono.","Chaque joueur dans le bon coin rapporte 1 point à son équipe."],
+          ctl:[["Espace","Révéler la réponse (animateur)"],["+ / −","Compter les joueurs dans le bon coin"]] },
+  tabou:{ rules:["Un joueur fait deviner le mot à son équipe en 60 secondes.","Ses coéquipiers tournent le dos à l'écran.","Les quatre mots barrés sont interdits.","L'autre équipe surveille : si un mot interdit est dit, elle buzze."],
+          ctl:[["V","Mot trouvé : +1"],["S","Passer la carte"],["Buzzer adverse","Mot interdit : −1"]] },
+  money:{ rules:["Chaque équipe reçoit 10 jetons pour la manche.","À chaque question, placez tous vos jetons sur les réponses, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
+          ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]] },
+  saboteur:{ rules:["Chaque équipe cache un saboteur depuis le début.","Discutez 1 minute, puis désignez un suspect.","Saboteur démasqué : +3 points pour l'équipe.","Raté : le saboteur repart avec le titre de « Cabinet de complaisance »."],
+          ctl:[["Clic","Valider ou non chaque suspect"]] },
+  finale:{ rules:["Duel au buzzer : la première équipe à 5 bonnes réponses gagne.","L'équipe qui mène au score part avec 1 réponse d'avance (2 si elle mène de 10 points ou plus).","Buzzer d'abord, réponse ensuite. Mauvaise réponse : la main passe à l'autre équipe.","Le capitaine vainqueur tamponne le PV : avis favorable !"],
+          ctl:[["A / P","Buzzer équipe 1 / équipe 2"],["V / X","Bonne / mauvaise réponse"],["Espace","Question suivante"]] }
+};
+function screenHowto(k){
+  const h = HOWTO[k];
+  CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") go(); } };
+  const go = () => { CUR = null; countdown(() => RUN[k]()); };
+  render(`${topbar("Comment jouer")}
+  <div class="grow center" style="gap:clamp(14px,2.4vh,28px)">
+    <div style="color:var(--amber)">${gameIcon(k,72)}</div>
+    <h2 class="neon-p" style="font-size:clamp(34px,5vw,68px)">${esc(GAMES[k].nom)}</h2>
+    <div class="howto">
+      <div class="panel glow-p" style="text-align:left"><ul>${h.rules.map(r=>`<li>${r}</li>`).join("")}</ul></div>
+      <div class="panel glow-c ctl-list" style="text-align:left">${h.ctl.map(([a,b])=>`<div class="ctl"><span class="kbd">${a}</span><span>${b}</span></div>`).join("")}</div>
+    </div>
+    <button class="btn big pink" id="gobtn">Prêts ? <span class="kbd">Espace</span></button>
+  </div>`);
+  $("#gobtn").onclick = go;
+}
+
+/* ============ ÉPREUVES ============ */
+const RUN = {};
+
+/* ---- Les 4 coins ---- */
+RUN.coins = function(){
+  const before = G.teams.map(t=>t.pts); const qs = pickQ(G.qPer, false, {minOpts:3}); let i = 0;
+  const show = () => {
+    const q = qs[i]; let revealed = false; const got = [0,0];
+    CUR = { q, onKey:(k)=>{ if(k===" "){ revealed ? next() : reveal(); } } };
+    render(`${topbar("Les 4 coins · " + (i+1) + " / " + qs.length)}${scorebar()}
+    <div class="qcard grow">
+      <div class="qmeta"><span>${esc(q.t)}</span><span class="timer" id="timer"></span></div>
+      <p class="qtext">${esc(q.q)}</p>
+      <div class="room">${q.o.map((o,j)=>`<div class="corner c${j}" id="cn${j}"><span class="where">${LETTERS[j]} · ${CORNERS[j]}</span><span class="txt">${esc(o)}</span></div>`).join("")}</div>
+      <div id="after"></div>
+    </div>
+    <div class="row" style="justify-content:center"><button class="btn big pink" id="rv">Révéler la réponse <span class="kbd">Espace</span></button></div>`);
+    $("#rv").onclick = () => revealed ? next() : reveal();
+    startTimer(20, () => { SFX.buzz(1); });
+    function reveal(){
+      revealed = true; stopTimer(); SFX.good();
+      q.o.forEach((_,j)=>$("#cn"+j).classList.add(j===q.c?"good":"dim"));
+      $("#after").innerHTML = `${q.e?`<p class="expl">${esc(q.e)}</p>`:""}
+        <div class="count" style="margin-top:12px">${[0,1].map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams[t].name)} dans le bon coin</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span class="pts" id="cnt${t}">0</span><button aria-label="Plus" data-cn="${t}|1">+</button></span></div>`).join("")}</div>`;
+      document.querySelectorAll("[data-cn]").forEach(b => b.onclick = () => {
+        const [t,d] = b.dataset.cn.split("|").map(Number);
+        const v = Math.min(G.teams[t].players, Math.max(0, got[t] + d)); if(v === got[t]) return;
+        addPts(t, v - got[t]); got[t] = v; $("#cnt"+t).textContent = v; SFX.blip();
+      });
+      $("#rv").innerHTML = (i+1 < qs.length ? "Question suivante" : "Fin de l'épreuve") + ' <span class="kbd">Espace</span>';
+      refreshRegie();
+    }
+    function next(){ i++; i < qs.length ? show() : endGame(before); }
+    refreshRegie();
+  };
+  show();
+};
+
+/* ---- Tabou ---- */
+RUN.tabou = function(){
+  const before = G.teams.map(t=>t.pts); const deck = shuffle(TABOU); let turn = 0, ci = 0;
+  const startTurn = () => {
+    let found = 0, active = false;
+    CUR = { onKey:(k)=>{ if(!active && (k===" "||k==="Enter")) begin(); else if(active && k==="v") hit(); else if(active && k==="s") pass(); },
+            onBuzz:(t)=>{ if(active && t !== turn) foul(); } };
+    render(`${topbar("Tabou · tour de " + G.teams[turn].name)}${scorebar()}
+    <div class="grow center" style="gap:18px">
+      <h2 class="${TCLS[turn]}" style="font-size:clamp(26px,3.4vw,44px)">${esc(G.teams[turn].name)}, à vous !</h2>
+      <p class="muted" style="font-size:18px">Un joueur se place face à l'écran. Ses coéquipiers lui tournent le dos.</p>
+      <div id="tz" class="center" style="gap:16px"><button class="btn big pink" id="bg">Lancer le chrono <span class="kbd">Espace</span></button></div>
+    </div>`);
+    $("#bg").onclick = begin;
+    function card(){
+      const [w, f] = deck[ci % deck.length];
+      $("#tz").innerHTML = `<span class="timer" id="timer"></span>
+        <div class="panel tabou-card ${turn?"glow-c":"glow-p"}"><span class="tabou-word">${esc(w)}</span><div class="forbid">${f.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>
+        <div class="row" style="justify-content:center"><button class="btn ok" id="th">Trouvé <span class="kbd">V</span></button><button class="btn" id="tp">Passer <span class="kbd">S</span></button><button class="btn no" id="tf">Mot interdit</button></div>
+        <span class="muted">Trouvés : <strong id="tfound">${found}</strong></span>`;
+      $("#th").onclick = hit; $("#tp").onclick = pass; $("#tf").onclick = foul;
+    }
+    function begin(){ active = true; card(); startTimer(60, finish); }
+    function hit(){ found++; addPts(turn, 1); SFX.good(); ci++; card(); }
+    function pass(){ SFX.blip(); ci++; card(); }
+    function foul(){ SFX.bad(); addPts(turn, -1); ci++; card(); }
+    function finish(){
+      active = false; SFX.buzz(0);
+      $("#tz").innerHTML = `<h3 style="font-size:28px">Temps écoulé : ${found} mot${found>1?"s":""} trouvé${found>1?"s":""}</h3><button class="btn big cyan" id="nx">${turn===0?"Au tour de " + esc(G.teams[1].name):"Fin de l'épreuve"} <span class="kbd">Espace</span></button>`;
+      CUR.onKey = (k)=>{ if(k===" "||k==="Enter") nx(); };
+      const nx = () => { turn++; turn < 2 ? startTurn() : endGame(before); };
+      $("#nx").onclick = nx;
+    }
+    refreshRegie();
+  };
+  startTurn();
+};
+
+/* ---- Money Drop ---- */
+RUN.money = function(){
+  const before = G.teams.map(t=>t.pts); const qs = pickQ(3, false, {minOpts:3}); let i = 0; const bank = [10,10];
+  const show = () => {
+    const q = qs[i]; const bet = [q.o.map(()=>0), q.o.map(()=>0)]; let opened = false;
+    CUR = { q, onKey:(k)=>{ if(k===" "){ opened ? next() : open(); } } };
+    render(`${topbar("Money Drop · " + (i+1) + " / " + qs.length)}
+    <div class="qcard">
+      <div class="qmeta"><span>${esc(q.t)}</span><span class="timer" id="timer"></span></div>
+      <p class="qtext">${esc(q.q)}</p>
+      <div class="answers">${q.o.map((o,j)=>`<div class="ans c${j}" id="an${j}"><span class="let">${LETTERS[j]}</span><span>${esc(o)}</span></div>`).join("")}</div>
+    </div>
+    <div class="md">${[0,1].map(t=>`<div class="panel md-team ${t?"glow-c":"glow-p"}">
+      <div class="md-head"><span>${esc(G.teams[t].name)}</span><span>À placer : <span id="left${t}" style="color:var(--amber)">${bank[t]}</span></span></div>
+      <div class="md-slots" style="grid-template-columns:repeat(${q.o.length},minmax(0,1fr))">${q.o.map((_,j)=>`<div class="slot c${j}" id="sl${t}${j}"><span class="let" style="font-weight:700;color:var(--c)">${LETTERS[j]}</span><span class="n" id="n${t}${j}">0</span><div class="chips" id="ch${t}${j}"></div><span class="pm"><button aria-label="Retirer un jeton sur ${LETTERS[j]}" data-bet="${t}${j}-">−</button><button aria-label="Ajouter un jeton sur ${LETTERS[j]}" data-bet="${t}${j}+">+</button></span></div>`).join("")}</div>
+    </div>`).join("")}</div>
+    <div class="row" style="justify-content:center"><button class="btn big pink" id="op">Ouvrir les trappes <span class="kbd">Espace</span></button><span class="muted" id="warn"></span></div>`);
+    const draw = (t) => { const s = bet[t].reduce((a,b)=>a+b,0); $("#left"+t).textContent = bank[t] - s; bet[t].forEach((v,j)=>{ $("#n"+t+j).textContent = v; $("#ch"+t+j).innerHTML = '<span class="chip"></span>'.repeat(v); }); };
+    document.querySelectorAll("[data-bet]").forEach(b => b.onclick = () => {
+      if(opened) return; const t = +b.dataset.bet[0], j = +b.dataset.bet[1], up = b.dataset.bet[2] === "+";
+      const s = bet[t].reduce((a,x)=>a+x,0);
+      if(up && s >= bank[t]) return; if(!up && bet[t][j] === 0) return;
+      if(up && bet[t].filter((v,x)=>x!==j && v===0).length === 0 && bet[t][j] === 0){ $("#warn").textContent = "Au moins une trappe doit rester vide."; SFX.bad(); return; }
+      bet[t][j] += up ? 1 : -1; $("#warn").textContent = ""; SFX.blip(); draw(t);
+    });
+    $("#op").onclick = () => opened ? next() : open();
+    startTimer(45, () => { SFX.buzz(0); $("#warn").textContent = "Temps écoulé ! Les jetons non placés seront perdus."; });
+    function open(){
+      opened = true; stopTimer(); SFX.drop();
+      q.o.forEach((_,j)=>$("#an"+j).classList.add(j===q.c?"good":"dim"));
+      [0,1].forEach(t => { q.o.forEach((_,j) => { if(j < q.o.length && j !== q.c) $("#sl"+t+j).classList.add("drop"); }); bank[t] = bet[t][q.c]; $("#left"+t).textContent = bank[t] + " jetons sauvés"; });
+      setTimeout(SFX.good, 700);
+      $("#op").innerHTML = (i+1 < qs.length ? "Question suivante" : "Encaisser les jetons") + ' <span class="kbd">Espace</span>';
+      if(q.e) $("#warn").textContent = q.e;
+      refreshRegie();
+    }
+    function next(){
+      i++;
+      if(i < qs.length && (bank[0] || bank[1])) show();
+      else { addPts(0, bank[0]); addPts(1, bank[1]); endGame(before); }
+    }
+    refreshRegie();
+  };
+  show();
+};
+
+/* ---- Le Saboteur ---- */
+RUN.saboteur = function(){
+  const before = G.teams.map(t=>t.pts); const done = [null,null];
+  CUR = null;
+  render(`${topbar("Le Saboteur")}${scorebar()}
+  <div class="grow center" style="gap:22px">
+    <h2 class="neon-p" style="font-size:clamp(30px,4.4vw,60px)">Qui est le saboteur ?</h2>
+    <p class="muted" style="font-size:19px;max-width:60ch">Chaque équipe a 1 minute pour désigner un suspect. Le suspect retourne sa carte.</p>
+    <span class="timer" id="timer"></span>
+    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}">${avatar(t,80)}<strong style="font-size:20px">${esc(G.teams[t].name)}</strong><div class="row" style="justify-content:center" id="sb${t}"><button class="btn ok" data-sab="${t}-1">Démasqué : +3</button><button class="btn no" data-sab="${t}-0">Raté</button></div></div>`).join("")}</div>
+    <button class="btn big cyan" id="sbn" disabled>Continuer</button>
+  </div>`);
+  startTimer(60, () => SFX.buzz(1));
+  document.querySelectorAll("[data-sab]").forEach(b => b.onclick = () => {
+    const [t, ok] = b.dataset.sab.split("-").map(Number); if(done[t] !== null) return; done[t] = ok;
+    if(ok){ addPts(t, 3); SFX.good(); $("#sb"+t).innerHTML = '<strong style="color:var(--lime);font-size:20px">Saboteur démasqué !</strong>'; }
+    else { SFX.bad(); $("#sb"+t).innerHTML = '<strong style="color:var(--amber);font-size:20px">Titre décerné : Cabinet de complaisance</strong>'; }
+    if(done[0] !== null && done[1] !== null){ stopTimer(); $("#sbn").disabled = false; }
+  });
+  $("#sbn").onclick = () => endGame(before);
+};
+
+/* ---- Finale : le Coup de tampon ---- */
+RUN.finale = function(){
+  const before = G.teams.map(t=>t.pts);
+  const lead = G.teams[0].pts - G.teams[1].pts;
+  const duel = [0,0]; if(lead !== 0){ duel[lead > 0 ? 0 : 1] = Math.abs(lead) >= 10 ? 2 : 1; }
+  const qs = pickQ(14, true, {allLevels:true}); let i = 0;
+  const show = () => {
+    const q = qs[i % qs.length]; let hand = null, tried = [false,false], answered = false;
+    CUR = { q,
+      onBuzz:(t)=>{ if(hand === null && !answered && !tried[t]) take(t); },
+      onKey:(k)=>{ if(k==="v" && hand !== null) judge(true); else if(k==="x" && hand !== null) judge(false); else if(k===" " && (answered || hand === null)) { answered ? next() : reveal(); } } };
+    render(`${topbar("Le Coup de tampon · finale")}
+    <div class="duel">${[0,1].map(t=>`<div class="lane t${t}" id="ln${t}">${avatar(t,44)}<strong style="font-size:clamp(15px,1.6vw,20px)">${esc(G.teams[t].name)}</strong><span class="pips">${[0,1,2,3,4].map(p=>`<span class="pip ${p<duel[t]?"on":""}"></span>`).join("")}</span></div>`).join("")}</div>
+    <div class="qcard grow">
+      <div class="qmeta"><span>Question ${i+1} · niveau ${q.n||1}</span><span class="timer" id="timer"></span></div>
+      <p class="qtext">${esc(q.q)}</p>
+      <div class="answers">${q.o.map((o,j)=>`<div class="ans c${j}" id="an${j}"><span class="let">${LETTERS[j]}</span><span>${esc(o)}</span></div>`).join("")}</div>
+      <p class="hand" id="hand">Buzzez ! <span class="kbd">A</span> ou <span class="kbd">P</span></p>
+      <p class="expl" id="fexp"></p>
+    </div>
+    <div class="row" style="justify-content:center" id="fctl"><button class="btn" id="fskip">Personne ne trouve : révéler <span class="kbd">Espace</span></button></div>`);
+    $("#fskip").onclick = reveal;
+    startTimer(20, () => { if(hand === null) reveal(); });
+    function take(t){
+      hand = t; stopTimer(); SFX.buzz(t);
+      $("#ln"+t).classList.add("buzz");
+      $("#hand").innerHTML = `<span class="${TCLS[t]}">${esc(G.teams[t].name)} a la main !</span>`;
+      $("#fctl").innerHTML = `<button class="btn ok big" id="fv">Bonne réponse <span class="kbd">V</span></button><button class="btn no big" id="fx">Mauvaise <span class="kbd">X</span></button>`;
+      $("#fv").onclick = () => judge(true); $("#fx").onclick = () => judge(false);
+      startTimer(10, () => judge(false));
+      refreshRegie();
+    }
+    function judge(ok){
+      const t = hand; if(t === null) return; stopTimer(); $("#ln"+t).classList.remove("buzz"); hand = null; tried[t] = true;
+      if(ok){
+        duel[t]++; SFX.good(); answered = true;
+        $("#hand").innerHTML = `<span class="${TCLS[t]}">Bonne réponse ! Un point pour ${esc(G.teams[t].name)}</span>`;
+        reveal(true);
+        if(duel[t] >= 5){ CUR = null; $("#fctl").innerHTML = ""; setTimeout(() => win(t), 1100); return; }
+      } else {
+        SFX.bad();
+        if(!tried[1-t]){ $("#hand").innerHTML = `Raté ! La main passe à <span class="${TCLS[1-t]}">${esc(G.teams[1-t].name)}</span>`; take(1-t); }
+        else reveal();
+      }
+    }
+    function reveal(silent){
+      answered = true; stopTimer(); if(!silent) SFX.blip();
+      q.o.forEach((_,j)=>$("#an"+j).classList.add(j===q.c?"good":"dim"));
+      [0,1].forEach(t => $("#ln"+t).querySelectorAll(".pip").forEach((p,k)=>p.classList.toggle("on", k < duel[t])));
+      $("#fexp").textContent = q.e || "";
+      if(!silent) $("#hand").textContent = "Réponse :";
+      $("#fctl").innerHTML = `<button class="btn big pink" id="fn">Question suivante <span class="kbd">Espace</span></button>`;
+      $("#fn").onclick = next;
+      refreshRegie();
+    }
+    function next(){ i++; show(); }
+    refreshRegie();
+  };
+  function win(t){
+    G.winner = t; addPts(t, 0);
+    CUR = { onKey:(k)=>{ if(k===" "||k==="Enter") endGame(before); } };
+    render(`<div class="grow center" style="gap:30px">
+      <h2 class="${TCLS[t]}" style="font-size:clamp(28px,4vw,52px)">${esc(G.teams[t].name)}, au tampon !</h2>
+      <div class="bounce">${avatar(t,120)}</div>
+      <div id="stz" style="min-height:clamp(120px,22vw,300px);display:flex;align-items:center"><button class="btn big pink" id="tamp">Tamponner le PV</button></div>
+    </div>`);
+    $("#tamp").onclick = () => {
+      SFX.stamp(); $("#stz").innerHTML = '<div class="stamp">Avis<br>favorable !</div>';
+      setTimeout(SFX.fanfare, 500);
+      setTimeout(() => { const b = document.createElement("button"); b.className = "btn big cyan"; b.textContent = "Voir le podium"; b.onclick = () => endGame(before); $("#app .center").appendChild(b); }, 1200);
+    };
+  }
+  show();
+};
+
+/* ---- Fin ---- */
+function screenEnd(){
+  CUR = { onKey:(k)=>{ if(k==="Enter") { G = freshGame(); screenTitle(); } } };
+  const w = G.winner ?? (G.teams[0].pts === G.teams[1].pts ? -1 : (G.teams[0].pts > G.teams[1].pts ? 0 : 1));
+  render(`${topbar("Podium")}
+  <div class="grow center" style="gap:24px">
+    <span class="eyebrow">Le Complexe des Dunes peut ouvrir</span>
+    <h2 class="${w<0?"neon-c":TCLS[w]}" style="font-size:clamp(30px,4.6vw,64px)">${w<0 ? "Égalité parfaite !" : "Victoire : " + esc(G.teams[w].name)}</h2>
+    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}"><div class="${t===w?"bounce":""}">${avatar(t, t===w?120:84)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">${G.teams[t].pts}</span><span class="muted">points</span></div>`).join("")}</div>
+    <div class="row" style="justify-content:center"><button class="btn big pink" data-act="again">Rejouer avec les mêmes équipes</button><button class="btn" data-act="newgame">Nouvelle partie</button></div>
+  </div>`);
+}
+
+/* ============ RÉGIE ============ */
+function refreshRegie(){
+  const r = $("#regie"); if(r.hidden) return;
+  const q = CUR && CUR.q;
+  r.innerHTML = `<div class="row" style="justify-content:space-between"><h3>Régie animateur</h3><button class="btn ghost" data-act="regie">Fermer</button></div>
+    <p class="note">Ouvrez la régie quand l'écran projeté ne la montre pas (écran étendu, ou projecteur en pause).</p>
+    <div><h3>Bonne réponse</h3>${q ? `<p class="ans-key">${LETTERS[q.c]} · ${esc(q.o[q.c])}</p><p class="note">${esc(q.e||"")}</p>` : `<p class="note">Pas de question à l'écran.</p>`}</div>
+    <div><h3>Ajuster les points</h3>${[0,1].map(t=>`<div class="row" style="margin-top:8px"><span style="flex:1;color:${TCOL[t]};font-weight:700">${esc(G.teams[t].name)} : ${G.teams[t].pts}</span><button class="btn ghost" data-adj="${t}|-1">−1</button><button class="btn ghost" data-adj="${t}|1">+1</button></div>`).join("")}</div>
+    <div><h3>Raccourcis</h3><div class="keys"><span class="kbd">A</span><span>Buzzer équipe 1</span><span class="kbd">P</span><span>Buzzer équipe 2</span><span class="kbd">V</span><span>Bonne réponse / mot trouvé</span><span class="kbd">X</span><span>Mauvaise réponse</span><span class="kbd">S</span><span>Passer (Tabou)</span><span class="kbd">Espace</span><span>Révéler / continuer</span></div></div>
+    <div class="row"><button class="btn ghost" data-act="skip">Passer l'épreuve</button><button class="btn ghost" data-act="board">Plateau</button><button class="btn ghost" data-act="home">Menu</button></div>`;
+  r.querySelectorAll("[data-adj]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.adj.split("|").map(Number); addPts(t, d); });
+}
+
+/* ============ ACTIONS & ENTRÉES ============ */
+const ACT = {
+  home:()=>{ $("#regie").hidden = true; screenTitle(); },
+  preset:()=>{ G.plan = PRESET.slice(); G.saboteur = true; G.themes = []; G.level = "ca"; screenTeams(); },
+  compose:screenCompose, toteams:()=>{ if(!G.plan.length){ return; } screenTeams(); },
+  bank:screenBank, kit:screenKit,
+  resetbank:()=>{ if(TOURNEE){ BANK = TOURNEE; BANK_SRC = "tournee"; } else { BANK = DEMO_Q.map((r,i)=>({id:"d"+i,t:r[0],n:r[1],q:r[2],o:r[3],c:0,e:r[4]})); BANK_SRC = "demo"; } G.used = []; try{ localStorage.removeItem("af-bank"); }catch(e){} screenBank(); },
+  start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; SFX.go(); screenBoard(); },
+  launch, board:()=>{ $("#regie").hidden = true; screenBoard(); },
+  skip:()=>{ $("#regie").hidden = true; if(G.step < G.plan.length){ G.step++; } screenBoard(); },
+  again:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.used = []; screenBoard(); },
+  newgame:()=>{ G = freshGame(); screenTitle(); },
+  regie:()=>{ const r = $("#regie"); r.hidden = !r.hidden; refreshRegie(); },
+  sound:()=>{ SOUND = !SOUND; const b = $("#sndbtn"); if(b) b.textContent = SOUND ? "Son : oui" : "Son : non"; },
+  full:()=>{ try{ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }catch(e){} }
+};
+document.addEventListener("click", e => { const b = e.target.closest("[data-act]"); if(b && ACT[b.dataset.act]){ e.preventDefault(); ACT[b.dataset.act](); } });
+function buzz(t){ if(CUR && CUR.onBuzz) CUR.onBuzz(t); }
+document.addEventListener("keydown", e => {
+  if(e.target.closest && e.target.closest("input,select,textarea")) return;
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  if(k === "a" || k === "q"){ e.preventDefault(); return buzz(0); }
+  if(k === "p" || k === "m"){ e.preventDefault(); return buzz(1); }
+  if(k === "r"){ return ACT.regie(); }
+  if(CUR && CUR.onKey && ["v","x","s"," ","Enter"].includes(k)){ e.preventDefault(); CUR.onKey(k); }
+});
+/* Manettes : manette 1 = équipe 1, manette 2 = équipe 2, n'importe quel bouton. */
+const padPrev = [false,false];
+(function poll(){
+  try{
+    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    const list = Array.from(pads || []).filter(Boolean);
+    [0,1].forEach(t => { const p = list[t]; const down = !!(p && p.buttons.some(b => b.pressed)); if(down && !padPrev[t]) buzz(t); padPrev[t] = down; });
+  }catch(e){}
+  requestAnimationFrame(poll);
+})();
+
+/* Démarrage (et reprise après mise à jour de la page) */
+function boot(data){
+  if(data && data.G){ G = data.G; screenBoard(); } else screenTitle();
+}
+window.claude?.hot?.snapshot?.(() => ({ G }));
+window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
+loadTournee();
+</script>
+
+</body>
+</html>
