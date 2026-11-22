@@ -40,7 +40,11 @@ Des buzzers USB réglés sur les touches A et P fonctionnent directement.
 
 Un formateur peut aussi importer son propre fichier CSV depuis le menu « Banque de questions ».
 
-## Mode téléphone : relier le jeu à Firebase (une seule fois)
+## Mode téléphone : Firebase
+
+Le jeu est relié au projet Firebase `avis-favorable` (Realtime Database, europe-west1). Pour le relier à un autre projet, suivez les étapes ci-dessous.
+
+### Relier le jeu à un projet Firebase
 
 Les téléphones communiquent avec l'écran par une base Firebase Realtime Database (offre gratuite « Spark », jusqu'à 100 joueurs connectés en même temps).
 

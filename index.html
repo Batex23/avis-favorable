@@ -1144,7 +1144,15 @@ function screenEnd(){
 
 /* ============ MODE TÉLÉPHONE ============ */
 /* Configuration Firebase (Realtime Database) : à coller ici, voir le README. */
-const FIREBASE_CONFIG = null;
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDrFyt0FKHqrV4CqbX15Cp0yQgF-Y0qwh8",
+  authDomain: "avis-favorable.firebaseapp.com",
+  databaseURL: "https://avis-favorable-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "avis-favorable",
+  storageBucket: "avis-favorable.firebasestorage.app",
+  messagingSenderId: "232683274949",
+  appId: "1:232683274949:web:71b8a8e3df58e39b5926ac"
+};
 const PARAMS = new URLSearchParams(location.search);
 const NET_LOCAL = PARAMS.get("net") === "local";      // test sur un seul ordinateur : ?net=local
 const PH = { want:false, on:false, net:null, code:"", players:{}, k:0 };
