@@ -199,6 +199,11 @@ h2{text-wrap:balance}
 .opt input{width:22px;height:22px;accent-color:var(--pink)}
 .opt.soon{opacity:.45;cursor:default}
 .opt .d{margin-left:auto;font-size:13px;color:var(--muted);font-weight:500}
+.opt.pitch{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;row-gap:3px;align-items:center}
+.opt.pitch .d{margin-left:0;text-align:right}
+.opt.pitch .pt{grid-column:2 / -1;font-size:14px;font-weight:500;line-height:1.4;color:var(--fg)}
+.opt.pitch .po{grid-column:2 / -1;font-size:13px;font-weight:600;color:var(--amber)}
+.opt.pitch.soon .pt,.opt.pitch.soon .po{color:var(--muted)}
 .tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600;background:var(--panel2);cursor:pointer;min-height:40px}
 .tag[aria-pressed=true]{border-color:var(--cyan);color:var(--cyan)}
@@ -440,6 +445,18 @@ const GAMES = {
   tribunal:{nom:"Le Tribunal", sub:"Registre de sécurité", min:7, icon:'<path d="M32 10v40M18 50h28"/><path d="M14 18h36"/><path d="M14 18l-6 14h12zM50 18l-6 14h12z"/>'},
   saboteur:{nom:"Le Saboteur (fil rouge)", sub:"Bluff", min:3, thread:true, icon:'<circle cx="32" cy="26" r="10"/><path d="M14 52c2-10 10-14 18-14s16 4 18 14"/><path d="M22 24h20" stroke-width="5"/>'},
   finale:  {nom:"Le Coup de tampon", sub:"Finale", min:8, icon:'<rect x="24" y="12" width="16" height="18" rx="4"/><path d="M14 36h36v10H14z"/><path d="M18 52h28"/>'}
+};
+/* Pitch et objectif pédagogique de chaque épreuve, affichés dans « Composer ma séance » */
+const PITCH = {
+  coins:["Une question, quatre coins de la salle : tout le monde se lève et choisit son camp. Idéal pour ouvrir la séance et réveiller le groupe.","Réviser les bases réglementaires avec la banque commune."],
+  tabou:["Faire deviner un mot du métier sans les quatre mots interdits. Rapide, drôle, et chacun doit expliquer avec ses propres mots.","Maîtriser le vocabulaire de la prévention."],
+  money:["Dix jetons à miser sur les réponses : les mauvaises tombent dans la trappe. L'équipe doit débattre et assumer ses doutes.","Argumenter en équipe et mesurer sa certitude."],
+  lances:["Bataille d'arrosage en 2D pilotée au téléphone : on éteint les foyers, on trempe l'adversaire, on recharge au poteau en répondant aux questions. Le temps fort du milieu de séance.","Ancrer les connaissances dans l'action, sous pression."],
+  desamorcage:["Un opérateur face au tableau SSI, son équipe dos à l'écran avec le manuel : il faut se parler pour traiter l'alarme. Manuel à imprimer.","Communiquer et lire un tableau SSI."],
+  faussepiste:["Le SSI déclenche, mais le plan est-il à jour ? Croiser l'ECS, le plan d'intervention et les témoins pour trouver le vrai local et engager le premier engin.","Fiabiliser l'information à l'arrivée sur les lieux."],
+  tribunal:["Trois semaines après votre intervention, un incendie : le juge épluche le registre de sécurité. Relaxe ou mise en cause ?","La traçabilité au registre lors des interventions en ERP."],
+  saboteur:["Un traître caché dans chaque équipe pendant toute la séance, avec un contrat secret par épreuve. Révélation après la finale, qui peut renverser le podium. Sans téléphone : cartes à imprimer.","Développer l'esprit critique : ne pas suivre la majorité sans réfléchir."],
+  finale:["Duel au buzzer, cinq bonnes réponses, des questions qui montent jusqu'au niveau PRV2. Le vainqueur tamponne le PV : avis favorable !","Conclure la séance sur un temps fort."]
 };
 const PRESET = ["coins","tabou","money","faussepiste","tribunal","finale"];
 const PRESET_P = ["coins","tabou","money","lances","faussepiste","tribunal","finale"];
@@ -738,7 +755,7 @@ function screenCompose(){
   <div class="form-grid">
     <div class="panel" style="display:flex;flex-direction:column;gap:10px">
       <h2 style="font-size:24px">Épreuves</h2>
-      ${Object.entries(GAMES).map(([k,g])=>{ const off = g.soon || (g.phoneOnly && !PH.want); const on = g.thread ? G.saboteur : G.plan.includes(k); return `<label class="opt ${off?"soon":""}"><input type="checkbox" ${off?"disabled":""} ${on && !off?"checked":""} data-game="${k}"> ${esc(g.nom)}<span class="d">${g.soon?"bientôt":g.phoneOnly && !PH.want ? "avec téléphones" : g.thread ? "toute la partie" : "≈ "+g.min+" min"}</span></label>`; }).join("")}
+      ${Object.entries(GAMES).map(([k,g])=>{ const off = g.soon || (g.phoneOnly && !PH.want); const on = g.thread ? G.saboteur : G.plan.includes(k); return `<label class="opt pitch ${off?"soon":""}"><input type="checkbox" ${off?"disabled":""} ${on && !off?"checked":""} data-game="${k}"><span class="pn">${esc(g.nom)}</span><span class="d">${g.soon?"bientôt":g.phoneOnly && !PH.want ? "avec téléphones uniquement" : g.thread ? "toute la partie" : "≈ "+g.min+" min"}</span>${PITCH[k] ? `<span class="pt">${esc(PITCH[k][0])}</span><span class="po">Objectif : ${esc(PITCH[k][1])}</span>` : ""}</label>`; }).join("")}
       <p class="note">La finale monte toujours en difficulté jusqu'au niveau PRV2.</p>
       <p class="note">Durée estimée : <strong id="tot">${tot}</strong> minutes, plus l'accueil. La finale se joue toujours en dernier.</p>
       <p class="note">Désamorçage : imprimez 2 exemplaires du <a href="${MANUEL_URL}" target="_blank" rel="noopener" style="color:var(--cyan)">manuel du PC sécurité</a>.</p>
