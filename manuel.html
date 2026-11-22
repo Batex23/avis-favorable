@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manuel du PC sécurité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap">
+<style>
+/* Manuel papier : une page A4 recto-verso, lisible dos à l'écran. Encre sombre sur blanc, repères roses et cyan du jeu. */
+:root{--ink:#14142A;--muted:#4A4A66;--line:#C9C7DD;--pink:#C4116A;--cyan:#007A85;--bg:#FFFFFF;--soft:#F3F2FA;
+  --f:'Chakra Petch','Segoe UI',system-ui,sans-serif;color-scheme:light}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.45}
+main{max-width:820px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left,0px)) 40px max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+h1{margin:0;font-size:30px;line-height:1.1}
+h2{margin:0 0 8px;font-size:19px;text-transform:uppercase;letter-spacing:.08em;color:var(--pink)}
+p{margin:0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-bottom:3px solid var(--ink);padding-bottom:10px}
+.tag{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.warn{background:var(--soft);border-left:0;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1.5px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:700}
+td:first-child{font-weight:700;white-space:nowrap}
+.wrap{overflow-x:auto}
+.proc{border:2px solid var(--ink);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;break-inside:avoid}
+.proc h3{margin:0;font-size:17px}
+ol{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:5px}
+.btn{font-weight:700;border:1.5px solid var(--ink);border-radius:6px;padding:0 5px;white-space:nowrap}
+.or{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.grid{grid-template-columns:1fr}}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1.5px solid var(--ink)}
+.r{background:#E02828}.a{background:#F29A00}.y{background:#F2D600}.g{background:#22B35A}
+.gold{border:3px solid var(--pink);border-radius:12px;padding:10px 14px;font-weight:700}
+@media print{body{font-size:12.5px}main{padding:0;gap:14px}h1{font-size:24px}.noprint{display:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="head">
+    <div><span class="tag">Avis Favorable ! · Épreuve Désamorçage</span><h1>Manuel du PC sécurité<br>Complexe des Dunes</h1></div>
+    <span class="tag" style="color:var(--pink)">Ne pas montrer à l'opérateur</span>
+  </div>
+  <p class="warn">Consignes fictives, écrites pour le jeu à partir d'un SSI de catégorie A avec alarme générale temporisée. Elles ne remplacent pas les consignes réelles d'un établissement et sont à valider par un préventionniste.</p>
+
+  <div class="gold">Règle d'or : toute action qui n'est pas dans la procédure, ou faite trop tôt, compte comme une fausse manœuvre. À la troisième, l'alarme est ratée.</div>
+
+  <section>
+    <h2>1 · Lire le tableau</h2>
+    <p>L'écran de l'ECS affiche un code en trois parties : <strong>Lettre - Zone - Numéro</strong>, par exemple <strong>F-ZD4-012</strong>.</p>
+    <div class="wrap" style="margin-top:8px"><table>
+      <tr><th>Lettre</th><th>Signification</th><th>Procédure</th></tr>
+      <tr><td>F</td><td>Feu : un détecteur ou un déclencheur manuel s'est déclenché.</td><td>Procédure FEU</td></tr>
+      <tr><td>D</td><td>Dérangement : un détecteur ou une ligne ne fonctionne plus.</td><td>Procédure DÉRANGEMENT</td></tr>
+    </table></div>
+    <p style="margin-top:8px">Le numéro désigne le point de détection : il ne change rien à la procédure.</p>
+    <div class="grid" style="margin-top:10px">
+      <p><span class="led r"></span><strong>Feu · alarme restreinte</strong> : l'alarme ne sonne qu'au PC sécurité.</p>
+      <p><span class="led a"></span><strong>Temporisation en cours</strong> : l'évacuation générale se déclenchera seule à la fin du délai.</p>
+      <p><span class="led a"></span><strong>DAS</strong> orange clignotant : un DAS n'est pas en position de sécurité. Vert : tout va bien.</p>
+      <p><span class="led y"></span><strong>Dérangement</strong> : une partie de la détection est hors service.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · Zones de détection</h2>
+    <div class="wrap"><table>
+      <tr><th>Zone</th><th>Local</th><th>Accès à indiquer aux secours</th></tr>
+      <tr><td>ZD1</td><td>Hall d'accueil et billetterie</td><td>Entrée principale, place des Dunes</td></tr>
+      <tr><td>ZD2</td><td>Salle de spectacle (800 places)</td><td>Sorties de secours, parking est</td></tr>
+      <tr><td>ZD3</td><td>Loges et coulisses</td><td>Quai de déchargement, rue des Pins</td></tr>
+      <tr><td>ZD4</td><td>Cuisine du restaurant</td><td>Porte de service, cour nord</td></tr>
+      <tr><td>ZD5</td><td>Salle du restaurant</td><td>Terrasse, boulevard de l'Océan</td></tr>
+      <tr><td>ZD6</td><td>Hôtel, étages 1 à 3</td><td>Entrée hôtel, colonne sèche cage A</td></tr>
+      <tr><td>ZD7</td><td>Hôtel, étages 4 à 6</td><td>Entrée hôtel, colonne sèche cage B</td></tr>
+      <tr><td>ZD8</td><td>Locaux techniques, sous-sol</td><td>Rampe du sous-sol, parking ouest</td></tr>
+    </table></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>3 · Procédures</h2>
+    <div class="proc">
+      <h3>Procédure FEU (code F)</h3>
+      <ol>
+        <li><span class="btn">Acquitter le buzzer du tableau</span></li>
+        <li><span class="btn">Envoyer un agent en levée de doute</span>, puis attendre son message radio. Ne rien faire d'autre pendant ce temps.</li>
+        <li>Lire le message radio de l'agent :
+          <ul style="margin:6px 0 0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px">
+            <li><strong>Feu confirmé</strong> (fumée, flammes, odeur de brûlé) :
+              <span class="btn">Déclencher l'évacuation générale</span> et <span class="btn">Appeler les secours (18 / 112)</span> <span class="or">(dans l'ordre que vous voulez)</span>.
+              Si le voyant DAS clignote orange, ajouter <span class="btn">Commander les DAS</span>.
+              Ensuite seulement, <span class="btn">Guider les secours</span> en choisissant l'accès de la zone (tableau 2).</li>
+            <li><strong>Fausse alarme</strong> (rien constaté, vapeur, machine à fumée) :
+              <span class="btn">Réarmer le système</span>, puis <span class="btn">Noter au registre de sécurité</span>.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+    <div class="proc">
+      <h3>Procédure DÉRANGEMENT (code D)</h3>
+      <ol>
+        <li><span class="btn">Acquitter le buzzer du tableau</span></li>
+        <li><span class="btn">Appeler le mainteneur</span> et <span class="btn">Lancer une ronde de surveillance</span> dans la zone <span class="or">(dans l'ordre que vous voulez)</span>.</li>
+        <li><span class="btn">Noter au registre de sécurité</span></li>
+      </ol>
+    </div>
+  </section>
+  <p class="warn">Points : alarme traitée = +3, sans aucune fausse manœuvre = +1 en bonus. Chaque équipe traite deux alarmes, avec un opérateur différent à chaque fois.</p>
+</main>
+</body>
+</html>

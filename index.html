@@ -19,6 +19,9 @@
   color-scheme:dark;
 }
 html,body{height:100%}
+[hidden]{display:none!important}
+body{margin:0}
+*,*::before,*::after{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:16px;overflow:hidden;
   background-image:linear-gradient(rgba(46,242,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(46,242,255,.06) 1px,transparent 1px);background-size:40px 40px}
 #app{height:100%;box-sizing:border-box;padding-block:clamp(12px,2.2vh,28px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:clamp(10px,2vh,22px);overflow-y:auto}
@@ -206,11 +209,47 @@ th{color:var(--muted);font-weight:600}
 .scroll{overflow:auto;max-height:44vh}
 .note{font-size:14px;color:var(--muted);line-height:1.45}
 
+/* Désamorçage : tableau SSI */
+.ssi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(10px,1.6vw,20px)}
+@media (max-width:860px){.ssi{grid-template-columns:1fr}}
+.ssi-col{display:flex;flex-direction:column;gap:clamp(10px,1.6vh,16px);min-width:0}
+.ssi-box{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.ssi-box h3{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.lcd{background:#06200E;border:3px solid #123A1C;border-radius:10px;padding:12px 14px;font-family:'Courier New',ui-monospace,monospace;color:#7CFF8A;text-shadow:0 0 6px rgba(124,255,138,.6);font-size:clamp(20px,2.4vw,32px);font-weight:700;line-height:1.25;letter-spacing:.06em}
+.lcd small{display:block;font-size:.55em;letter-spacing:.1em;opacity:.85}
+.leds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}
+.ledrow{display:flex;align-items:center;gap:10px;font-size:clamp(14px,1.4vw,17px);font-weight:600}
+.led{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:#26263E;border:2px solid #3A3A5C}
+.led.red{background:#FF3B3B;border-color:#FF8080;box-shadow:0 0 12px #FF3B3B}
+.led.amber{background:#FFB020;border-color:#FFD27A;box-shadow:0 0 12px #FFB020}
+.led.yellow{background:#FFE14D;border-color:#FFF0A0;box-shadow:0 0 12px #FFE14D}
+.led.green{background:#3BE37A;border-color:#9AF5BC;box-shadow:0 0 10px #3BE37A}
+.blink{animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{background:#26263E;box-shadow:none;border-color:#3A3A5C}}
+.radio{border:2px dashed var(--line);border-radius:14px;padding:12px 14px;font-size:clamp(16px,1.8vw,22px);font-weight:600;min-height:2.6em;display:flex;align-items:center;gap:12px}
+.radio.on{border-style:solid;border-color:var(--amber);color:var(--amber)}
+.acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.acts{grid-template-columns:1fr}}
+.act{appearance:none;text-align:left;border:2px solid var(--line);background:var(--panel2);border-radius:12px;padding:10px 12px;font-size:clamp(14px,1.4vw,17px);font-weight:700;cursor:pointer;min-height:48px;transition:transform .1s,border-color .1s}
+.act:hover{border-color:var(--cyan);transform:translateY(-1px)}
+.act.done{border-color:var(--lime);color:var(--lime)}
+.act.err{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.act[disabled]{opacity:.45;pointer-events:none}
+.strikes{display:flex;gap:6px;align-items:center}
+.strike{width:26px;height:26px;border-radius:8px;border:2px solid var(--bad)}
+.strike.on{background:var(--bad);box-shadow:0 0 10px var(--bad)}
+.guide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.guide{grid-template-columns:1fr}}
+.qr{background:#fff;padding:10px;border-radius:12px;display:inline-block;line-height:0}
+.qr img,.qr canvas{display:block}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 </style>
 
 </head>
 <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <div id="app" aria-live="polite"></div>
 <div id="overlay" hidden><div class="cd neon-p" id="cdtext"></div></div>
 <aside id="regie" hidden aria-label="Régie de l'animateur"></aside>
@@ -281,14 +320,34 @@ const GAMES = {
   coins:   {nom:"Les 4 coins", sub:"Questions", min:8, icon:'<rect x="14" y="14" width="14" height="14" rx="3"/><rect x="36" y="14" width="14" height="14" rx="3"/><rect x="14" y="36" width="14" height="14" rx="3"/><rect x="36" y="36" width="14" height="14" rx="3"/>'},
   tabou:   {nom:"Tabou", sub:"Communication", min:8, icon:'<path d="M14 20h36v20H30l-10 8v-8h-6z"/><path d="M22 30h20" stroke-width="5"/>'},
   money:   {nom:"Money Drop", sub:"Questions", min:10, icon:'<circle cx="32" cy="32" r="16"/><circle cx="32" cy="32" r="8"/>'},
-  saboteur:{nom:"Le Saboteur", sub:"Bluff", min:3, icon:'<circle cx="32" cy="26" r="10"/><path d="M14 52c2-10 10-14 18-14s16 4 18 14"/><path d="M22 24h20" stroke-width="5"/>'},
-  finale:  {nom:"Le Coup de tampon", sub:"Finale", min:8, icon:'<rect x="24" y="12" width="16" height="18" rx="4"/><path d="M14 36h36v10H14z"/><path d="M18 52h28"/>'},
-  desamorcage:{nom:"Désamorçage", sub:"Bientôt", soon:true, min:8},
+  desamorcage:{nom:"Désamorçage", sub:"PC sécurité", min:9, icon:'<rect x="10" y="14" width="44" height="36" rx="4"/><rect x="16" y="20" width="18" height="10" rx="2"/><circle cx="44" cy="24" r="3"/><circle cx="44" cy="34" r="3"/><path d="M16 40h12M34 40h12"/>'},
   premier:{nom:"Premier sur les lieux", sub:"Bientôt", soon:true, min:7},
   lances:{nom:"Guerre des lances", sub:"Bientôt", soon:true, min:10},
-  tribunal:{nom:"Le Tribunal", sub:"Bientôt", soon:true, min:7}
+  tribunal:{nom:"Le Tribunal", sub:"Bientôt", soon:true, min:7},
+  saboteur:{nom:"Le Saboteur", sub:"Bluff", min:3, icon:'<circle cx="32" cy="26" r="10"/><path d="M14 52c2-10 10-14 18-14s16 4 18 14"/><path d="M22 24h20" stroke-width="5"/>'},
+  finale:  {nom:"Le Coup de tampon", sub:"Finale", min:8, icon:'<rect x="24" y="12" width="16" height="18" rx="4"/><path d="M14 36h36v10H14z"/><path d="M18 52h28"/>'}
 };
-const PRESET = ["coins","tabou","money","saboteur","finale"];
+const PRESET = ["coins","tabou","money","desamorcage","saboteur","finale"];
+const MANUEL_URL = "https://batex23.github.io/avis-favorable/manuel.html";
+/* Complexe des Dunes : zones de détection (consignes fictives du jeu, à valider) */
+const ZONES = [
+  {id:"ZD1", nom:"Hall d'accueil et billetterie", acces:"Entrée principale, place des Dunes", type:"L"},
+  {id:"ZD2", nom:"Salle de spectacle (800 places)", acces:"Sorties de secours, parking est", type:"L"},
+  {id:"ZD3", nom:"Loges et coulisses", acces:"Quai de déchargement, rue des Pins", type:"L"},
+  {id:"ZD4", nom:"Cuisine du restaurant", acces:"Porte de service, cour nord", type:"N"},
+  {id:"ZD5", nom:"Salle du restaurant", acces:"Terrasse, boulevard de l'Océan", type:"N"},
+  {id:"ZD6", nom:"Hôtel, étages 1 à 3", acces:"Entrée hôtel, colonne sèche cage A", type:"O"},
+  {id:"ZD7", nom:"Hôtel, étages 4 à 6", acces:"Entrée hôtel, colonne sèche cage B", type:"O"},
+  {id:"ZD8", nom:"Locaux techniques, sous-sol", acces:"Rampe du sous-sol, parking ouest", type:"-"}
+];
+const ACTIONS = [
+  ["acq","Acquitter le buzzer du tableau"],["agent","Envoyer un agent en levée de doute"],
+  ["evac","Déclencher l'évacuation générale"],["appel","Appeler les secours (18 / 112)"],
+  ["das","Commander les DAS"],["rearm","Réarmer le système"],
+  ["maint","Appeler le mainteneur"],["ronde","Lancer une ronde de surveillance"],
+  ["reg","Noter au registre de sécurité"],["guide","Guider les secours"]
+];
+const ACT_NAME = Object.fromEntries(ACTIONS);
 const LETTERS = ["A","B","C","D"];
 const CORNERS = ["Coin avant gauche","Coin avant droit","Coin arrière gauche","Coin arrière droit"];
 
@@ -408,7 +467,7 @@ function screenTitle(){
     <h1 class="logo"><span class="logo-a neon-p" style="display:block">AVIS</span><span class="logo-b neon-c" style="display:block">FAVORABLE !</span></h1>
     <p class="muted" style="font-size:clamp(16px,1.8vw,21px);max-width:60ch;line-height:1.45">Deux équipes, un présentateur, des buzzers, et un seul établissement à faire ouvrir : le Complexe des Dunes.</p>
     <div class="menu">
-      <button class="btn big pink" data-act="preset">Émission complète<small>5 épreuves, environ 45 minutes, prête à jouer</small></button>
+      <button class="btn big pink" data-act="preset">Émission complète<small>6 épreuves, environ 50 minutes, prête à jouer</small></button>
       <button class="btn big cyan" data-act="compose">Composer ma séance<small>Choisir les épreuves, les thèmes et le niveau</small></button>
       <button class="btn" data-act="bank">Banque de questions<small>${BANK.length} questions ${bankLabel()}</small></button>
       <button class="btn" data-act="kit">Brancher les buzzers<small>Tester les touches et les manettes</small></button>
@@ -509,6 +568,7 @@ function screenCompose(){
       ${Object.entries(GAMES).map(([k,g])=>`<label class="opt ${g.soon?"soon":""}"><input type="checkbox" ${g.soon?"disabled":""} ${G.plan.includes(k)?"checked":""} data-game="${k}"> ${esc(g.nom)}<span class="d">${g.soon?"bientôt":"≈ "+g.min+" min"}</span></label>`).join("")}
       <p class="note">La finale monte toujours en difficulté jusqu'au niveau PRV2.</p>
       <p class="note">Durée estimée : <strong id="tot">${tot}</strong> minutes, plus l'accueil. La finale se joue toujours en dernier.</p>
+      <p class="note">Désamorçage : imprimez 2 exemplaires du <a href="${MANUEL_URL}" target="_blank" rel="noopener" style="color:var(--cyan)">manuel du PC sécurité</a>.</p>
     </div>
     <div class="panel" style="display:flex;flex-direction:column;gap:14px">
       <h2 style="font-size:24px">Questions</h2>
@@ -594,6 +654,8 @@ const HOWTO = {
           ctl:[["V","Mot trouvé : +1"],["S","Passer la carte"],["Buzzer adverse","Mot interdit : −1"]] },
   money:{ rules:["Chaque équipe reçoit 10 jetons pour la manche.","À chaque question, placez tous vos jetons sur les réponses, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
           ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]] },
+  desamorcage:{ rules:["Un opérateur s'assoit face au tableau SSI. Lui seul voit l'écran.","Ses coéquipiers tournent le dos à l'écran et lisent le manuel du PC sécurité.","L'opérateur décrit ce qu'il voit, l'équipe lui dicte les actions dans le bon ordre.","90 secondes par alarme. Au bout de 3 fausses manœuvres, c'est raté."],
+          ctl:[["Clic","L'opérateur clique les actions"],["Manuel","À imprimer, ou à ouvrir avec le QR code"],["+3","Alarme traitée (+1 sans faute)"]], qr:true },
   saboteur:{ rules:["Chaque équipe cache un saboteur depuis le début.","Discutez 1 minute, puis désignez un suspect.","Saboteur démasqué : +3 points pour l'équipe.","Raté : le saboteur repart avec le titre de « Cabinet de complaisance »."],
           ctl:[["Clic","Valider ou non chaque suspect"]] },
   finale:{ rules:["Duel au buzzer : la première équipe à 5 bonnes réponses gagne.","L'équipe qui mène au score part avec 1 réponse d'avance (2 si elle mène de 10 points ou plus).","Buzzer d'abord, réponse ensuite. Mauvaise réponse : la main passe à l'autre équipe.","Le capitaine vainqueur tamponne le PV : avis favorable !"],
@@ -609,11 +671,13 @@ function screenHowto(k){
     <h2 class="neon-p" style="font-size:clamp(34px,5vw,68px)">${esc(GAMES[k].nom)}</h2>
     <div class="howto">
       <div class="panel glow-p" style="text-align:left"><ul>${h.rules.map(r=>`<li>${r}</li>`).join("")}</ul></div>
-      <div class="panel glow-c ctl-list" style="text-align:left">${h.ctl.map(([a,b])=>`<div class="ctl"><span class="kbd">${a}</span><span>${b}</span></div>`).join("")}</div>
+      <div class="panel glow-c ctl-list" style="text-align:left">${h.ctl.map(([a,b])=>`<div class="ctl"><span class="kbd">${a}</span><span>${b}</span></div>`).join("")}
+        ${h.qr ? `<div class="row" style="margin-top:6px"><div class="qr" id="qrbox" aria-label="QR code du manuel"></div><span class="note">Manuel du PC sécurité<br><a href="${MANUEL_URL}" target="_blank" rel="noopener" style="color:var(--cyan)">batex23.github.io/avis-favorable/manuel.html</a></span></div>` : ""}</div>
     </div>
     <button class="btn big pink" id="gobtn">Prêts ? <span class="kbd">Espace</span></button>
   </div>`);
   $("#gobtn").onclick = go;
+  if(h.qr){ try{ new QRCode($("#qrbox"), {text:MANUEL_URL, width:140, height:140, correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const b = $("#qrbox"); if(b) b.hidden = true; } }
 }
 
 /* ============ ÉPREUVES ============ */
@@ -738,6 +802,136 @@ RUN.money = function(){
   show();
 };
 
+/* ---- Désamorçage ---- */
+const RADIO = {
+  feu:["Fumée noire sous la porte, forte odeur de brûlé.","Début de feu sur une poubelle, ça prend vite.","Flammes visibles au faux plafond.","Fumée qui sort d'une armoire électrique."],
+  faux:{ZD2:"Rien de grave : c'est la machine à fumée du spectacle.",ZD3:"Rien de grave : c'est la machine à fumée du spectacle.",ZD4:"Rien de grave : vapeur de cuisson, la hotte était coupée.",ZD6:"Rien de grave : vapeur de douche dans une chambre.",ZD7:"Rien de grave : vapeur de douche dans une chambre.", _:"Rien constaté : ni fumée, ni odeur, ni chaleur."}
+};
+function makeAlarm(){
+  const z = ZONES[Math.floor(Math.random()*ZONES.length)];
+  const type = Math.random() < .72 ? "F" : "D";
+  const real = Math.random() < .6;
+  const das = type === "F" && Math.random() < .5;
+  const num = String(Math.floor(Math.random()*90)+10).padStart(3,"0");
+  const radio = real ? shuffle(RADIO.feu)[0] : (RADIO.faux[z.id] || RADIO.faux._);
+  const groups = type === "D" ? [["acq"],["maint","ronde"],["reg"]] : [["acq"],["agent"]];
+  return {z, type, real, das, code:`${type}-${z.id}-${num}`, radio, groups};
+}
+RUN.desamorcage = function(){
+  const before = G.teams.map(t=>t.pts);
+  const order = [0,1,0,1]; let r = 0;
+  const intro = () => {
+    if(r >= order.length) return endGame(before);
+    const t = order[r];
+    CUR = { onKey:(k)=>{ if(k===" "||k==="Enter") play(); } };
+    render(`${topbar("Désamorçage · alarme " + (r+1) + " / " + order.length)}${scorebar()}
+    <div class="grow center" style="gap:20px">
+      <h2 class="${TCLS[t]}" style="font-size:clamp(28px,3.8vw,50px)">${esc(G.teams[t].name)} au PC sécurité</h2>
+      <p class="muted" style="font-size:clamp(17px,1.8vw,22px);max-width:56ch;line-height:1.45">${r < 2 ? "Désignez un opérateur." : "Changez d'opérateur."} Il s'assoit face à l'écran. Les autres se retournent, manuel en main.</p>
+      <button class="btn big pink" id="dgo">Déclencher l'alarme <span class="kbd">Espace</span></button>
+    </div>`);
+    $("#dgo").onclick = play;
+  };
+  const play = () => {
+    const t = order[r]; const A = makeAlarm();
+    let gi = 0, left = A.groups[0].slice(), strikes = 0, acq = false, evac = false, dasOk = !A.das, waiting = false, over = false, radio = "", guiding = false, rearmed = false;
+    const hint = () => over ? "Alarme terminée." : waiting ? "Attente du rapport radio." : "Actions attendues : " + left.map(a=>ACT_NAME[a]).join(" + ") + (A.type==="F" && gi>=2 && A.real ? " · Zone " + A.z.id + " = " + A.z.acces : "");
+    CUR = { regieHint:hint };
+    const leds = () => {
+      const F = A.type === "F";
+      const L = [
+        ["Feu · alarme restreinte", F ? "red" : "", F && !acq],
+        ["Temporisation en cours", F && !evac && !rearmed ? "amber" : "", true],
+        ["Évacuation générale", evac ? "red" : "", false],
+        ["DAS en position de sécurité", A.das && !dasOk ? "amber" : "green", A.das && !dasOk],
+        ["Dérangement", A.type === "D" ? "yellow" : "", !acq],
+        ["Sous tension", "green", false]
+      ];
+      return L.map(([n,c,b])=>`<div class="ledrow"><span class="led ${c} ${c && b ? "blink" : ""}" aria-hidden="true"></span><span>${n}${c?"":" · éteint"}</span></div>`).join("");
+    };
+    const draw = () => {
+      const rest = over ? "" : `
+        <div class="ssi-box"><h3>Commandes</h3><div class="acts">${ACTIONS.map(([k,n])=>`<button class="act" data-a="${k}" ${waiting||over?"disabled":""}>${n}</button>`).join("")}</div>
+        ${guiding ? `<div class="ssi-box" style="border-color:var(--cyan)"><h3>Où guider les secours ?</h3><div class="guide">${A.choices.map((c,i)=>`<button class="act" data-g="${i}">${esc(c)}</button>`).join("")}</div></div>` : ""}</div>`;
+      $("#dz").innerHTML = `
+      <div class="ssi">
+        <div class="ssi-col">
+          <div class="ssi-box"><h3>ECS · tableau de signalisation</h3><div class="lcd">${A.code}<small>${acq ? "BUZZER ACQUITTÉ" : "ATTENTE ACQUITTEMENT"}</small></div></div>
+          <div class="ssi-box"><h3>CMSI · voyants</h3><div class="leds">${leds()}</div></div>
+          <div class="radio ${radio?"on":""}" role="status">${radio ? "Radio de l'agent : « " + esc(radio) + " »" : (waiting ? "Agent en route vers la zone…" : "Radio : silence")}</div>
+        </div>
+        <div class="ssi-col">${rest}</div>
+      </div>`;
+      $("#strk").innerHTML = [0,1,2].map(i=>`<span class="strike ${i<strikes?"on":""}"></span>`).join("");
+      document.querySelectorAll("[data-a]").forEach(b => b.onclick = () => press(b.dataset.a, b));
+      document.querySelectorAll("[data-g]").forEach(b => b.onclick = () => pick(+b.dataset.g, b));
+      refreshRegie();
+    };
+    render(`${topbar("Désamorçage · " + G.teams[t].name)}
+    <div class="row" style="justify-content:space-between"><span class="timer" id="timer"></span><span class="strikes" aria-label="Fausses manœuvres"><span class="muted" style="margin-right:6px">Fausses manœuvres</span><span class="strikes" id="strk"></span></span></div>
+    <div id="dz" class="grow"></div>
+    <div id="dres"></div>`);
+    draw();
+    startTimer(90, () => finish(false, "Temps écoulé"));
+    function fault(btn){
+      strikes++; SFX.bad(); if(btn){ btn.classList.remove("err"); void btn.offsetWidth; btn.classList.add("err"); }
+      if(strikes >= 3){ draw(); return finish(false, "Trois fausses manœuvres"); }
+      draw();
+    }
+    function advance(){
+      if(left.length) return;
+      gi++;
+      if(gi < A.groups.length){ left = A.groups[gi].slice(); return; }
+      finish(true);
+    }
+    function press(a, btn){
+      if(over || waiting) return;
+      if(!left.includes(a)) return fault(btn);
+      if(a === "guide"){ guiding = true; A.choices = shuffle([A.z.acces, ...shuffle(ZONES.filter(z=>z.id!==A.z.id)).slice(0,3).map(z=>z.acces)]); SFX.blip(); return draw(); }
+      left = left.filter(x => x !== a); SFX.blip();
+      if(a === "acq") acq = true;
+      if(a === "evac"){ evac = true; SFX.buzz(0); }
+      if(a === "das") dasOk = true;
+      if(a === "rearm"){ rearmed = true; acq = true; }
+      if(a === "agent"){
+        waiting = true; draw();
+        setTimeout(() => {
+          if(over) return;
+          waiting = false; radio = A.radio; SFX.tick();
+          A.groups.push(...(A.real ? [["evac","appel", ...(A.das ? ["das"] : [])],["guide"]] : [["rearm"],["reg"]]));
+          advance(); draw();
+        }, 2600);
+        return;
+      }
+      advance(); if(!over) draw();
+    }
+    function pick(i, btn){
+      if(over) return;
+      if(A.choices[i] !== A.z.acces) return fault(btn);
+      guiding = false; left = []; SFX.good(); advance();
+    }
+    function finish(ok, why){
+      if(over) return; over = true; stopTimer();
+      const pts = ok ? 3 + (strikes === 0 ? 1 : 0) : 0;
+      if(pts) addPts(t, pts);
+      ok ? SFX.fanfare() : SFX.drop();
+      draw();
+      const expl = A.type === "D" ? `Dérangement en ${A.z.id} (${esc(A.z.nom)}) : acquitter, appeler le mainteneur et lancer une ronde, puis noter au registre.`
+        : A.real ? `Feu confirmé en ${A.z.id} (${esc(A.z.nom)}) : acquitter, levée de doute, évacuation générale et appel des secours${A.das ? ", commande des DAS" : ""}, puis guidage par : ${esc(A.z.acces)}.`
+        : `Fausse alarme en ${A.z.id} (${esc(A.z.nom)}) : acquitter, levée de doute, réarmer, puis noter au registre.`;
+      $("#dres").innerHTML = `<div class="panel ${ok?"glow-c":"glow-p"} center" style="gap:12px;margin-top:12px">
+        <h3 style="font-size:clamp(24px,3vw,38px)" class="${ok?"neon-c":"neon-p"}">${ok ? "Alarme maîtrisée ! +" + pts : esc(why) + " : alarme ratée"}</h3>
+        <p class="expl" style="max-width:70ch">${expl}</p>
+        <button class="btn big cyan" id="dnx">${r+1 < order.length ? "Alarme suivante" : "Fin de l'épreuve"} <span class="kbd">Espace</span></button></div>`;
+      CUR = { regieHint:hint, onKey:(k)=>{ if(k===" "||k==="Enter") nx(); } };
+      const nx = () => { r++; intro(); };
+      $("#dnx").onclick = nx;
+      refreshRegie();
+    }
+  };
+  intro();
+};
+
 /* ---- Le Saboteur ---- */
 RUN.saboteur = function(){
   const before = G.teams.map(t=>t.pts); const done = [null,null];
@@ -854,7 +1048,7 @@ function refreshRegie(){
   const q = CUR && CUR.q;
   r.innerHTML = `<div class="row" style="justify-content:space-between"><h3>Régie animateur</h3><button class="btn ghost" data-act="regie">Fermer</button></div>
     <p class="note">Ouvrez la régie quand l'écran projeté ne la montre pas (écran étendu, ou projecteur en pause).</p>
-    <div><h3>Bonne réponse</h3>${q ? `<p class="ans-key">${LETTERS[q.c]} · ${esc(q.o[q.c])}</p><p class="note">${esc(q.e||"")}</p>` : `<p class="note">Pas de question à l'écran.</p>`}</div>
+    <div><h3>${CUR && CUR.regieHint ? "Désamorçage" : "Bonne réponse"}</h3>${CUR && CUR.regieHint ? `<p class="note" style="font-size:16px;color:var(--fg)">${esc(CUR.regieHint())}</p>` : q ? `<p class="ans-key">${LETTERS[q.c]} · ${esc(q.o[q.c])}</p><p class="note">${esc(q.e||"")}</p>` : `<p class="note">Pas de question à l'écran.</p>`}</div>
     <div><h3>Ajuster les points</h3>${[0,1].map(t=>`<div class="row" style="margin-top:8px"><span style="flex:1;color:${TCOL[t]};font-weight:700">${esc(G.teams[t].name)} : ${G.teams[t].pts}</span><button class="btn ghost" data-adj="${t}|-1">−1</button><button class="btn ghost" data-adj="${t}|1">+1</button></div>`).join("")}</div>
     <div><h3>Raccourcis</h3><div class="keys"><span class="kbd">A</span><span>Buzzer équipe 1</span><span class="kbd">P</span><span>Buzzer équipe 2</span><span class="kbd">V</span><span>Bonne réponse / mot trouvé</span><span class="kbd">X</span><span>Mauvaise réponse</span><span class="kbd">S</span><span>Passer (Tabou)</span><span class="kbd">Espace</span><span>Révéler / continuer</span></div></div>
     <div class="row"><button class="btn ghost" data-act="skip">Passer l'épreuve</button><button class="btn ghost" data-act="board">Plateau</button><button class="btn ghost" data-act="home">Menu</button></div>`;
