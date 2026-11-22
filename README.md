@@ -11,14 +11,19 @@ Séance collective de 45 min à 1 h, de 6 à 12 joueurs, du chef d'agrès au PRV
 
 ## Les épreuves
 
-- **Les 4 coins** : chaque réponse est un coin de la salle, tout le monde se lève.
+- **Les 4 coins** : chaque réponse est un coin de la salle, tout le monde se lève. Jusqu'à 3 points par question et par équipe, selon la part de ses joueurs qui a bien répondu (la taille des équipes ne compte pas).
 - **Tabou** : faire deviner un mot du métier sans les mots interdits.
 - **Money Drop** : 10 jetons à répartir, les mauvaises réponses tombent dans la trappe.
+- **Guerre des lances** (avec téléphones) : bataille en 2D vue de dessus dans le Complexe des Dunes. Joystick et bouton « Arroser » sur le téléphone, foyers à éteindre (+2), adversaires à tremper (+1, gelés 3 s), réserve d'eau à recharger aux poteaux incendie en répondant aux questions.
 - **Désamorçage** : un opérateur face au tableau SSI, son équipe dos à l'écran avec le manuel du PC sécurité.
 - **Le Saboteur** : un traître caché par équipe, à démasquer avant la finale.
 - **Le Coup de tampon** (finale) : duel au buzzer, le capitaine gagnant tamponne le PV.
 
-À venir : Premier sur les lieux, Guerre des lances, le Tribunal de la commission.
+À venir : Premier sur les lieux, le Tribunal.
+
+## Mode test concepteur
+
+Sur l'écran d'accueil, « Mode test concepteur » ouvre l'écran projeté avec, à droite, quatre téléphones simulés (« Toi » et trois joueurs automatiques), un menu pour aller directement à une épreuve, et les explications de chaque écran, lues à voix haute si « Voix off » est coché. Rien ne passe par Firebase dans ce mode.
 
 ## Commandes
 

@@ -209,6 +209,58 @@ th{color:var(--muted);font-weight:600}
 .scroll{overflow:auto;max-height:44vh}
 .note{font-size:14px;color:var(--muted);line-height:1.45}
 
+/* Enseigne néon : FAVORABLE (vert) qui vire à DÉFAVORABLE (rouge), façon motel */
+.sign{display:block;font-family:var(--f-title);font-size:clamp(34px,6.2vw,88px);line-height:1;letter-spacing:.05em;white-space:nowrap}
+.sign .de,.sign .fav{animation:10s step-end infinite}
+.sign .fav{animation-name:favc;color:#fff;text-shadow:0 0 6px #2BFF88,0 0 20px #2BFF88,0 0 42px #2BFF88}
+.sign .de{animation-name:dec;color:rgba(255,255,255,.08);text-shadow:none}
+@keyframes favc{
+  0%,49%{color:#fff;text-shadow:0 0 6px #2BFF88,0 0 20px #2BFF88,0 0 42px #2BFF88}
+  50%{color:rgba(255,255,255,.12);text-shadow:none}
+  51%{color:#fff;text-shadow:0 0 6px #2BFF88,0 0 20px #2BFF88}
+  52.5%{color:rgba(255,255,255,.12);text-shadow:none}
+  53.5%{color:#fff;text-shadow:0 0 6px #2BFF88,0 0 20px #2BFF88}
+  55%{color:rgba(255,255,255,.12);text-shadow:none}
+  57%,86%{color:#fff;text-shadow:0 0 6px #FF2A2A,0 0 20px #FF2A2A,0 0 42px #FF2A2A}
+  87%{color:rgba(255,255,255,.12);text-shadow:none}
+  88%{color:#fff;text-shadow:0 0 6px #FF2A2A,0 0 20px #FF2A2A}
+  89.5%{color:rgba(255,255,255,.12);text-shadow:none}
+  91%,100%{color:#fff;text-shadow:0 0 6px #2BFF88,0 0 20px #2BFF88,0 0 42px #2BFF88}}
+@keyframes dec{
+  0%,55%{color:rgba(255,255,255,.08);text-shadow:none}
+  56%{color:#fff;text-shadow:0 0 6px #FF2A2A,0 0 22px #FF2A2A}
+  56.5%{color:rgba(255,255,255,.08);text-shadow:none}
+  57%,86%{color:#fff;text-shadow:0 0 6px #FF2A2A,0 0 20px #FF2A2A,0 0 42px #FF2A2A}
+  87%{color:rgba(255,255,255,.08);text-shadow:none}
+  88%{color:#fff;text-shadow:0 0 6px #FF2A2A,0 0 20px #FF2A2A}
+  89.5%,100%{color:rgba(255,255,255,.08);text-shadow:none}}
+.logo-a.neon-p{animation:avisf 7s step-end infinite}
+@keyframes avisf{0%,92%{opacity:1}93%{opacity:.35}94%{opacity:1}95.5%{opacity:.5}96.5%,100%{opacity:1}}
+
+/* Guerre des lances */
+.arena{position:relative;width:100%;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.arena canvas{display:block;max-width:100%;max-height:100%;border-radius:18px;border:2px solid var(--line);background:#0B0B18}
+.feed{position:absolute;top:10px;right:12px;display:flex;flex-direction:column;gap:4px;align-items:flex-end;pointer-events:none}
+.feed span{background:rgba(7,7,15,.8);border-radius:8px;padding:3px 10px;font-weight:600;font-size:14px}
+.joy{position:relative;width:min(62vw,240px);aspect-ratio:1;border-radius:50%;border:3px solid var(--line);background:radial-gradient(circle,var(--panel2),var(--panel));margin:0 auto;touch-action:none}
+.joy .knob{position:absolute;left:50%;top:50%;width:38%;aspect-ratio:1;border-radius:50%;background:var(--tc);box-shadow:0 0 18px var(--tc);transform:translate(-50%,-50%);pointer-events:none}
+.firebtn{width:100%;min-height:120px;border-radius:24px;border:4px solid #fff;background:#2E9BFF;color:#fff;font-family:inherit;font-size:30px;font-weight:700;box-shadow:0 0 26px #2E9BFF;touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none}
+.firebtn.on{transform:scale(.97);background:#59B4FF}
+.gauge{height:22px;border-radius:999px;border:2px solid #2E9BFF;overflow:hidden;background:var(--panel)}
+.gauge i{display:block;height:100%;background:linear-gradient(90deg,#2E9BFF,#7CD0FF)}
+.frozen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(46,155,255,.35);font-size:44px;font-weight:700;color:#fff;text-shadow:0 0 18px #2E9BFF;pointer-events:none;z-index:5}
+
+/* Mode test concepteur */
+body.admin #app{margin-right:min(540px,45vw)}
+#adminbar{position:fixed;top:0;right:0;bottom:0;width:min(540px,45vw);background:#0B0B18;border-left:2px solid var(--amber);display:flex;flex-direction:column;gap:10px;padding:12px max(12px,env(safe-area-inset-right,0px)) 12px 12px;box-sizing:border-box;overflow-y:auto;z-index:30}
+#adminbar h3{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber)}
+.narr{background:var(--panel);border:2px solid var(--amber);border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.45}
+.narr b{color:var(--amber)}
+.phones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.vphone{position:relative;border:3px solid #2A2A44;border-radius:18px;overflow:hidden;aspect-ratio:390/780;background:var(--bg)}
+.vphone iframe{position:absolute;left:0;top:0;width:390px;height:780px;border:0;transform-origin:0 0}
+.vphone span{position:absolute;left:6px;bottom:4px;font-size:11px;font-weight:700;color:var(--muted);z-index:2;background:rgba(7,7,15,.8);padding:1px 6px;border-radius:6px}
+
 /* Mode téléphone */
 .codepill{font-weight:700;letter-spacing:.2em;border:2px solid var(--amber);color:var(--amber);border-radius:999px;padding:6px 14px;font-size:15px}
 .modes{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -273,6 +325,7 @@ th{color:var(--muted);font-weight:600}
 .qr{background:#fff;padding:10px;border-radius:12px;display:inline-block;line-height:0}
 .qr img,.qr canvas{display:block}
 
+@media (prefers-reduced-motion:reduce){.sign .de,.sign .fav,.logo-a.neon-p{animation:none!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 </style>
 
@@ -349,14 +402,15 @@ const GAMES = {
   coins:   {nom:"Les 4 coins", sub:"Questions", min:8, icon:'<rect x="14" y="14" width="14" height="14" rx="3"/><rect x="36" y="14" width="14" height="14" rx="3"/><rect x="14" y="36" width="14" height="14" rx="3"/><rect x="36" y="36" width="14" height="14" rx="3"/>'},
   tabou:   {nom:"Tabou", sub:"Communication", min:8, icon:'<path d="M14 20h36v20H30l-10 8v-8h-6z"/><path d="M22 30h20" stroke-width="5"/>'},
   money:   {nom:"Money Drop", sub:"Questions", min:10, icon:'<circle cx="32" cy="32" r="16"/><circle cx="32" cy="32" r="8"/>'},
+  lances:{nom:"Guerre des lances", sub:"Téléphones", phoneOnly:true, min:6, icon:'<path d="M12 46l22-22"/><path d="M30 18l16 16"/><path d="M44 16c4 2 6 6 6 10"/><path d="M50 12c5 3 8 9 8 15"/><circle cx="14" cy="48" r="5"/>'},
   desamorcage:{nom:"Désamorçage", sub:"PC sécurité", min:9, icon:'<rect x="10" y="14" width="44" height="36" rx="4"/><rect x="16" y="20" width="18" height="10" rx="2"/><circle cx="44" cy="24" r="3"/><circle cx="44" cy="34" r="3"/><path d="M16 40h12M34 40h12"/>'},
   premier:{nom:"Premier sur les lieux", sub:"Bientôt", soon:true, min:7},
-  lances:{nom:"Guerre des lances", sub:"Bientôt", soon:true, min:10},
   tribunal:{nom:"Le Tribunal", sub:"Bientôt", soon:true, min:7},
   saboteur:{nom:"Le Saboteur", sub:"Bluff", min:3, icon:'<circle cx="32" cy="26" r="10"/><path d="M14 52c2-10 10-14 18-14s16 4 18 14"/><path d="M22 24h20" stroke-width="5"/>'},
   finale:  {nom:"Le Coup de tampon", sub:"Finale", min:8, icon:'<rect x="24" y="12" width="16" height="18" rx="4"/><path d="M14 36h36v10H14z"/><path d="M18 52h28"/>'}
 };
 const PRESET = ["coins","tabou","money","desamorcage","saboteur","finale"];
+const PRESET_P = ["coins","tabou","money","lances","desamorcage","saboteur","finale"];
 const MANUEL_URL = "https://batex23.github.io/avis-favorable/manuel.html";
 /* Complexe des Dunes : zones de détection (consignes fictives du jeu, à valider) */
 const ZONES = [
@@ -490,22 +544,22 @@ function render(html){ stopTimer(); $("#app").innerHTML = html; $("#app").scroll
 
 /* ============ ÉCRANS GÉNÉRAUX ============ */
 function screenTitle(){
-  CUR = null;
+  CUR = null; narrate("title");
   render(`<div class="grow center title-screen" style="gap:clamp(18px,3vh,36px)">
     <span class="eyebrow">Le jeu télé de la prévention</span>
-    <h1 class="logo"><span class="logo-a neon-p" style="display:block">AVIS</span><span class="logo-b neon-c" style="display:block">FAVORABLE !</span></h1>
+    <h1 class="logo" aria-label="Avis favorable !"><span class="logo-a neon-p" style="display:block">AVIS</span><span class="sign" aria-hidden="true"><span class="de">DÉ</span><span class="fav">FAVORABLE !</span></span></h1>
     <p class="muted" style="font-size:clamp(16px,1.8vw,21px);max-width:60ch;line-height:1.45">Deux équipes, un présentateur, des buzzers, et un seul établissement à faire ouvrir : le Complexe des Dunes.</p>
     <div class="center" style="gap:8px">
       <div class="modes" role="group" aria-label="Mode de jeu"><button class="btn" aria-pressed="${!PH.want}" data-act="mode0">Sans téléphone</button><button class="btn" aria-pressed="${PH.want}" data-act="mode1">Avec téléphones</button></div>
       <span class="note">${PH.want ? (phoneAvailable() ? "Les joueurs rejoignent la partie avec un QR code, sans compte ni installation." : "Le mode téléphone n'est pas encore relié à son serveur (Firebase) : voir le README du dépôt.") : "Tout se joue à l'écran, avec le clavier ou des buzzers USB."}</span>
     </div>
     <div class="menu">
-      <button class="btn big pink" data-act="preset">Émission complète<small>6 épreuves, environ 50 minutes, prête à jouer</small></button>
+      <button class="btn big pink" data-act="preset">Émission complète<small>${PH.want ? "7 épreuves dont la Guerre des lances, environ 55 minutes" : "6 épreuves, environ 50 minutes, prête à jouer"}</small></button>
       <button class="btn big cyan" data-act="compose">Composer ma séance<small>Choisir les épreuves, les thèmes et le niveau</small></button>
       <button class="btn" data-act="bank">Banque de questions<small>${BANK.length} questions ${bankLabel()}</small></button>
       <button class="btn" data-act="kit">Brancher les buzzers<small>Tester les touches et les manettes</small></button>
     </div>
-    <button class="btn ghost" data-act="joinform">Je suis joueur : rejoindre une partie avec mon téléphone</button>
+    <div class="row" style="justify-content:center"><button class="btn ghost" data-act="joinform">Je suis joueur : rejoindre une partie avec mon téléphone</button>${ADMIN ? "" : `<button class="btn ghost" data-act="admin" style="border-color:var(--amber);color:var(--amber)">Mode test concepteur</button>`}</div>
   </div>`);
 }
 function screenKit(){
@@ -594,12 +648,13 @@ function importCSV(ev){
 function screenCompose(){
   CUR = null;
   const themes = [...new Set(BANK.map(q=>q.t))];
+  G.plan = G.plan.filter(k => !GAMES[k].soon && !(GAMES[k].phoneOnly && !PH.want));
   const tot = G.plan.reduce((a,k)=>a+GAMES[k].min,0);
   render(`${topbar("Composer ma séance")}
   <div class="form-grid">
     <div class="panel" style="display:flex;flex-direction:column;gap:10px">
       <h2 style="font-size:24px">Épreuves</h2>
-      ${Object.entries(GAMES).map(([k,g])=>`<label class="opt ${g.soon?"soon":""}"><input type="checkbox" ${g.soon?"disabled":""} ${G.plan.includes(k)?"checked":""} data-game="${k}"> ${esc(g.nom)}<span class="d">${g.soon?"bientôt":"≈ "+g.min+" min"}</span></label>`).join("")}
+      ${Object.entries(GAMES).map(([k,g])=>{ const off = g.soon || (g.phoneOnly && !PH.want); return `<label class="opt ${off?"soon":""}"><input type="checkbox" ${off?"disabled":""} ${G.plan.includes(k) && !off?"checked":""} data-game="${k}"> ${esc(g.nom)}<span class="d">${g.soon?"bientôt":g.phoneOnly && !PH.want ? "avec téléphones" : "≈ "+g.min+" min"}</span></label>`; }).join("")}
       <p class="note">La finale monte toujours en difficulté jusqu'au niveau PRV2.</p>
       <p class="note">Durée estimée : <strong id="tot">${tot}</strong> minutes, plus l'accueil. La finale se joue toujours en dernier.</p>
       <p class="note">Désamorçage : imprimez 2 exemplaires du <a href="${MANUEL_URL}" target="_blank" rel="noopener" style="color:var(--cyan)">manuel du PC sécurité</a>.</p>
@@ -652,7 +707,7 @@ function screenTeams(){
   if(PH.on){
     try{ new QRCode($("#joinqr"), {text:joinURL(), width:180, height:180, correctLevel:QRCode.CorrectLevel.M}); }catch(e){}
     const plist = () => { [0,1].forEach(t => { const el = $("#plist"+t); if(el) el.innerHTML = teamPlayers(t).map(([,p])=>`<span>${esc(p.name)}</span>`).join("") || '<span class="muted" style="border:0">En attente…</span>'; }); const c = $("#pcount"); if(c) c.textContent = Object.keys(PH.players).length + " joueur(s) connecté(s)"; };
-    CUR.onPlayers = plist; plist(); pub("lobby", {});
+    CUR.onPlayers = plist; plist(); pub("lobby", {}); narrate("teams");
   }
   document.querySelectorAll("[data-emb]").forEach(b => b.onclick = () => { const [t,i] = b.dataset.emb.split("-").map(Number); G.teams[t].emb = i; SFX.blip(); screenTeams(); });
   document.querySelectorAll("[data-pl]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.pl.split("|").map(Number); G.teams[t].players = Math.min(8, Math.max(1, G.teams[t].players + d)); $("#pl"+t).textContent = G.teams[t].players; SFX.blip(); });
@@ -662,7 +717,7 @@ function screenTeams(){
 function screenBoard(){
   CUR = { onKey:(k)=>{ if(k==="Enter"||k===" ") launch(); } };
   if(G.step >= G.plan.length) return screenEnd();
-  pub("wait", {title:"Le plateau", msg:"Prochaine épreuve : " + GAMES[G.plan[G.step]].nom});
+  pub("wait", {title:"Le plateau", msg:"Prochaine épreuve : " + GAMES[G.plan[G.step]].nom}); narrate("board");
   render(`${topbar("Le plateau")}${scorebar()}
   <div class="panel grow" style="display:flex;flex-direction:column;justify-content:center;gap:20px">
     <h2 style="font-size:clamp(22px,2.6vw,34px);text-align:center">Tournée du Complexe des Dunes</h2>
@@ -670,7 +725,7 @@ function screenBoard(){
   </div>
   <div class="center" style="gap:8px"><button class="btn big pink" data-act="launch">Épreuve suivante : ${esc(GAMES[G.plan[G.step]].nom)}</button><span class="muted">ou <span class="kbd">Entrée</span></span></div>`);
 }
-function launch(){ SFX.blip(); screenHowto(G.plan[G.step]); }
+function launch(){ SFX.blip(); const k = G.plan[G.step]; if(GAMES[k].phoneOnly && !PH.on){ G.step++; return screenBoard(); } screenHowto(k); }
 function endGame(before){
   G.step++;
   const gain = [0,1].map(t => G.teams[t].pts - before[t]);
@@ -679,7 +734,7 @@ function endGame(before){
   const win = gain[0] === gain[1] ? -1 : (gain[0] > gain[1] ? 0 : 1);
   SFX.fanfare();
   CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") screenBoard(); } };
-  pub("wait", {title: win<0 ? "Égalité !" : G.teams[win].name + " remporte l'épreuve !", msg:"Regardez l'écran"});
+  pub("wait", {title: win<0 ? "Égalité !" : G.teams[win].name + " remporte l'épreuve !", msg:"Regardez l'écran"}); narrate("results");
   render(`${topbar("Résultats")}
   <div class="grow center" style="gap:24px">
     <h2 style="font-size:clamp(28px,4vw,54px)" class="${win<0?"neon-c":TCLS[win]}">${win<0 ? "Égalité !" : esc(G.teams[win].name) + " remporte l'épreuve !"}</h2>
@@ -690,9 +745,9 @@ function endGame(before){
 
 /* ---- Comment jouer ---- */
 const HOWTO = {
-  coins:{ rules:["Une question s'affiche avec quatre réponses.","Chaque réponse correspond à un coin de la salle.","Tout le monde se lève et va dans le coin de son choix avant la fin du chrono.","Chaque joueur dans le bon coin rapporte 1 point à son équipe."],
+  coins:{ rules:["Une question s'affiche avec quatre réponses.","Chaque réponse correspond à un coin de la salle.","Tout le monde se lève et va dans le coin de son choix avant la fin du chrono.","Chaque équipe marque jusqu'à 3 points par question : 3 si tous ses joueurs sont dans le bon coin, 2 pour les deux tiers, 1 pour un tiers."],
           ctl:[["Espace","Révéler la réponse (animateur)"],["+ / −","Compter les joueurs dans le bon coin"]],
-          rulesP:["Une question s'affiche avec quatre réponses, une par coin de la salle.","Chacun répond sur son téléphone avant la fin du chrono. Allez aussi dans votre coin !","Chaque bonne réponse rapporte 1 point à son équipe."],
+          rulesP:["Une question s'affiche avec quatre réponses, une par coin de la salle.","Chacun répond sur son téléphone avant la fin du chrono. Allez aussi dans votre coin !","Chaque équipe marque jusqu'à 3 points par question, selon la part de ses joueurs qui a bien répondu."],
           ctlP:[["Téléphone","Choisir A, B, C ou D"],["Espace","Révéler la réponse (animateur)"]] },
   tabou:{ rules:["Un joueur fait deviner le mot à son équipe en 60 secondes.","Ses coéquipiers tournent le dos à l'écran.","Les quatre mots barrés sont interdits.","L'autre équipe surveille : si un mot interdit est dit, elle buzze."],
           ctl:[["V","Mot trouvé : +1"],["S","Passer la carte"],["Buzzer adverse","Mot interdit : −1"]],
@@ -702,6 +757,8 @@ const HOWTO = {
           ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]],
           rulesP:["Chaque équipe reçoit 10 jetons pour la manche.","Placez vos jetons ensemble depuis vos téléphones, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
           ctlP:[["Téléphone","+ / − sur chaque réponse"],["Espace","Ouvrir les trappes (animateur)"]] },
+  lances:{ rules:["Chaque joueur dirige un pompier dans le Complexe des Dunes avec son téléphone.","Arrosez les foyers pour les éteindre (+2) et arrosez les adversaires pour les tremper (+1) : un joueur trempé est gelé 3 secondes.","Votre réserve d'eau est limitée. Pour la remplir, allez à un poteau incendie (rouge) et répondez aux questions : +4 d'eau par bonne réponse.","Attention : au poteau, vous êtes immobile. 2 min 30 de bataille."],
+          ctl:[["Joystick","Se déplacer (gauche du téléphone)"],["Arroser","Maintenir le bouton bleu"],["Poteau","Répondre aux questions pour recharger"]] },
   desamorcage:{ rules:["Un opérateur s'assoit face au tableau SSI. Lui seul voit l'écran.","Ses coéquipiers tournent le dos à l'écran et lisent le manuel du PC sécurité.","L'opérateur décrit ce qu'il voit, l'équipe lui dicte les actions dans le bon ordre.","90 secondes par alarme. Au bout de 3 fausses manœuvres, c'est raté."],
           ctl:[["Clic","L'opérateur clique les actions"],["Manuel","À imprimer, ou à ouvrir avec le QR code"],["+3","Alarme traitée (+1 sans faute)"]], qr:true,
           rulesP:["Un opérateur s'assoit face au tableau SSI. Lui seul voit l'écran.","Ses coéquipiers tournent le dos à l'écran : le manuel s'ouvre sur leurs téléphones.","L'opérateur décrit ce qu'il voit, l'équipe lui dicte les actions dans le bon ordre.","90 secondes par alarme. Au bout de 3 fausses manœuvres, c'est raté."] },
@@ -716,7 +773,7 @@ const HOWTO = {
 };
 function screenHowto(k){
   const h0 = HOWTO[k]; const h = PH.on && h0.rulesP ? {...h0, rules:h0.rulesP, ctl:h0.ctlP || h0.ctl} : h0;
-  pub("wait", {title:GAMES[k].nom, msg:"Écoutez les règles", rules:h.rules});
+  pub("wait", {title:GAMES[k].nom, msg:"Écoutez les règles", rules:h.rules}); narrate(k);
   CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") go(); } };
   const go = () => { CUR = null; countdown(() => RUN[k]()); };
   render(`${topbar("Comment jouer")}
@@ -741,7 +798,8 @@ const RUN = {};
 RUN.coins = function(){
   const before = G.teams.map(t=>t.pts); const qs = pickQ(G.qPer, false, {minOpts:3}); let i = 0;
   const show = () => {
-    const q = qs[i]; let revealed = false; const got = [0,0]; const rk = "c" + G.step + "-" + i; const answers = {};
+    const q = qs[i]; let revealed = false; const got = [0,0], given = [0,0]; const rk = "c" + G.step + "-" + i; const answers = {};
+    const award = (t) => { const n = Math.max(1, G.teams[t].players); const pts = Math.round(3 * Math.min(got[t], n) / n); addPts(t, pts - given[t]); given[t] = pts; const e = $("#cnt"+t); if(e) e.textContent = got[t]; const g = $("#gain"+t); if(g) g.textContent = "+" + pts; };
     CUR = { q, onKey:(k)=>{ if(k===" "){ revealed ? next() : reveal(); } },
       onPhone:(ev)=>{ if(ev.type === "ans" && ev.round === rk && !revealed){ answers[ev.pid] = {a:+ev.a, team:ev.team}; live(); } } };
     const live = () => { const e = $("#live"); if(e) e.textContent = PH.on ? "Réponses : " + Object.keys(answers).length + " / " + Object.keys(PH.players).length : ""; };
@@ -756,18 +814,19 @@ RUN.coins = function(){
     $("#rv").onclick = () => revealed ? next() : reveal();
     startTimer(20, () => { SFX.buzz(1); });
     pub("vote", {round:rk, q:q.q, o:q.o, t:q.t}); live();
+    botAct(pid => { if(!revealed && CUR && CUR.onPhone){ const a = Math.random() < .65 ? q.c : Math.floor(Math.random()*q.o.length); CUR.onPhone({type:"ans", round:rk, a, pid, team:+PH.players[pid].team}); } });
     function reveal(){
       revealed = true; stopTimer(); SFX.good();
       q.o.forEach((_,j)=>$("#cn"+j).classList.add(j===q.c?"good":"dim"));
       $("#after").innerHTML = `${q.e?`<p class="expl">${esc(q.e)}</p>`:""}
-        <div class="count" style="margin-top:12px">${[0,1].map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams[t].name)} ${PH.on ? ": bonnes réponses" : "dans le bon coin"}</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span class="pts" id="cnt${t}">0</span><button aria-label="Plus" data-cn="${t}|1">+</button></span></div>`).join("")}</div>`;
+        <div class="count" style="margin-top:12px">${[0,1].map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams[t].name)} ${PH.on ? ": bonnes réponses" : "dans le bon coin"}</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span style="font-size:22px;font-weight:700"><span id="cnt${t}">0</span> / ${G.teams[t].players}</span><button aria-label="Plus" data-cn="${t}|1">+</button></span><span class="pts" id="gain${t}">+0</span></div>`).join("")}</div>`;
       document.querySelectorAll("[data-cn]").forEach(b => b.onclick = () => {
         const [t,d] = b.dataset.cn.split("|").map(Number);
         const v = Math.min(G.teams[t].players, Math.max(0, got[t] + d)); if(v === got[t]) return;
-        addPts(t, v - got[t]); got[t] = v; $("#cnt"+t).textContent = v; SFX.blip();
+        got[t] = v; award(t); SFX.blip();
       });
       if(PH.on){
-        [0,1].forEach(t => { const n = Object.values(answers).filter(x => x.team === t && x.a === q.c).length; if(n){ addPts(t, n); got[t] = n; $("#cnt"+t).textContent = n; } });
+        [0,1].forEach(t => { got[t] = Object.values(answers).filter(x => x.team === t && x.a === q.c).length; award(t); });
         pub("reveal", {round:rk, q:q.q, o:q.o, c:q.c});
       }
       $("#rv").innerHTML = (i+1 < qs.length ? "Question suivante" : "Fin de l'épreuve") + ' <span class="kbd">Espace</span>';
@@ -810,7 +869,9 @@ RUN.tabou = function(){
       $("#th").onclick = hit; $("#tp").onclick = pass; $("#tf").onclick = foul;
       pubT();
     }
-    function begin(){ active = true; card(); startTimer(60, finish); }
+    function begin(){ active = true; card(); startTimer(60, finish);
+      if(isBot(spPid)){ const iv = setInterval(() => { if(!active || !document.body.contains($("#tz"))) return clearInterval(iv); Math.random() < .75 ? hit() : pass(); }, 5500); }
+      botAct(pid => { if(active && +PH.players[pid].team !== turn && Math.random() < .3) foul(); }); }
     function hit(){ found++; lastWord = deck[ci % deck.length][0]; addPts(turn, 1); SFX.good(); ci++; card(); }
     function pass(){ SFX.blip(); ci++; card(); }
     function foul(){ SFX.bad(); addPts(turn, -1); ci++; card(); }
@@ -875,6 +936,181 @@ RUN.money = function(){
     refreshRegie();
   };
   show();
+};
+
+/* ---- Guerre des lances (téléphones uniquement) ---- */
+const ARENA = {
+  w:1600, h:900,
+  walls:[[0,0,1600,18],[0,882,1600,18],[0,0,18,900],[1582,0,18,900],
+    [510,0,20,350],[510,530,20,370],[1070,0,20,300],[1070,460,20,440],
+    [0,440,200,20],[330,440,200,20],[1090,420,200,20],[1430,420,170,20],
+    [700,130,200,50],[640,620,60,60],[900,620,60,60]],
+  rooms:[["Hall d'accueil",265,225],["Cuisine",265,680],["Salle de spectacle",800,90],["Restaurant",1340,210],["Hôtel",1340,690]],
+  hyd:[[70,830],[1530,70],[800,470],[1530,830],[70,70]],
+  fires:[[265,620],[800,260],[1300,250],[1350,720],[300,250],[820,760],[1200,620],[600,450]],
+  spawn:[[260,330],[1340,560]]
+};
+function wallHit(x, y, r){
+  for(const [wx,wy,ww,wh] of ARENA.walls){
+    const cx = Math.max(wx, Math.min(x, wx+ww)), cy = Math.max(wy, Math.min(y, wy+wh));
+    const dx = x-cx, dy = y-cy; if(dx*dx + dy*dy < r*r) return [cx, cy];
+  }
+  return null;
+}
+/* Itinéraires des joueurs automatiques : recherche en largeur sur une grille de 40 px */
+const NAV = (() => { const C = 40, cols = 40, rows = 23; let blk = null;
+  const grid = () => { if(blk) return blk; blk = new Uint8Array(cols*rows); for(let j = 0; j < rows; j++) for(let i = 0; i < cols; i++) blk[j*cols+i] = wallHit(i*C+C/2, j*C+C/2, 26) ? 1 : 0; return blk; };
+  const cell = (x, y) => [Math.max(0, Math.min(cols-1, Math.floor(x/C))), Math.max(0, Math.min(rows-1, Math.floor(y/C)))];
+  function next(x, y, tx, ty){
+    const g = grid(), [si, sj] = cell(x, y), [ti, tj] = cell(tx, ty), S0 = sj*cols+si, T = tj*cols+ti;
+    if(S0 === T) return [tx, ty];
+    const prev = new Int32Array(cols*rows).fill(-1); prev[S0] = S0; const q = [S0]; let found = false;
+    for(let h = 0; h < q.length; h++){ const c = q[h]; if(c === T){ found = true; break; } const ci = c % cols, cj = (c - ci)/cols;
+      for(const [di,dj] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){ const ni = ci+di, nj = cj+dj; if(ni < 0 || nj < 0 || ni >= cols || nj >= rows) continue; const n = nj*cols+ni; if(prev[n] !== -1 || (g[n] && n !== T)) continue; if(di && dj && (g[cj*cols+ni] || g[nj*cols+ci])) continue; prev[n] = c; q.push(n); } }
+    if(!found) return [tx, ty];
+    const path = []; for(let c = T; c !== S0; c = prev[c]) path.push(c); path.reverse();
+    const c = path[Math.min(1, path.length-1)]; const ci = c % cols; return [ci*C + C/2, (c - ci)/cols*C + C/2];
+  }
+  return {next};
+})();
+function lineFree(ax, ay, bx, by){ const d = Math.hypot(bx-ax, by-ay), n = Math.ceil(d/18); for(let i = 1; i < n; i++){ const t = i/n; if(wallHit(ax + (bx-ax)*t, ay + (by-ay)*t, 3)) return false; } return true; }
+RUN.lances = function(){
+  const before = G.teams.map(t=>t.pts);
+  if(!PH.on){ return endGame(before); }
+  const DUR = 150, MAXW = 10, R0 = 22;
+  const P = {}; let t0 = performance.now(), last = t0, left = DUR, over = false, lastPub = 0, lastSig = "";
+  const drops = [], feed = []; const fires = []; const score = [0,0];
+  [0,1].forEach(t => teamPlayers(t).forEach(([pid,p], i) => { const [sx,sy] = ARENA.spawn[t]; P[pid] = {pid, team:t, name:p.name, x:sx + (i%3)*50 - 50, y:sy + Math.floor(i/3)*55, fx: t ? -1 : 1, fy:0, ix:0, iy:0, fire:false, w:MAXW, fz:0, inv:0, q:null, hy:-1, cool:0, wrong:0, acc:0, ai:{}}; }));
+  const addFire = () => { const free = ARENA.fires.filter(([x,y]) => !fires.some(f => Math.hypot(f.x-x, f.y-y) < 50)); if(!free.length) return; const [x,y] = free[Math.floor(Math.random()*free.length)]; fires.push({x, y, hp:100, born:performance.now()}); };
+  addFire(); addFire(); addFire();
+  const say = (txt, t) => { feed.unshift({txt, t, at:performance.now()}); feed.length = Math.min(feed.length, 5); };
+  const newQ = (pl) => { const q = pickQ(1, false, {})[0]; pl.q = {...q, k:Math.random().toString(36).slice(2,7)}; };
+  CUR = { onInput:(pid, o) => { const pl = P[pid]; if(!pl || isBot(pid)) return; pl.ix = Math.max(-1, Math.min(1, +o.x || 0)); pl.iy = Math.max(-1, Math.min(1, +o.y || 0)); pl.fire = !!o.f; },
+    onPhone:(ev) => { const pl = P[ev.pid]; if(!pl) return; if(ev.type === "lq" && pl.q && ev.k === pl.q.k) answer(pl, +ev.a); if(ev.type === "leave"){ pl.q = null; pl.hy = -1; pl.cool = 2; } },
+    onKey:(k) => { if(over && (k === " " || k === "Enter")) endGame(before); } };
+  function answer(pl, a){
+    if(a === pl.q.c){ pl.w = Math.min(MAXW, pl.w + 4); SFX.good(); } else { pl.wrong = 1.5; SFX.bad(); }
+    pl.q = null;
+    if(pl.w >= MAXW){ pl.hy = -1; pl.cool = 1.5; }
+  }
+  render(`${topbar("Guerre des lances")}
+  <div class="row" style="justify-content:space-between;flex-wrap:nowrap">
+    <div class="score t0" style="flex:1"><span class="name">${esc(G.teams[0].name)}</span><span class="pts" id="ls0">0</span></div>
+    <span class="timer" id="ltimer" style="padding:0 14px">2:30</span>
+    <div class="score t1" style="flex:1"><span class="name">${esc(G.teams[1].name)}</span><span class="pts" id="ls1">0</span></div>
+  </div>
+  <div class="arena"><canvas id="cv" width="1600" height="900" aria-label="Arène de la Guerre des lances"></canvas><div class="feed" id="feed"></div></div>`);
+  const cv = $("#cv"), cx = cv.getContext("2d");
+  const fit = () => { const a = cv.parentElement; const s = Math.min(a.clientWidth/1600, a.clientHeight/900); if(s > 0){ cv.style.width = (1600*s) + "px"; cv.style.height = (900*s) + "px"; } };
+  fit(); window.addEventListener("resize", fit);
+  SFX.go();
+  function bot(pl, dt){
+    const A = pl.ai; A.t = (A.t || 0) - dt;
+    if(pl.q){ A.qt = (A.qt || 1.6) - dt; if(A.qt <= 0){ A.qt = 1.6; answer(pl, Math.random() < .7 ? pl.q.c : (pl.q.c + 1) % pl.q.o.length); } pl.ix = pl.iy = 0; pl.fire = false; return; }
+    let tx, ty, shoot = false;
+    const dist = o => Math.hypot(o.x-pl.x, o.y-pl.y);
+    if(pl.w < 1.5){ const h = ARENA.hyd.reduce((b,h) => Math.hypot(h[0]-pl.x, h[1]-pl.y) < Math.hypot(b[0]-pl.x, b[1]-pl.y) ? h : b); [tx, ty] = h; }
+    else {
+      const foes = Object.values(P).filter(o => o.team !== pl.team && o.fz <= 0 && o.inv <= 0).sort((a,b) => dist(a) - dist(b));
+      const fire = fires.slice().sort((a,b) => dist(a) - dist(b))[0];
+      const seen = foes.find(o => dist(o) < 420 && lineFree(pl.x, pl.y, o.x, o.y));
+      const tgt = seen || fire || foes[0];
+      if(tgt){ tx = tgt.x; ty = tgt.y; shoot = dist(tgt) < 300 && lineFree(pl.x, pl.y, tx, ty); }
+    }
+    if(tx === undefined){ pl.ix = pl.iy = 0; pl.fire = false; return; }
+    if(shoot){ const d = Math.hypot(tx-pl.x, ty-pl.y) || 1; const k = d < 170 ? .12 : 1; pl.ix = (tx-pl.x)/d*k; pl.iy = (ty-pl.y)/d*k; }
+    else { if(!A.wp || A.t <= 0){ A.wp = NAV.next(pl.x, pl.y, tx, ty); A.t = .35; } const d = Math.hypot(A.wp[0]-pl.x, A.wp[1]-pl.y) || 1; pl.ix = (A.wp[0]-pl.x)/d; pl.iy = (A.wp[1]-pl.y)/d; if(d < 14) A.t = 0; }
+    pl.fire = shoot;
+  }
+  function step(now){
+    if(!document.body.contains(cv)){ window.removeEventListener("resize", fit); return; }
+    const dt = Math.min(.05, (now - last)/1000); last = now;
+    if(!over){
+      left = Math.max(0, DUR - (now - t0)/1000);
+      for(const pl of Object.values(P)){
+        if(isBot(pl.pid)) bot(pl, dt);
+        pl.fz = Math.max(0, pl.fz - dt); pl.inv = Math.max(0, pl.inv - dt); pl.cool = Math.max(0, pl.cool - dt); pl.wrong = Math.max(0, pl.wrong - dt);
+        const hIdx = ARENA.hyd.findIndex(([hx,hy]) => Math.hypot(hx-pl.x, hy-pl.y) < 55);
+        if(pl.q || (pl.hy >= 0 && hIdx === pl.hy && pl.w < MAXW)){
+          // au poteau : immobile ; on peut partir en poussant le joystick
+          const push = Math.hypot(pl.ix, pl.iy) > .6;
+          pl.acc = push ? pl.acc + dt : 0;
+          if(pl.acc > .5){ pl.q = null; pl.hy = -1; pl.cool = 2; pl.acc = 0; }
+          else { if(!pl.q && pl.wrong <= 0) newQ(pl); pl.fire = false; continue; }
+        }
+        if(hIdx >= 0 && pl.w < MAXW && pl.cool <= 0 && pl.fz <= 0 && !pl.q){ pl.hy = hIdx; newQ(pl); continue; }
+        if(pl.fz > 0) continue;
+        const m = Math.hypot(pl.ix, pl.iy);
+        if(m > .1){ const sp = 270 * Math.min(1, m); const nx = pl.x + pl.ix/m*sp*dt*Math.min(1,m), ny = pl.y + pl.iy/m*sp*dt*Math.min(1,m);
+          if(!wallHit(nx, pl.y, R0)) pl.x = nx; if(!wallHit(pl.x, ny, R0)) pl.y = ny; pl.fx = pl.ix/m; pl.fy = pl.iy/m; }
+        pl.sh = (pl.sh || 0) - dt;
+        if(pl.fire && pl.w > 0 && pl.sh <= 0){ pl.sh = .07; pl.w = Math.max(0, pl.w - .1);
+          const sprd = (Math.random()-.5)*.18, c = Math.cos(sprd), s2 = Math.sin(sprd); const dx = pl.fx*c - pl.fy*s2, dy = pl.fx*s2 + pl.fy*c;
+          drops.push({x:pl.x + dx*28, y:pl.y + dy*28, vx:dx*720, vy:dy*720, life:.42, team:pl.team, by:pl.pid}); }
+      }
+      const arr = Object.values(P);
+      for(let i = 0; i < arr.length; i++) for(let j = i+1; j < arr.length; j++){ const A1 = arr[i], B1 = arr[j]; const dx = B1.x-A1.x, dy = B1.y-A1.y, d = Math.hypot(dx, dy); if(d > 0 && d < R0*2){ const push = (R0*2 - d)/2, ux = dx/d, uy = dy/d;
+        if(!wallHit(A1.x - ux*push, A1.y - uy*push, R0)){ A1.x -= ux*push; A1.y -= uy*push; } if(!wallHit(B1.x + ux*push, B1.y + uy*push, R0)){ B1.x += ux*push; B1.y += uy*push; } } }
+      for(let i = drops.length - 1; i >= 0; i--){
+        const d = drops[i]; d.x += d.vx*dt; d.y += d.vy*dt; d.life -= dt;
+        let dead = d.life <= 0 || !!wallHit(d.x, d.y, 3);
+        if(!dead) for(const o of Object.values(P)){ if(o.team !== d.team && o.fz <= 0 && o.inv <= 0 && Math.hypot(o.x-d.x, o.y-d.y) < R0+4){ o.fz = 3; o.inv = 4.5; o.q = null; o.hy = -1; dead = true; score[d.team]++; addPts(d.team, 1); const by = P[d.by]; say(`${by ? by.name : "?"} a trempé ${o.name} !`, d.team); SFX.buzz(d.team); break; } }
+        if(!dead) for(const f of fires){ if(Math.hypot(f.x-d.x, f.y-d.y) < 34){ f.hp -= 4; f.by = d.team; f.byp = d.by; dead = true; break; } }
+        if(dead) drops.splice(i, 1);
+      }
+      for(let i = fires.length - 1; i >= 0; i--){ const f = fires[i]; if(f.hp <= 0){ fires.splice(i, 1); score[f.by] += 2; addPts(f.by, 2); const by = P[f.byp]; say(`${by ? by.name : "?"} a éteint un foyer ! +2`, f.by); SFX.good(); setTimeout(addFire, 2500); } else f.hp = Math.min(100, f.hp + dt*3); }
+      if(left <= 0){ over = true; finish(); }
+      // publication vers les téléphones
+      const st = {}; for(const pl of Object.values(P)) st[pl.pid] = {w:Math.ceil(pl.w), fz:Math.ceil(pl.fz), q: pl.q ? {q:pl.q.q, o:pl.q.o, k:pl.q.k} : null, wr: pl.wrong > 0 ? 1 : 0};
+      const sig = JSON.stringify(st) + Math.ceil(left);
+      if(sig !== lastSig && now - lastPub > 150 || now - lastPub > 1000){ lastSig = sig; lastPub = now; pub("lances", {left:Math.ceil(left), sc:score, st}); }
+      const e = $("#ltimer"); if(e){ const L = Math.ceil(left); e.textContent = Math.floor(L/60) + ":" + String(L%60).padStart(2,"0"); e.classList.toggle("low", L <= 10); }
+      [0,1].forEach(t => { const s3 = $("#ls"+t); if(s3) s3.textContent = score[t]; });
+      const fd = $("#feed"); if(fd) fd.innerHTML = feed.filter(f => now - f.at < 5000).map(f => `<span style="color:${TCOL[f.t]}">${esc(f.txt)}</span>`).join("");
+    }
+    draw(now);
+    requestAnimationFrame(step);
+  }
+  function draw(now){
+    cx.clearRect(0, 0, 1600, 900);
+    cx.fillStyle = "#0B0B18"; cx.fillRect(0, 0, 1600, 900);
+    cx.strokeStyle = "rgba(46,242,255,.06)"; cx.lineWidth = 1;
+    for(let x = 0; x < 1600; x += 50){ cx.beginPath(); cx.moveTo(x, 0); cx.lineTo(x, 900); cx.stroke(); }
+    for(let y = 0; y < 900; y += 50){ cx.beginPath(); cx.moveTo(0, y); cx.lineTo(1600, y); cx.stroke(); }
+    cx.font = "600 22px 'Chakra Petch', sans-serif"; cx.textAlign = "center"; cx.fillStyle = "rgba(169,166,207,.35)";
+    for(const [n,x,y] of ARENA.rooms) cx.fillText(n.toUpperCase(), x, y);
+    cx.fillStyle = "#2C2C4C"; cx.shadowColor = "#A47BFF"; cx.shadowBlur = 10;
+    for(const [x,y,w,h] of ARENA.walls) cx.fillRect(x, y, w, h);
+    cx.shadowBlur = 0;
+    for(const [x,y] of ARENA.hyd){ cx.fillStyle = "#FF3B3B"; cx.shadowColor = "#FF3B3B"; cx.shadowBlur = 16; cx.beginPath(); cx.arc(x, y, 16, 0, Math.PI*2); cx.fill(); cx.fillRect(x-22, y-5, 44, 10); cx.shadowBlur = 0; cx.fillStyle = "#fff"; cx.font = "700 12px 'Chakra Petch', sans-serif"; cx.fillText("PI", x, y+4); }
+    for(const f of fires){
+      const k = .75 + .25*Math.sin(now/90 + f.x), r = 20 + 16*(f.hp/100);
+      const g = cx.createRadialGradient(f.x, f.y, 2, f.x, f.y, r*1.8); g.addColorStop(0, "rgba(255,240,120,.95)"); g.addColorStop(.45, "rgba(255,120,30,.85)"); g.addColorStop(1, "rgba(255,40,0,0)");
+      cx.fillStyle = g; cx.beginPath(); cx.arc(f.x, f.y - 4*k, r*1.8*k, 0, Math.PI*2); cx.fill();
+      cx.strokeStyle = "rgba(255,201,60,.8)"; cx.lineWidth = 4; cx.beginPath(); cx.arc(f.x, f.y, 40, -Math.PI/2, -Math.PI/2 + Math.PI*2*f.hp/100); cx.stroke();
+    }
+    cx.fillStyle = "rgba(124,208,255,.9)";
+    for(const d of drops){ cx.beginPath(); cx.arc(d.x, d.y, 4, 0, Math.PI*2); cx.fill(); }
+    for(const pl of Object.values(P)){
+      const col = pl.team ? "#2EF2FF" : "#FF2E88";
+      if(pl.inv > 0 && pl.fz <= 0 && Math.floor(now/120) % 2) cx.globalAlpha = .45;
+      cx.fillStyle = col; cx.shadowColor = col; cx.shadowBlur = 14;
+      cx.beginPath(); cx.arc(pl.x, pl.y, R0, 0, Math.PI*2); cx.fill(); cx.shadowBlur = 0;
+      cx.fillStyle = "#07070F"; cx.beginPath(); cx.arc(pl.x + pl.fx*10, pl.y + pl.fy*10, 7, 0, Math.PI*2); cx.fill();
+      cx.strokeStyle = "#fff"; cx.lineWidth = 4; cx.beginPath(); cx.moveTo(pl.x + pl.fx*18, pl.y + pl.fy*18); cx.lineTo(pl.x + pl.fx*34, pl.y + pl.fy*34); cx.stroke();
+      cx.globalAlpha = 1;
+      if(pl.fz > 0){ cx.strokeStyle = "#7CD0FF"; cx.lineWidth = 5; cx.shadowColor = "#2E9BFF"; cx.shadowBlur = 18; cx.beginPath(); cx.arc(pl.x, pl.y, R0+8, 0, Math.PI*2); cx.stroke(); cx.shadowBlur = 0; }
+      cx.fillStyle = "#fff"; cx.font = "700 15px 'Chakra Petch', sans-serif"; cx.fillText(pl.name + (pl.fz > 0 ? " · trempé" : pl.q ? " · au poteau" : ""), pl.x, pl.y - 34);
+      cx.fillStyle = "#26263E"; cx.fillRect(pl.x - 22, pl.y + 28, 44, 6); cx.fillStyle = "#2E9BFF"; cx.fillRect(pl.x - 22, pl.y + 28, 44*pl.w/MAXW, 6);
+    }
+    if(over){ cx.fillStyle = "rgba(7,7,15,.7)"; cx.fillRect(0, 0, 1600, 900); cx.fillStyle = "#fff"; cx.font = "700 72px 'Chakra Petch', sans-serif"; cx.fillText("FIN DE LA BATAILLE", 800, 430); cx.font = "600 32px 'Chakra Petch', sans-serif"; cx.fillText(`${G.teams[0].name} ${score[0]}  ·  ${score[1]} ${G.teams[1].name}`, 800, 490); }
+  }
+  function finish(){
+    SFX.fanfare(); pub("wait", {title:"Fin de la bataille !", msg:G.teams[0].name + " " + score[0] + " · " + score[1] + " " + G.teams[1].name});
+    const b = document.createElement("div"); b.className = "row"; b.style.justifyContent = "center";
+    b.innerHTML = `<button class="btn big cyan" id="lnx">Voir les résultats <span class="kbd">Espace</span></button>`; $("#app").appendChild(b); $("#lnx").onclick = () => endGame(before);
+  }
+  requestAnimationFrame(step);
 };
 
 /* ---- Désamorçage ---- */
@@ -1034,6 +1270,7 @@ RUN.saboteur = function(){
   if(PH.on){
     const roster = [0,1].map(t => teamPlayers(t).map(([pid,p]) => ({pid, name:p.name})));
     pub("sabvote", {players:roster}); vc();
+    botAct(pid => { const t = +PH.players[pid].team; const mates = roster[t].filter(x => x.pid !== pid); if(mates.length && CUR && CUR.onPhone) CUR.onPhone({type:"vote", pid, team:t, target:mates[Math.floor(Math.random()*mates.length)].pid}); });
     $("#sbauto").onclick = () => {
       [0,1].forEach(t => {
         const tally = {}; Object.values(votes).filter(v => v.team === t).forEach(v => tally[v.target] = (tally[v.target]||0) + 1);
@@ -1074,6 +1311,7 @@ RUN.finale = function(){
     $("#fskip").onclick = () => reveal();
     startTimer(20, () => { if(hand === null) reveal(); });
     pubF();
+    botAct(pid => { if(Math.random() < .5 && CUR && CUR.onPhone) CUR.onPhone({type:"buzz", round:rk, pid, team:+PH.players[pid].team}); });
     function take(t){
       hand = t; stopTimer(); SFX.buzz(t);
       $("#ln"+t).classList.add("buzz");
@@ -1132,7 +1370,7 @@ RUN.finale = function(){
 function screenEnd(){
   CUR = { onKey:(k)=>{ if(k==="Enter") { G = freshGame(); screenTitle(); } } };
   const w = G.winner ?? (G.teams[0].pts === G.teams[1].pts ? -1 : (G.teams[0].pts > G.teams[1].pts ? 0 : 1));
-  pub("end", {winner:w});
+  pub("end", {winner:w}); narrate("end");
   render(`${topbar("Podium")}
   <div class="grow center" style="gap:24px">
     <span class="eyebrow">Le Complexe des Dunes peut ouvrir</span>
@@ -1155,7 +1393,61 @@ const FIREBASE_CONFIG = {
 };
 const PARAMS = new URLSearchParams(location.search);
 const NET_LOCAL = PARAMS.get("net") === "local";      // test sur un seul ordinateur : ?net=local
-const PH = { want:false, on:false, net:null, code:"", players:{}, k:0 };
+const PH = { want:false, on:false, net:null, code:"", players:{}, k:0, bots:[] };
+const ADMIN = PARAMS.get("admin") === "1";
+const isBot = pid => ADMIN && PH.bots.includes(pid);
+function botAct(fn){ if(!ADMIN || !PH.bots.length) return; PH.bots.forEach(pid => { if(PH.players[pid]) setTimeout(() => fn(pid), 1200 + Math.random()*3500); }); }
+/* Mode test concepteur : écran + 4 téléphones simulés, explications et voix off */
+const NARR = {
+  title:["Écran d'accueil","Le formateur choisit le mode (sans téléphone ou avec téléphones), puis « Émission complète ». En mode test, le jeu ouvre une partie et quatre téléphones simulés la rejoignent à droite : « Toi » (que tu manipules) et trois joueurs automatiques."],
+  teams:["Les équipes","L'écran projeté montre le QR code et le code à 4 lettres. Les téléphones rejoignent la partie : Toi et Chloé dans l'équipe rose, Bob et David dans l'équipe cyan. Clique sur « C'est parti ! » pour lancer l'émission."],
+  board:["Le plateau","Le plateau montre la tournée du Complexe des Dunes. Les téléphones affichent « Regarde l'écran » et le nom de la prochaine épreuve. Au lancement, un saboteur secret a été tiré dans chaque équipe : maintiens le doigt sur la zone « mission secrète » de ton téléphone pour voir ton rôle."],
+  coins:["Les 4 coins","Qui voit quoi : la question est sur l'écran, les réponses sur les téléphones. Chaque réponse correspond aussi à un coin de la salle. Barème : chaque équipe marque jusqu'à 3 points par question, selon la part de ses joueurs qui a bien répondu. Ainsi, une équipe de 3 et une équipe de 6 sont à égalité. Réponds sur le téléphone Toi, puis appuie sur Espace pour révéler."],
+  tabou:["Tabou","Un orateur est désigné à tour de rôle : la carte n'apparaît que sur son téléphone. Il fait deviner le mot à son équipe sans les quatre mots barrés. L'équipe adverse a un bouton rouge « Mot interdit ». Un mot trouvé vaut plus un, un mot interdit moins un. Lance le chrono avec Espace."],
+  money:["Money Drop","Chaque équipe a 10 jetons à répartir sur les réponses, en laissant au moins une trappe vide. Toute l'équipe mise depuis ses téléphones. À l'ouverture des trappes, seuls les jetons sur la bonne réponse restent. Après trois questions, les jetons restants deviennent des points."],
+  lances:["Guerre des lances","Le cœur ludique du mode téléphone. Chaque joueur dirige un pompier avec le joystick de son téléphone et arrose avec le bouton bleu. Éteindre un foyer rapporte deux points, tremper un adversaire un point : il est gelé trois secondes. La réserve d'eau est limitée : pour la remplir, il faut aller à un poteau incendie rouge et répondre aux questions, immobile et vulnérable. Essaie avec le joystick du téléphone Toi, à la souris."],
+  desamorcage:["Désamorçage (à refondre)","Version actuelle : un opérateur manipule le tableau SSI, son équipe lit le manuel. Ton retour : le sapeur-pompier ne manipule pas le SSI, il doit le lire, le confronter au plan et fiabiliser l'information. Cette épreuve sera refondue en ce sens."],
+  saboteur:["Le Saboteur","Un joueur par équipe a reçu en secret le rôle de saboteur. Chaque équipe vote sur ses téléphones pour désigner un suspect, puis l'animateur dépouille. Saboteur démasqué : plus trois. Cette mécanique va être enrichie : missions secrètes pendant toute la partie."],
+  finale:["Le Coup de tampon","Duel au buzzer : chaque téléphone devient un buzzer. Le premier qui appuie donne la main à son équipe, qui répond à voix haute. L'animateur valide avec V ou X. Première équipe à cinq bonnes réponses. L'équipe qui mène au score part avec une ou deux réponses d'avance."],
+  results:["Résultats de l'épreuve","Les points gagnés pendant l'épreuve. Retour au plateau avec Espace."],
+  end:["Le podium","Fin de l'émission : le podium s'affiche sur l'écran et sur chaque téléphone."]
+};
+function narrate(key){
+  if(!ADMIN) return; const n = NARR[key]; const box = $("#narr"); if(!n || !box) return;
+  box.innerHTML = `<b>${esc(n[0])}</b><br>${esc(n[1])}`;
+  const v = $("#avoice");
+  try{ speechSynthesis.cancel(); if(v && v.checked){ const u = new SpeechSynthesisUtterance(n[0] + ". " + n[1]); u.lang = "fr-FR"; u.rate = 1.05; const fr = speechSynthesis.getVoices().find(x => /^fr/i.test(x.lang)); if(fr) u.voice = fr; speechSynthesis.speak(u); } }catch(e){}
+}
+function adminSetup(){
+  if(!ADMIN) return;
+  document.body.classList.add("admin"); PH.want = true;
+  const bar = document.createElement("aside"); bar.id = "adminbar"; bar.setAttribute("aria-label", "Mode test concepteur");
+  bar.innerHTML = `<h3>Mode test concepteur</h3>
+    <div class="row" style="gap:8px"><label for="ajump" class="note">Aller à</label><select id="ajump"><option value="">une épreuve…</option>${Object.entries(GAMES).filter(([,g]) => !g.soon).map(([k,g]) => `<option value="${k}">${esc(g.nom)}</option>`).join("")}</select></div>
+    <div class="row" style="gap:8px"><label class="opt" style="padding:6px 10px"><input type="checkbox" id="avoice"> Voix off</label><label class="opt" style="padding:6px 10px"><input type="checkbox" id="abots" checked> Joueurs automatiques</label></div>
+    <div class="narr" id="narr" role="status"></div>
+    <h3>Téléphones simulés</h3>
+    <div class="phones" id="aphones"><p class="note">Ils rejoignent la partie dès que tu lances une émission.</p></div>
+    <p class="note">« Toi » est ton téléphone : clique dedans pour jouer. Les trois autres jouent seuls quand « Joueurs automatiques » est coché.</p>`;
+  document.body.appendChild(bar);
+  $("#abots").onchange = e => { PH.bots = e.target.checked ? ["v2","v3","v4"] : []; };
+  PH.bots = ["v2","v3","v4"];
+  $("#avoice").onchange = e => { if(!e.target.checked){ try{ speechSynthesis.cancel(); }catch(x){} } };
+  $("#ajump").onchange = async e => {
+    const k = e.target.value; e.target.value = ""; if(!k) return;
+    if(!PH.on){ G.plan = PRESET_P.slice(); G.saboteur = true; G.level = "ca"; await goTeams(); await new Promise(r => setTimeout(r, 1800)); ACT.start(); }
+    if(!G.plan.includes(k)) G.plan.splice(Math.max(0, G.plan.length - 1), 0, k);
+    G.step = G.plan.indexOf(k); $("#regie").hidden = true; screenHowto(k);
+  };
+  window.addEventListener("resize", scalePhones);
+}
+function spawnPhones(){
+  if(!ADMIN) return; const box = $("#aphones"); if(!box) return;
+  const ppl = [["v1","Toi",0],["v2","Chloé",0],["v3","Bob",1],["v4","David",1]];
+  box.innerHTML = ppl.map(([id,n,t]) => `<div class="vphone" style="border-color:${TCOL[t]}"><iframe title="Téléphone de ${n}" src="${joinURL()}&pid=${id}&auto=${encodeURIComponent(n + "|" + t)}"></iframe><span>${n}${id === "v1" ? "" : " · auto"}</span></div>`).join("");
+  scalePhones();
+}
+function scalePhones(){ document.querySelectorAll(".vphone").forEach(v => { const f = v.querySelector("iframe"); if(f) f.style.transform = "scale(" + (v.clientWidth / 390) + ")"; }); }
 const phoneAvailable = () => !!FIREBASE_CONFIG || NET_LOCAL;
 const CODE_ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ";
 const newCode = () => Array.from({length:4}, () => CODE_ABC[Math.floor(Math.random()*CODE_ABC.length)]).join("");
@@ -1176,6 +1468,7 @@ async function fbHost(code){
     setPlayer:(pid, patch) => room.child("players/" + pid).update(patch),
     onPlayers:(cb) => room.child("players").on("value", sn => cb(sn.val() || {})),
     onEvent:(cb) => room.child("events").orderByKey().startAt(cursor).on("child_added", sn => cb(sn.val())),
+    onInput:(cb) => { const r = room.child("input"); r.on("child_added", sn => cb(sn.key, sn.val())); r.on("child_changed", sn => cb(sn.key, sn.val())); },
     close:() => { room.child("players").off(); room.child("events").off(); }
   };
 }
@@ -1186,25 +1479,27 @@ async function fbJoin(code){
     onState:(cb) => room.child("state").on("value", sn => cb(sn.val())),
     onMe:(pid, cb) => room.child("players/" + pid).on("value", sn => cb(sn.val())),
     setMe:(pid, o) => room.child("players/" + pid).update(o),
-    push:(ev) => room.child("events").push(ev)
+    push:(ev) => room.child("events").push(ev),
+    setInput:(pid, o) => room.child("input/" + pid).set(o)
   };
 }
 function localHost(code){
-  const bc = new BroadcastChannel("af-" + code); let state = null, players = {}; const pcb = [], ecb = [];
+  const bc = new BroadcastChannel("af-" + code); let state = null, players = {}; const pcb = [], ecb = [], icb = [];
   const send = m => bc.postMessage(m); const fire = () => { send({k:"players", p:players}); pcb.forEach(f => f(players)); };
   bc.onmessage = ({data:m}) => {
     if(m.k === "hello"){ send({k:"state", s:state}); send({k:"players", p:players}); }
     if(m.k === "me"){ players[m.pid] = {...(players[m.pid]||{}), ...m.o}; fire(); }
     if(m.k === "ev") ecb.forEach(f => f(m.ev));
+    if(m.k === "in") icb.forEach(f => f(m.pid, m.o));
   };
   return { setState:(st) => { state = st; send({k:"state", s:st}); }, setPlayer:(pid, patch) => { players[pid] = {...(players[pid]||{}), ...patch}; fire(); },
-    onPlayers:(cb) => { pcb.push(cb); cb(players); }, onEvent:(cb) => ecb.push(cb), close:() => bc.close() };
+    onPlayers:(cb) => { pcb.push(cb); cb(players); }, onEvent:(cb) => ecb.push(cb), onInput:(cb) => icb.push(cb), close:() => bc.close() };
 }
 function localJoin(code){
   const bc = new BroadcastChannel("af-" + code); const scb = [], mcb = {};
   bc.onmessage = ({data:m}) => { if(m.k === "state") scb.forEach(f => f(m.s)); if(m.k === "players") Object.entries(mcb).forEach(([pid, f]) => f((m.p||{})[pid] || null)); };
   setTimeout(() => bc.postMessage({k:"hello"}), 60);
-  return { onState:(cb) => scb.push(cb), onMe:(pid, cb) => { mcb[pid] = cb; }, setMe:(pid, o) => bc.postMessage({k:"me", pid, o}), push:(ev) => bc.postMessage({k:"ev", ev}) };
+  return { onState:(cb) => scb.push(cb), onMe:(pid, cb) => { mcb[pid] = cb; }, setMe:(pid, o) => bc.postMessage({k:"me", pid, o}), push:(ev) => bc.postMessage({k:"ev", ev}), setInput:(pid, o) => bc.postMessage({k:"in", pid, o}) };
 }
 async function phoneStart(){
   PH.code = newCode(); PH.players = {}; PH.k = 0;
@@ -1212,6 +1507,7 @@ async function phoneStart(){
   PH.on = true;
   PH.net.onPlayers(p => { PH.players = p || {}; [0,1].forEach(t => { const n = teamPlayers(t).length; if(n) G.teams[t].players = n; }); if(CUR && CUR.onPlayers) CUR.onPlayers(); });
   PH.net.onEvent(ev => { if(!ev || !ev.type || !ev.pid) return; const p = PH.players[ev.pid]; if(!p) return; ev.team = +p.team; if(CUR && CUR.onPhone) CUR.onPhone(ev); });
+  PH.net.onInput((pid, o) => { if(CUR && CUR.onInput && o) CUR.onInput(pid, o); });
 }
 function phoneStop(){ if(PH.net){ try{ PH.net.close(); }catch(e){} } PH.net = null; PH.on = false; }
 function joinURL(){ return location.origin + location.pathname + "?r=" + PH.code + (NET_LOCAL ? "&net=local" : ""); }
@@ -1245,6 +1541,7 @@ async function goTeams(){
   }
   if(!PH.want && PH.on) phoneStop();
   screenTeams();
+  if(ADMIN && PH.on && !document.querySelector(".vphone")) spawnPhones();
 }
 function screenJoinForm(){
   CUR = null;
@@ -1276,7 +1573,9 @@ function phoneApp(code){
   if(!phoneAvailable()) return retry("Le mode téléphone n'est pas encore configuré sur ce site.");
   P(`${logo}<p class="ph-big">Connexion à la partie ${esc(code)}…</p>`);
   (NET_LOCAL ? Promise.resolve(localJoin(code)) : fbJoin(code)).then(n => {
-    net = n; net.onMe(pid, v => { me = v; draw(); }); net.onState(st => { S = st; draw(); }); draw();
+    net = n; net.onMe(pid, v => { me = v || me; draw(); }); net.onState(st => { S = st; draw(); }); draw();
+    const auto = PARAMS.get("auto");
+    if(auto && (!me || !me.name)){ const [an, at] = auto.split("|"); setTimeout(() => { net.setMe(pid, {name:an, team:+at, at:Date.now()}); me = {...(me||{}), name:an, team:+at}; draw(); }, 300); }
   }).catch(() => retry(`Partie ${esc(code)} introuvable. Vérifiez le code affiché à l'écran.`));
 
   app.addEventListener("click", e => {
@@ -1290,11 +1589,27 @@ function phoneApp(code){
     if(k === "hit" || k === "pass" || k === "foul"){ send({type:k, ci:d.ci}); return; }
     if(k === "vote"){ my["vote"] = a; send({type:"vote", target:a}); draw(); return; }
     if(k === "buzz"){ my["buzz" + d.round] = 1; send({type:"buzz", round:d.round}); draw(); return; }
+    if(k === "lq"){ send({type:"lq", k:a, a:+c}); return; }
+    if(k === "leave"){ send({type:"leave"}); return; }
   });
   const showSecret = on => { const el = $("#sec"); if(!el || !me) return; el.innerHTML = on ? (me.role === "sab" ? "Tu es le SABOTEUR. Fais perdre ton équipe sans te faire repérer. Si personne ne te démasque, tu gagnes le titre de Cabinet de complaisance." : "Tu es un équipier loyal. Un saboteur se cache peut-être parmi vous…") : "Maintiens le doigt ici pour voir ta mission secrète"; };
   app.addEventListener("pointerdown", e => { if(e.target.closest("#sec")) showSecret(true); });
   ["pointerup","pointercancel","pointerleave"].forEach(ev => app.addEventListener(ev, () => showSecret(false)));
 
+  const inp = {x:0, y:0, f:0}; let lastIn = 0, inTmr = null;
+  const sendIn = () => { const now = Date.now(); if(now - lastIn < 90){ if(!inTmr) inTmr = setTimeout(() => { inTmr = null; sendIn(); }, 90); return; } lastIn = now; try{ const r = net.setInput(pid, {x:inp.x, y:inp.y, f:inp.f, t:now}); if(r && r.catch) r.catch(()=>{}); }catch(e){} };
+  function bindLances(){
+    const joy = $("#joy"), knob = joy.querySelector(".knob"), fb = $("#firebtn");
+    const mv = e => { const r = joy.getBoundingClientRect(); let x = (e.clientX - r.left - r.width/2)/(r.width/2), y = (e.clientY - r.top - r.height/2)/(r.height/2); const m = Math.hypot(x, y); if(m > 1){ x /= m; y /= m; } inp.x = +x.toFixed(2); inp.y = +y.toFixed(2); knob.style.left = (50 + x*31) + "%"; knob.style.top = (50 + y*31) + "%"; sendIn(); };
+    joy.onpointerdown = e => { try{ joy.setPointerCapture(e.pointerId); }catch(x){} mv(e); };
+    joy.onpointermove = e => { if(e.buttons || e.pointerType === "touch") mv(e); };
+    joy.onpointerup = joy.onpointercancel = () => { inp.x = inp.y = 0; knob.style.left = knob.style.top = "50%"; sendIn(); };
+    fb.onpointerdown = e => { try{ fb.setPointerCapture(e.pointerId); }catch(x){} inp.f = 1; fb.classList.add("on"); sendIn(); };
+    fb.onpointerup = fb.onpointercancel = () => { inp.f = 0; fb.classList.remove("on"); sendIn(); };
+  }
+  function lancesStatus(st, d){
+    return st.fz > 0 ? "Trempé ! Gelé encore " + st.fz + " s" : st.w <= 0 ? "Réserve vide : file à un poteau rouge !" : st.wr ? "Mauvaise réponse… question suivante" : "Eau : " + st.w + " / 10 · " + d.left + " s";
+  }
   function joinForm(){
     const teams = (S && S.teams) || [{name:"Équipe 1"}, {name:"Équipe 2"}];
     P(`${logo}<p class="muted" style="text-align:center">Partie ${esc(code)}</p>
@@ -1315,6 +1630,7 @@ function phoneApp(code){
     }
     const t = +me.team, teams = (S && S.teams) || [{name:"Équipe 1", pts:0}, {name:"Équipe 2", pts:0}], T = teams[t] || {name:"", pts:0};
     const ph = S ? S.phase : "lobby", d = (S && S.data) || {};
+    if(ph !== "lances"){ app.dataset.mode = ""; if(inp.x || inp.y || inp.f){ inp.x = inp.y = inp.f = 0; } }
     let body = "";
     if(ph === "lobby") body = wait("Tu es dans l'équipe !", "La partie va commencer. Regarde l'écran.");
     else if(ph === "vote" || ph === "reveal"){
@@ -1355,6 +1671,27 @@ function phoneApp(code){
       else if(d.hand === 0 || d.hand === 1) body = wait("L'autre équipe a la main", "Attends la suite…");
       else body = `<p class="ph-big">${tried[t] ? "Ton équipe a déjà répondu" : d.open ? "Buzze dès que tu connais la réponse !" : "Regarde l'écran"}</p><button class="buzzer" style="--tc:${TCOL[t]}" data-ph="buzz" ${(!d.open || tried[t]) ? "disabled" : ""}>BUZZ</button>`;
     }
+    else if(ph === "lances"){
+      const st = (d.st || {})[pid];
+      if(!st) body = wait("Bataille en cours", "Regarde l'écran : tu n'étais pas inscrit au début de la bataille.");
+      else if(st.q){
+        app.dataset.mode = "q";
+        body = `<div class="gauge"><i style="width:${st.w*10}%"></i></div><p class="live" style="text-align:center">Au poteau : +4 d'eau par bonne réponse</p><p class="ph-big" style="font-size:20px">${esc(st.q.q)}</p>
+          <div class="ph-ans">${(st.q.o||[]).map((x,j) => `<button class="ans c${j}" data-ph="lq:${st.q.k}:${j}"><span class="let">${LETTERS[j]}</span><span>${esc(x)}</span></button>`).join("")}</div>
+          <button class="btn ghost" data-ph="leave">Quitter le poteau</button>`;
+      } else {
+        if(app.dataset.mode === "ctl" && $("#joy")){
+          $("#wg").style.width = (st.w*10) + "%"; $("#lst").textContent = lancesStatus(st, d);
+          const fzo = $("#fzo"); fzo.hidden = !(st.fz > 0); fzo.textContent = "TREMPÉ ! " + st.fz;
+          return;
+        }
+        body = `<div class="gauge"><i id="wg" style="width:${st.w*10}%"></i></div><p class="live" id="lst" style="text-align:center">${esc(lancesStatus(st, d))}</p>
+          <div class="joy" id="joy" style="--tc:${TCOL[t]}" aria-label="Joystick"><span class="knob"></span></div>
+          <button class="firebtn" id="firebtn">ARROSER</button><div class="frozen" id="fzo" ${st.fz > 0 ? "" : "hidden"}>TREMPÉ ! ${st.fz}</div>`;
+        P(`<div class="ph-head"><span class="ph-team" style="--tc:${TCOL[t]}">${esc(T.name)}</span><span class="muted">${esc(me.name)}</span></div>${body}`);
+        app.dataset.mode = "ctl"; bindLances(); return;
+      }
+    }
     else if(ph === "end"){
       body = `<p class="ph-big" style="margin-top:3vh">${d.winner === t ? "Victoire !" : d.winner === -1 ? "Égalité !" : "Bien joué !"}</p>${teams.map((x,j) => `<div class="score t${j}"><span class="name">${esc(x.name)}</span><span class="pts">${x.pts||0}</span></div>`).join("")}<p class="muted" style="text-align:center">Le Complexe des Dunes peut ouvrir. Merci d'avoir joué !</p>`;
     }
@@ -1380,10 +1717,10 @@ function refreshRegie(){
 /* ============ ACTIONS & ENTRÉES ============ */
 const ACT = {
   home:()=>{ $("#regie").hidden = true; screenTitle(); },
-  preset:()=>{ G.plan = PRESET.slice(); G.saboteur = true; G.themes = []; G.level = "ca"; goTeams(); },
+  preset:()=>{ G.plan = (PH.want ? PRESET_P : PRESET).slice(); G.saboteur = true; G.themes = []; G.level = "ca"; goTeams(); },
   compose:screenCompose, toteams:()=>{ if(!G.plan.length){ return; } goTeams(); },
   mode0:()=>{ PH.want = false; screenTitle(); }, mode1:()=>{ PH.want = true; screenTitle(); },
-  joinform:screenJoinForm, goteams:goTeams, nophone:()=>{ PH.want = false; goTeams(); },
+  joinform:screenJoinForm, admin:()=>{ location.href = location.pathname + "?net=local&admin=1"; }, goteams:goTeams, nophone:()=>{ PH.want = false; goTeams(); },
   bank:screenBank, kit:screenKit,
   resetbank:()=>{ if(TOURNEE){ BANK = TOURNEE; BANK_SRC = "tournee"; } else { BANK = DEMO_Q.map((r,i)=>({id:"d"+i,t:r[0],n:r[1],q:r[2],o:r[3],c:0,e:r[4]})); BANK_SRC = "demo"; } G.used = []; try{ localStorage.removeItem("af-bank"); }catch(e){} screenBank(); },
   start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.tabIdx = [0,0]; assignRoles(); SFX.go(); screenBoard(); },
@@ -1419,6 +1756,7 @@ const padPrev = [false,false];
 /* Démarrage (et reprise après mise à jour de la page) */
 function boot(data){
   if(PARAMS.get("r")) return phoneApp(PARAMS.get("r"));
+  adminSetup();
   if(data && data.G && !PH.on){ G = data.G; screenTitle(); } else screenTitle();
 }
 window.claude?.hot?.snapshot?.(() => ({ G }));
