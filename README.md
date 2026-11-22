@@ -2,7 +2,7 @@
 
 Le jeu télé de la prévention incendie. Deux équipes, un animateur, des buzzers, et un seul établissement à faire ouvrir : le Complexe des Dunes.
 
-Séance collective de 45 min à 1 h, de 6 à 12 joueurs, du chef d'agrès au PRV2. Le jeu se projette au vidéoprojecteur, avec deux modes au choix :
+Séance collective de 45 min à 1 h, de 6 à 16 joueurs en 2 à 4 équipes (2 par défaut, composition au choix ou tirée au sort), du chef d'agrès au PRV2. Le niveau (Découverte, Chef d'agrès, PRV2) se règle au début de chaque épreuve. En cas de fermeture de la page, l'accueil propose de reprendre la partie en cours. Le jeu se projette au vidéoprojecteur, avec deux modes au choix :
 
 - **Sans téléphone** : tout se joue à l'écran, avec le clavier ou des buzzers USB.
 - **Avec téléphones** : façon Kahoot, chacun rejoint la partie en scannant un QR code (sans compte ni installation), répond, mise, buzze et vote depuis son téléphone. Le Saboteur reçoit son rôle secret sur son téléphone.
@@ -31,8 +31,10 @@ Sur l'écran d'accueil, « Mode test concepteur » ouvre l'écran projeté avec,
 
 | Touche | Action |
 |---|---|
-| A ou manette 1 | Buzzer équipe 1 |
-| P ou manette 2 | Buzzer équipe 2 |
+| A, 1 ou manette 1 | Buzzer équipe 1 |
+| P, 2 ou manette 2 | Buzzer équipe 2 |
+| 3 ou manette 3 | Buzzer équipe 3 |
+| 4 ou manette 4 | Buzzer équipe 4 |
 | V / X | Bonne / mauvaise réponse (animateur) |
 | Espace | Révéler / continuer |
 | R | Ouvrir la régie (réponse, points) |

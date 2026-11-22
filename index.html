@@ -33,6 +33,8 @@ h2{text-wrap:balance}
 /* Titres néon */
 .neon-p{color:#fff;text-shadow:0 0 6px var(--pink),0 0 22px var(--pink),0 0 44px var(--pink)}
 .neon-c{color:#fff;text-shadow:0 0 6px var(--cyan),0 0 20px var(--cyan),0 0 40px var(--cyan)}
+.neon-a{color:#fff;text-shadow:0 0 6px var(--amber),0 0 20px var(--amber),0 0 40px var(--amber)}
+.neon-l{color:#fff;text-shadow:0 0 6px var(--lime),0 0 20px var(--lime),0 0 40px var(--lime)}
 .logo{font-family:var(--f-title);font-weight:400;letter-spacing:.05em;line-height:1;text-align:center}
 .eyebrow{font-size:clamp(12px,1.4vw,15px);font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan)}
 
@@ -57,6 +59,8 @@ h2{text-wrap:balance}
 .panel{background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:clamp(14px,2vw,24px)}
 .glow-p{border-color:var(--pink);box-shadow:0 0 18px rgba(255,46,136,.4),inset 0 0 18px rgba(255,46,136,.18)}
 .glow-c{border-color:var(--cyan);box-shadow:0 0 18px rgba(46,242,255,.35),inset 0 0 18px rgba(46,242,255,.15)}
+.glow-a{border-color:var(--amber);box-shadow:0 0 18px rgba(255,201,60,.35),inset 0 0 18px rgba(255,201,60,.15)}
+.glow-l{border-color:var(--lime);box-shadow:0 0 18px rgba(182,255,59,.3),inset 0 0 18px rgba(182,255,59,.12)}
 .muted{color:var(--muted)}
 .center{display:flex;flex-direction:column;align-items:center;justify-content:safe center;text-align:center}
 .grow{flex:1 1 auto;min-height:0}
@@ -83,7 +87,7 @@ h2{text-wrap:balance}
 .menu .btn small{font-size:14px;font-weight:500;color:var(--muted)}
 
 /* Équipes */
-.teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,2vw,24px)}
+.teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(12px,2vw,24px)}
 @media (max-width:720px){.teams{grid-template-columns:1fr}}
 .team-card{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .team-card input[type=text]{background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:10px 14px;font-size:clamp(18px,2vw,24px);font-weight:700;text-align:center;width:min(320px,100%)}
@@ -102,6 +106,8 @@ h2{text-wrap:balance}
 .score .pts{margin-left:auto;font-size:clamp(24px,3vw,40px);font-weight:700;font-variant-numeric:tabular-nums}
 .score.t0{border-color:var(--pink)} .score.t0 .pts{color:var(--pink)}
 .score.t1{border-color:var(--cyan)} .score.t1 .pts{color:var(--cyan)}
+.score.t2{border-color:var(--amber)} .score.t2 .pts{color:var(--amber)}
+.score.t3{border-color:var(--lime)} .score.t3 .pts{color:var(--lime)}
 .score.flash{animation:flash .5s 2}
 @keyframes flash{50%{background:var(--panel2);transform:scale(1.03)}}
 
@@ -152,7 +158,7 @@ h2{text-wrap:balance}
 .corner .where{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--c)}
 .corner .txt{font-size:clamp(17px,2.1vw,27px);font-weight:700}
 .corner.good{box-shadow:0 0 30px var(--c)} .corner.dim{opacity:.25}
-.count{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.count{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:10px}
 @media (max-width:640px){.count{grid-template-columns:1fr}}
 
 /* Money Drop */
@@ -178,9 +184,9 @@ h2{text-wrap:balance}
 .forbid span{border-radius:12px;padding:8px;background:var(--panel2);border:2px solid var(--bad);font-size:clamp(17px,1.9vw,24px);font-weight:600;text-decoration:line-through;text-decoration-color:var(--bad)}
 
 /* Finale */
-.duel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.duel{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .lane{display:flex;align-items:center;gap:12px;border-radius:18px;border:3px solid var(--c);padding:10px 14px;background:var(--panel)}
-.lane.t0{--c:var(--pink)} .lane.t1{--c:var(--cyan)}
+.lane.t0{--c:var(--pink)} .lane.t1{--c:var(--cyan)} .lane.t2{--c:var(--amber)} .lane.t3{--c:var(--lime)}
 .pips{display:flex;gap:6px;margin-left:auto}
 .pip{width:clamp(18px,2.2vw,28px);height:clamp(18px,2.2vw,28px);border-radius:6px;border:2px solid var(--c)}
 .pip.on{background:var(--c);box-shadow:0 0 10px var(--c)}
@@ -190,7 +196,7 @@ h2{text-wrap:balance}
 @keyframes stamp{from{transform:rotate(-8deg) scale(3);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
 
 /* Résultats */
-.res{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:min(900px,100%)}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;width:min(1000px,100%)}
 @media (max-width:640px){.res{grid-template-columns:1fr}}
 .res .panel{display:flex;flex-direction:column;align-items:center;gap:10px}
 .res .gain{font-size:clamp(40px,6vw,80px);font-weight:700;font-variant-numeric:tabular-nums}
@@ -284,10 +290,12 @@ body.admin #app{margin-right:min(540px,45vw)}
 .tc-opt .let{flex:0 0 auto;width:1.7em;height:1.7em;border-radius:8px;background:var(--c);color:#07070F;display:flex;align-items:center;justify-content:center;font-weight:700}
 .tc-opt .tx{flex:1;min-width:0;font-size:clamp(14px,1.45vw,18px);font-weight:600;line-height:1.25}
 .tc-opt.good{box-shadow:0 0 22px var(--c)} .tc-opt.dim{opacity:.4}
-.tc-chips{display:flex;gap:6px;flex:0 0 auto}
-.tc-chip{border:2px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;background:var(--panel2);cursor:pointer;font-size:13px;min-height:36px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tc-chips{display:flex;gap:5px;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;max-width:55%}
+.tc-chip{border:2px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;background:var(--panel2);cursor:pointer;font-size:13px;min-height:36px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tc-chip.t0.on{border-color:var(--pink);background:var(--pink);color:#07070F}
 .tc-chip.t1.on{border-color:var(--cyan);background:var(--cyan);color:#07070F}
+.tc-chip.t2.on{border-color:var(--amber);background:var(--amber);color:#07070F}
+.tc-chip.t3.on{border-color:var(--lime);background:var(--lime);color:#07070F}
 .tc-chip[disabled]{cursor:default}
 .fp{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(10px,1.4vw,18px);align-items:start}
 @media (max-width:900px){.fp{grid-template-columns:1fr}}
@@ -428,17 +436,45 @@ const DEMO_Q = [
 ["Moyens de secours",2,"Quel extincteur convient à un feu de friteuse ?",["Un extincteur classe F","Un extincteur à eau sans additif","Un seau d'eau","Un extincteur à poudre BC uniquement"],""]
 ];
 const TABOU = [
-["Colonne sèche",["eau","tuyau","étage","raccord"]],["Porte coupe-feu",["porte","feu","fermer","couloir"]],
-["Extincteur",["éteindre","feu","rouge","poudre"]],["BAES",["lumière","éclairage","bloc","panne"]],
-["Désenfumage",["fumée","fenêtre","ouvrir","air"]],["Commission de sécurité",["visite","maire","avis","réunion"]],
-["Registre de sécurité",["cahier","vérification","signer","exploitant"]],["Dégagement",["sortie","couloir","évacuer","passage"]],
-["Détecteur de fumée",["plafond","bip","alarme","fumée"]],["Voie engins",["route","camion","pompiers","accès"]],
-["Point de rassemblement",["évacuation","dehors","compter","groupe"]],["Déclencheur manuel",["bouton","rouge","vitre","alarme"]],
-["Exercice d'évacuation",["sortir","alarme","entraînement","chronomètre"]],["Effectif",["nombre","personnes","public","calcul"]],
-["Sprinkleur",["eau","plafond","automatique","arrosage"]],["RIA",["robinet","tuyau","enrouleur","eau"]],
-["Plan d'intervention",["carte","pompiers","bâtiment","dessin"]],["Agent SSIAP",["sécurité","surveiller","ronde","diplôme"]],
-["Clapet coupe-feu",["gaine","ventilation","fermer","feu"]],["Flashover",["embrasement","feu","pièce","chaleur"]],
-["Chef d'agrès",["pompier","camion","chef","équipe"]],["Compartimentage",["mur","feu","diviser","porte"]]
+["Colonne sèche",["eau","tuyau","étage","raccord","engin"]],["Colonne humide",["eau","pression","étage","IGH","tuyau"]],
+["Porte coupe-feu",["porte","feu","fermer","couloir","ferme-porte"]],["Extincteur",["éteindre","feu","rouge","poudre","CO2"]],
+["BAES",["lumière","éclairage","bloc","panne","sortie"]],["Désenfumage",["fumée","fenêtre","ouvrir","air","exutoire"]],
+["Commission de sécurité",["visite","maire","avis","réunion","préfet"]],["Registre de sécurité",["cahier","vérification","signer","exploitant","noter"]],
+["Dégagement",["sortie","couloir","évacuer","passage","largeur"]],["Détecteur de fumée",["plafond","bip","alarme","fumée","DAAF"]],
+["Voie engins",["route","camion","pompiers","accès","largeur"]],["Voie échelles",["échelle","façade","camion","grande","EPA"]],
+["Point de rassemblement",["évacuation","dehors","compter","groupe","parking"]],["Déclencheur manuel",["bouton","rouge","vitre","alarme","appuyer"]],
+["Exercice d'évacuation",["sortir","alarme","entraînement","chronomètre","annuel"]],["Effectif",["nombre","personnes","public","calcul","catégorie"]],
+["Sprinkleur",["eau","plafond","automatique","arrosage","tête"]],["RIA",["robinet","tuyau","enrouleur","eau","armé"]],
+["Plan d'intervention",["carte","pompiers","bâtiment","dessin","accès"]],["Agent SSIAP",["sécurité","surveiller","ronde","diplôme","PC"]],
+["Clapet coupe-feu",["gaine","ventilation","fermer","feu","volet"]],["Flashover",["embrasement","feu","pièce","chaleur","éclair"]],
+["Backdraft",["explosion","air","porte","fumée","oxygène"]],["Chef d'agrès",["pompier","camion","chef","équipe","FPT"]],
+["Compartimentage",["mur","feu","diviser","porte","zone"]],["Poteau incendie",["eau","rouge","rue","bouche","débit"]],
+["Lance",["eau","tuyau","pompier","jet","débit"]],["Établissement recevant du public",["ERP","magasin","clients","public","bâtiment"]],
+["Catégorie",["effectif","classement","première","cinquième","nombre"]],["Unité de passage",["UP","largeur","porte","sortie","60"]],
+["Escalier encloisonné",["marches","fumée","protégé","porte","étage"]],["Exutoire",["toit","fumée","ouvrir","désenfumage","lanterneau"]],
+["Ferme-porte",["porte","fermer","automatique","bras","ressort"]],["Ventouse",["aimant","porte","coller","électrique","DAS"]],
+["CMSI",["centralisateur","mise en sécurité","SSI","armoire","commande"]],["ECS",["équipement","signalisation","détection","écran","tableau"]],
+["Alarme générale",["sonner","tout le monde","évacuer","son","sirène"]],["Levée de doute",["vérifier","agent","fausse","alarme","aller voir"]],
+["Réarmement",["SSI","remettre","bouton","réinitialiser","normal"]],["Mainteneur",["entreprise","réparer","entretien","contrat","technicien"]],
+["Bureau de contrôle",["vérification","organisme","agréé","rapport","technicien"]],["Avis défavorable",["commission","non","fermer","maire","PV"]],
+["Visite périodique",["commission","années","contrôle","régulière","calendrier"]],["Préventionniste",["PRV","pompier","visite","réglementation","commission"]],
+["Permis de construire",["mairie","travaux","dossier","autorisation","architecte"]],["Notice de sécurité",["dossier","document","architecte","descriptif","permis"]],
+["Isolement",["tiers","mur","distance","voisin","coupe-feu"]],["Réaction au feu",["matériau","brûler","M1","euroclasse","inflammable"]],
+["Résistance au feu",["minutes","EI","structure","tenir","stabilité"]],["Triangle du feu",["combustible","comburant","énergie","trois","oxygène"]],
+["Monoxyde de carbone",["CO","gaz","poison","invisible","chauffage"]],["Espace d'attente sécurisé",["handicap","attendre","secours","EAS","fauteuil"]],
+["Local à risques",["chaufferie","stockage","danger","porte","important"]],["Chaufferie",["chaudière","gaz","local","chauffage","fioul"]],
+["Grande cuisine",["restaurant","friteuse","hotte","cuisson","puissance"]],["Hotte",["cuisine","aspirer","graisse","filtre","extraction"]],
+["Coupure d'urgence",["électricité","bouton","couper","gaz","arrêt"]],["Éclairage de sécurité",["BAES","panne","lumière","sortie","bloc"]],
+["Plan d'évacuation",["affiché","vous êtes ici","sortie","dessin","mur"]],["Consignes de sécurité",["affiche","règles","quoi faire","incendie","personnel"]],
+["IGH",["tour","haut","immeuble","grande hauteur","28 mètres"]],["Hôtel",["chambre","dormir","client","type O","nuit"]],
+["PC sécurité",["poste","agent","SSI","écrans","central"]],["Ronde",["agent","tour","vérifier","nuit","surveillance"]],
+["Mur coupe-feu",["mur","feu","séparer","béton","résistance"]],["Façade",["mur","extérieur","propagation","fenêtre","vitre"]],
+["Euroclasse",["A1","réaction","matériau","classement","européen"]],["Combustible",["brûler","bois","matière","triangle","essence"]],
+["Comburant",["oxygène","air","triangle","feu","brûler"]],["Fumée",["noire","toxique","respirer","plafond","gaz"]],
+["Évacuation",["sortir","alarme","dehors","quitter","rassemblement"]],["Ascenseur",["cabine","étage","monter","pompiers","bouton"]],
+["Signalétique",["panneau","vert","flèche","sortie","pictogramme"]],["Cheminement",["chemin","sortie","parcours","dégagement","marcher"]],
+["Arrêté d'ouverture",["maire","autoriser","ouvrir","public","signer"]],["Type L",["salle","spectacle","réunion","théâtre","cinéma"]],
+["Type M",["magasin","vente","commerce","centre commercial","boutique"]],["Type U",["hôpital","soins","malades","clinique","santé"]]
 ];
 const EMBLEMS = [
  '<path d="M32 14l5 10 11 1.6-8 7.8 1.9 11L32 39.4 22.1 44.4 24 33.4l-8-7.8 11-1.6z"/>',
@@ -536,8 +572,16 @@ let TIMER = null;
 let SOUND = true;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const TCOL = ["var(--pink)","var(--cyan)"];
-const TCLS = ["neon-p","neon-c"];
+const TCOL = ["var(--pink)","var(--cyan)","var(--amber)","var(--lime)"];
+const TCLS = ["neon-p","neon-c","neon-a","neon-l"];
+const GLOW = ["glow-p","glow-c","glow-a","glow-l"];
+const THEX = ["#FF2E88","#2EF2FF","#FFC93C","#B6FF3B"];
+const TEAM_DEF = [["Équipe Rose",1],["Équipe Cyan",2],["Équipe Ambre",3],["Équipe Lime",0]];
+const BUZZ_KEYS = ["A","P","3","4"];
+const TT = () => G.teams.map((_,i) => i);
+const shortName = t => G.teams[t].name.replace(/^Équipe\s+/i, "");
+function bestTeam(vals){ const mx = Math.max(...vals); return vals.filter(v => v === mx).length > 1 ? -1 : vals.indexOf(mx); }
+function setTeamCount(n){ n = Math.max(2, Math.min(4, n)); while(G.teams.length < n){ const [nm, emb] = TEAM_DEF[G.teams.length]; G.teams.push({name:nm, emb, players:4, pts:0}); } G.teams.length = n; }
 
 /* ============ SONS ============ */
 let AC = null;
@@ -572,7 +616,7 @@ function gameIcon(k, size=48){
   return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GAMES[k].icon||""}</svg>`;
 }
 function scorebar(){
-  return `<div class="scorebar">${[0,1].map(t=>`<div class="score t${t}" id="sc${t}">${avatar(t,44)}<span class="name">${esc(G.teams[t].name)}</span><span class="pts" id="pts${t}">${G.teams[t].pts}</span></div>`).join("")}</div>`;
+  return `<div class="scorebar" style="grid-template-columns:repeat(${G.teams.length},minmax(0,1fr))">${TT().map(t=>`<div class="score t${t}" id="sc${t}">${avatar(t,44)}<span class="name">${esc(G.teams[t].name)}</span><span class="pts" id="pts${t}">${G.teams[t].pts}</span></div>`).join("")}</div>`;
 }
 function addPts(t, n){
   G.teams[t].pts = Math.max(0, G.teams[t].pts + n);
@@ -622,6 +666,7 @@ function render(html){ stopTimer(); $("#app").innerHTML = html; $("#app").scroll
 function screenTitle(){
   CUR = null; narrate("title");
   render(`<div class="grow center title-screen" style="gap:clamp(18px,3vh,36px)">
+    ${(() => { const x = ADMIN ? null : readSnap(); return x ? `<div class="panel glow-l" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:900px"><strong style="color:var(--lime)">Partie en cours trouvée</strong><span class="note">${x.code ? "Code " + esc(x.code) + " · " : ""}épreuve ${x.G.step + 1} sur ${x.G.plan.length} · ${x.G.teams.map(t => esc(t.name) + " " + t.pts).join(" · ")}</span><button class="btn pink" data-act="resume">Reprendre la partie</button><button class="btn ghost" data-act="dropsnap">Effacer</button></div>` : ""; })()}
     <span class="eyebrow">Le jeu télé de la prévention</span>
     <h1 class="logo" aria-label="Avis favorable !"><span class="logo-a neon-p" style="display:block">AVIS</span><span class="sign" aria-hidden="true"><span class="de">DÉ</span><span class="fav">FAVORABLE !</span></span></h1>
     <p class="muted" style="font-size:clamp(16px,1.8vw,21px);max-width:60ch;line-height:1.45">Deux équipes, un présentateur, des buzzers, et un seul établissement à faire ouvrir : le Complexe des Dunes.</p>
@@ -821,24 +866,36 @@ function screenFree(){
 function screenTeams(){
   CUR = { onBuzz:(t)=>{ const b = $("#bz"+t); if(b){ b.classList.add("on"); b.textContent = "Buzzer prêt !"; } SFX.buzz(t); } };
   render(`${topbar("Les équipes")}
+  <div class="row" style="justify-content:center;gap:8px"><span class="muted">Nombre d'équipes</span>${[2,3,4].map(n => `<button class="btn ghost" aria-pressed="${G.teams.length === n}" data-nt="${n}" style="${G.teams.length === n ? "border-color:var(--amber);color:var(--amber)" : ""}">${n}</button>`).join("")}
+    <span class="muted" style="margin-left:14px">Composition</span><button class="btn ghost" aria-pressed="${!G.randomTeams}" data-act="rand0" style="${!G.randomTeams ? "border-color:var(--amber);color:var(--amber)" : ""}">Au choix</button><button class="btn ghost" aria-pressed="${!!G.randomTeams}" data-act="rand1" style="${G.randomTeams ? "border-color:var(--amber);color:var(--amber)" : ""}">Tirage au sort</button>
+    ${G.randomTeams && PH.on ? `<button class="btn ghost" data-act="reshuffle">Remélanger</button>` : ""}</div>
+  ${G.randomTeams && !PH.on ? `<div class="panel" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start"><div style="flex:1 1 320px;display:flex;flex-direction:column;gap:6px"><label for="rnames" class="muted">Prénoms des participants, un par ligne</label><textarea id="rnames" rows="4" style="background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:10px;font:inherit;color:inherit;font-size:16px">${esc((G.roster || []).join("\n"))}</textarea></div><button class="btn big pink" id="rdraw" style="align-self:center">Tirer au sort</button></div>` : ""}
   ${PH.on ? `<div class="panel glow-c lobby"><div class="qr" id="joinqr" aria-label="QR code pour rejoindre la partie"></div><div style="display:flex;flex-direction:column;gap:8px"><span class="eyebrow">Rejoignez la partie</span><span class="bigcode">${PH.code}</span><span class="note" style="font-size:16px">Scannez le QR code, ou ouvrez <strong style="color:var(--fg)">${esc(location.host + location.pathname)}</strong>, touchez « Je suis joueur » et tapez le code.</span><span class="live" id="pcount"></span></div></div>` : ""}
-  <div class="teams">${[0,1].map(t=>`
-    <div class="panel team-card ${t?"glow-c":"glow-p"}">
+  <div class="teams">${TT().map(t=>`
+    <div class="panel team-card ${GLOW[t]}">
       <div class="bounce">${avatar(t,110)}</div>
       <label for="tn${t}" class="muted">Nom de l'équipe</label>
       <input type="text" id="tn${t}" value="${esc(G.teams[t].name)}" maxlength="24">
       <div class="emblems" style="color:${TCOL[t]}">${EMBLEMS.map((e,i)=>`<button class="emblem" aria-label="Emblème ${i+1}" aria-pressed="${G.teams[t].emb===i}" data-emb="${t}-${i}"><svg width="34" height="34" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">${e}</svg></button>`).join("")}</div>
-      ${PH.on ? `<span class="muted">Joueurs connectés</span><div class="plist" id="plist${t}" style="color:${TCOL[t]}"></div>` : `<div class="stepper"><span class="muted">Joueurs</span><button aria-label="Un joueur de moins" data-pl="${t}|-1">−</button><span id="pl${t}" style="font-size:24px;min-width:1.2em">${G.teams[t].players}</span><button aria-label="Un joueur de plus" data-pl="${t}|1">+</button></div>
-      <span class="buzzcheck" id="bz${t}">Appuyez sur votre buzzer (<span class="kbd">${t?"P":"A"}</span>)</span>`}
+      ${PH.on ? `<span class="muted">Joueurs connectés</span><div class="plist" id="plist${t}" style="color:${TCOL[t]}"></div>` : `${(G.teams[t].members || []).length ? `<div class="plist" style="color:${TCOL[t]}">${G.teams[t].members.map(m => `<span>${esc(m)}</span>`).join("")}</div>` : ""}<div class="stepper"><span class="muted">Joueurs</span><button aria-label="Un joueur de moins" data-pl="${t}|-1">−</button><span id="pl${t}" style="font-size:24px;min-width:1.2em">${G.teams[t].players}</span><button aria-label="Un joueur de plus" data-pl="${t}|1">+</button></div>
+      <span class="buzzcheck" id="bz${t}">Appuyez sur votre buzzer (<span class="kbd">${BUZZ_KEYS[t]}</span>)</span>`}
     </div>`).join("")}
   </div>
   ${G.saboteur ? `<div class="panel" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><strong style="color:var(--amber)">Le Saboteur</strong><span class="note" style="flex:1 1 300px">${PH.on ? "Au lancement, un saboteur secret est tiré au sort dans chaque équipe : chacun découvre son rôle sur son téléphone. À chaque épreuve, le saboteur reçoit un contrat secret. Révélation après la finale." : `Avant de commencer, chaque joueur tire une carte pliée (cartes à imprimer : <a href="${CARTES_URL}" target="_blank" rel="noopener" style="color:var(--cyan)">cartes du Saboteur</a>). Une carte par équipe porte « Saboteur » et ses contrats secrets. Révélation après la finale.`}</span></div>` : ""}
   <div class="row"><button class="btn" data-act="home">Retour</button><button class="btn big pink" data-act="start">C'est parti !</button></div>`);
-  [0,1].forEach(t => $("#tn"+t).oninput = e => { G.teams[t].name = e.target.value || ("Équipe " + (t+1)); pub("lobby", {}); });
+  document.querySelectorAll("[data-nt]").forEach(b => b.onclick = () => { setTeamCount(+b.dataset.nt); if(PH.on){ G.randomTeams ? reshuffle() : autoAssign(); } SFX.blip(); screenTeams(); });
+  const rd = $("#rdraw"); if(rd) rd.onclick = () => {
+    const names = $("#rnames").value.split(/\n+/).map(x => x.trim()).filter(Boolean); G.roster = names;
+    if(!names.length) return;
+    const sh = shuffle(names); G.teams.forEach(t => t.members = []);
+    sh.forEach((n, i) => G.teams[i % G.teams.length].members.push(n));
+    G.teams.forEach(t => t.players = Math.max(1, t.members.length)); SFX.good(); screenTeams();
+  };
+  TT().forEach(t => $("#tn"+t).oninput = e => { G.teams[t].name = e.target.value || ("Équipe " + (t+1)); pub("lobby", {random:!!G.randomTeams}); });
   if(PH.on){
     try{ new QRCode($("#joinqr"), {text:joinURL(), width:180, height:180, correctLevel:QRCode.CorrectLevel.M}); }catch(e){}
-    const plist = () => { [0,1].forEach(t => { const el = $("#plist"+t); if(el) el.innerHTML = teamPlayers(t).map(([,p])=>`<span>${esc(p.name)}</span>`).join("") || '<span class="muted" style="border:0">En attente…</span>'; }); const c = $("#pcount"); if(c) c.textContent = Object.keys(PH.players).length + " joueur(s) connecté(s)"; };
-    CUR.onPlayers = plist; plist(); pub("lobby", {}); narrate("teams");
+    const plist = () => { TT().forEach(t => { const el = $("#plist"+t); if(el) el.innerHTML = teamPlayers(t).map(([,p])=>`<span>${esc(p.name)}</span>`).join("") || '<span class="muted" style="border:0">En attente…</span>'; }); const c = $("#pcount"); if(c) c.textContent = Object.keys(PH.players).length + " joueur(s) connecté(s)"; };
+    CUR.onPlayers = plist; plist(); pub("lobby", {random:!!G.randomTeams}); narrate("teams");
   }
   document.querySelectorAll("[data-emb]").forEach(b => b.onclick = () => { const [t,i] = b.dataset.emb.split("-").map(Number); G.teams[t].emb = i; SFX.blip(); screenTeams(); });
   document.querySelectorAll("[data-pl]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.pl.split("|").map(Number); G.teams[t].players = Math.min(8, Math.max(1, G.teams[t].players + d)); $("#pl"+t).textContent = G.teams[t].players; SFX.blip(); });
@@ -848,6 +905,7 @@ function screenTeams(){
 function screenBoard(){
   CUR = { onKey:(k)=>{ if(k==="Enter"||k===" ") launch(); } };
   if(G.step >= G.plan.length) return screenEnd();
+  saveSnap();
   pub("wait", {title:"Le plateau", msg:"Prochaine épreuve : " + GAMES[G.plan[G.step]].nom}); narrate("board");
   render(`${topbar("Le plateau")}${scorebar()}
   <div class="panel grow" style="display:flex;flex-direction:column;justify-content:center;gap:20px">
@@ -857,20 +915,20 @@ function screenBoard(){
   ${G.saboteur ? `<p class="note" style="text-align:center">Fil rouge : un saboteur se cache dans chaque équipe. Révélation après la finale.</p>` : ""}
   <div class="center" style="gap:8px"><button class="btn big pink" data-act="launch">Épreuve suivante : ${esc(GAMES[G.plan[G.step]].nom)}</button><span class="muted">ou <span class="kbd">Entrée</span></span></div>`);
 }
-function launch(){ SFX.blip(); const k = G.plan[G.step]; if(!GAMES[k] || GAMES[k].thread || (GAMES[k].phoneOnly && !PH.on)){ G.step++; return screenBoard(); } screenHowto(k); }
+function launch(){ SFX.blip(); const k = G.plan[G.step]; if(!GAMES[k] || GAMES[k].thread || (GAMES[k].phoneOnly && !PH.on)){ G.step++; return screenBoard(); } G.ptsAtStep = G.teams.map(t => t.pts); G.inGame = true; saveSnap(); screenHowto(k); }
 function endGame(before){
-  G.step++;
-  const gain = [0,1].map(t => G.teams[t].pts - before[t]);
+  G.step++; G.inGame = false; saveSnap();
+  const gain = TT().map(t => G.teams[t].pts - before[t]);
   const k = G.plan[G.step-1];
   if(k === "finale") return G.saboteur ? RUN.saboteur() : screenEnd();
-  const win = gain[0] === gain[1] ? -1 : (gain[0] > gain[1] ? 0 : 1);
+  const win = bestTeam(gain);
   SFX.fanfare();
   CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") screenBoard(); } };
   pub("wait", {title: win<0 ? "Égalité !" : G.teams[win].name + " remporte l'épreuve !", msg:"Regardez l'écran"}); narrate("results");
   render(`${topbar("Résultats")}
   <div class="grow center" style="gap:24px">
     <h2 style="font-size:clamp(28px,4vw,54px)" class="${win<0?"neon-c":TCLS[win]}">${win<0 ? "Égalité !" : esc(G.teams[win].name) + " remporte l'épreuve !"}</h2>
-    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}"><div class="${t===win?"bounce":""}">${avatar(t,96)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">+${gain[t]}</span><span class="muted">Total : ${G.teams[t].pts} points</span></div>`).join("")}</div>
+    <div class="res">${TT().map(t=>`<div class="panel ${GLOW[t]}"><div class="${t===win?"bounce":""}">${avatar(t,96)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">+${gain[t]}</span><span class="muted">Total : ${G.teams[t].pts} points</span></div>`).join("")}</div>
     <button class="btn big cyan" data-act="board">${G.step >= G.plan.length ? "Voir le podium" : "Retour au plateau"}</button>
   </div>`);
 }
@@ -883,21 +941,21 @@ const HOWTO = {
           ctlP:[["Téléphone","Choisir A, B, C ou D"],["Espace","Révéler la réponse (animateur)"]] },
   tabou:{ rules:["Un joueur fait deviner le mot à son équipe en 60 secondes.","Ses coéquipiers tournent le dos à l'écran.","Les quatre mots barrés sont interdits.","L'autre équipe surveille : si un mot interdit est dit, elle buzze."],
           ctl:[["V","Mot trouvé : +1"],["S","Passer la carte"],["Buzzer adverse","Mot interdit : −1"]],
-          rulesP:["Un orateur est désigné à chaque tour : la carte s'affiche sur son téléphone.","Il fait deviner le mot à son équipe en 60 secondes.","Les quatre mots barrés sont interdits.","L'équipe adverse appuie sur « Mot interdit ! » si elle en entend un."],
-          ctlP:[["Orateur","Trouvé ou Passer sur son téléphone"],["Adversaires","Mot interdit : −1"]] },
+          rulesP:["Un orateur est désigné à chaque tour : la carte s'affiche sur son téléphone.","Il fait deviner le mot à son équipe en 60 secondes.","Les mots barrés (3, 4 ou 5 selon le niveau) sont interdits.","Les autres équipes voient la carte sur leurs téléphones et appuient sur « Mot interdit ! » dès qu'elles en entendent un."],
+          ctlP:[["Orateur","Trouvé ou Passer sur son téléphone"],["Adversaires","Voient la carte, buzzent : −1"]] },
   money:{ rules:["Chaque équipe reçoit 10 jetons pour la manche.","À chaque question, placez tous vos jetons sur les réponses, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
           ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]],
           rulesP:["Chaque équipe reçoit 10 jetons pour la manche.","Placez vos jetons ensemble depuis vos téléphones, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
           ctlP:[["Téléphone","+ / − sur chaque réponse"],["Espace","Ouvrir les trappes (animateur)"]] },
-  lances:{ rules:["Chaque joueur dirige un pompier dans le Complexe des Dunes avec son téléphone.","Arrosez les foyers pour les éteindre (+2) et arrosez les adversaires pour les tremper (+1) : un joueur trempé est gelé 3 secondes.","Votre réserve d'eau est limitée. Pour la remplir, allez à un poteau incendie (rouge) et répondez aux questions : +4 d'eau par bonne réponse.","Attention : au poteau, vous êtes immobile. 2 min 30 de bataille."],
+  lances:{ rules:["Chaque joueur dirige un pompier dans le Complexe des Dunes avec son téléphone.","Arrosez les foyers pour les éteindre (+2) et arrosez les adversaires pour les tremper (+1) : un joueur trempé est gelé 3 secondes.","Votre réserve d'eau est limitée. Pour la remplir, allez à un poteau incendie (rouge) et répondez aux questions : chaque bonne réponse recharge la lance.","Attention : au poteau, vous êtes immobile. 2 min 30 de bataille."],
           ctl:[["Joystick","Se déplacer (gauche du téléphone)"],["Arroser","Maintenir le bouton bleu"],["Poteau","Répondre aux questions pour recharger"]] },
   faussepiste:{ rules:["Le SSI signale un feu au Complexe des Dunes. L'écran montre le message de l'ECS, le plan d'intervention et trois indices.","Attention : le plan ou le SSI peut être faux. Croisez les informations avant de décider.","Par intervention : où est vraiment le feu (+2), quelles informations sont fausses (+1 par erreur trouvée, −1 par erreur inventée), où engager le premier engin (+2).","Deux interventions. Chaque équipe annonce ses choix à l'animateur."],
           ctl:[["Clic","L'animateur saisit le choix de chaque équipe"],["Espace","Révéler, puis suite"]],
           rulesP:["Le SSI signale un feu au Complexe des Dunes. L'écran montre le message de l'ECS, le plan d'intervention et trois indices.","Attention : le plan ou le SSI peut être faux. Croisez les informations avant de voter.","Par intervention : où est vraiment le feu (+2), quelles informations sont fausses (+1 par erreur trouvée, −1 par erreur inventée), où engager le premier engin (+2).","Chacun vote sur son téléphone : la majorité de l'équipe l'emporte."],
           ctlP:[["Téléphone","Voter"],["Espace","Révéler, puis suite (animateur)"]] },
-  tribunal:{ rules:["Trois semaines après votre intervention, un incendie touche le Complexe des Dunes.","Le juge examine le registre de sécurité et vous interroge : trois questions, +2 par bonne réponse.","Deux bonnes réponses ou plus : relaxe. Sinon : mise en cause."],
+  tribunal:{ rules:["Trois semaines après votre intervention, un incendie touche le Complexe des Dunes.","Le juge examine le registre de sécurité et vous interroge : quatre questions, +2 par bonne réponse.","Lisez le registre attentivement : ce qui n'y est pas compte autant que ce qui y est.","Trois bonnes réponses ou plus : relaxe. Sinon : mise en cause."],
           ctl:[["Clic","L'animateur saisit le choix de chaque équipe"],["Espace","Révéler, puis suite"]],
-          rulesP:["Trois semaines après votre intervention, un incendie touche le Complexe des Dunes.","Le juge examine le registre de sécurité et vous interroge : trois questions, +2 par bonne réponse. Votez sur vos téléphones.","Deux bonnes réponses ou plus : relaxe. Sinon : mise en cause."],
+          rulesP:["Trois semaines après votre intervention, un incendie touche le Complexe des Dunes.","Le juge examine le registre de sécurité et vous interroge : quatre questions, +2 par bonne réponse. Votez sur vos téléphones.","Lisez le registre attentivement : ce qui n'y est pas compte autant que ce qui y est.","Trois bonnes réponses ou plus : relaxe. Sinon : mise en cause."],
           ctlP:[["Téléphone","Voter"],["Espace","Révéler, puis suite (animateur)"]] },
   desamorcage:{ rules:["Un opérateur s'assoit face au tableau SSI. Lui seul voit l'écran.","Ses coéquipiers tournent le dos à l'écran et lisent le manuel du PC sécurité.","L'opérateur décrit ce qu'il voit, l'équipe lui dicte les actions dans le bon ordre.","90 secondes par alarme. Au bout de 3 fausses manœuvres, c'est raté."],
           ctl:[["Clic","L'opérateur clique les actions"],["Manuel","À imprimer, ou à ouvrir avec le QR code"],["+3","Alarme traitée (+1 sans faute)"]], qr:true,
@@ -911,9 +969,23 @@ const HOWTO = {
           rulesP:["Duel au buzzer : la première équipe à 5 bonnes réponses gagne le tampon et +5 points.","L'équipe qui mène au score part avec 1 réponse d'avance (2 si elle mène de 10 points ou plus).","Buzzez sur votre téléphone, puis répondez à voix haute. Mauvaise réponse : la main passe.","Le capitaine vainqueur tamponne le PV : avis favorable !"],
           ctlP:[["Téléphone","Buzzer"],["V / X","Bonne / mauvaise réponse (animateur)"],["Espace","Question suivante"]] }
 };
+/* Niveaux : choisis sur la carte « Comment jouer » de chaque épreuve */
+const LEVELS = [["decouverte","Découverte"],["ca","Chef d'agrès"],["prv2","PRV2"],["mix","Tous niveaux"]];
+const TF = () => ({decouverte:1.3, ca:1, prv2:0.75, mix:1})[G.level] || 1;
+const secs = n => Math.round(n * TF());
+const LVFX = {
+  coins:"Niveau des questions et temps de réponse.",
+  tabou:"Nombre de mots interdits (3, 4 ou 5) et durée du tour.",
+  money:"Niveau des questions et temps pour miser.",
+  lances:"Taille de la réserve d'eau, recharge au poteau et niveau des questions.",
+  desamorcage:"Temps pour traiter chaque alarme.",
+  faussepiste:"Temps de réflexion ; en PRV2, un indice de moins.",
+  tribunal:"Temps de réflexion face au juge.",
+  finale:"Niveau des questions (PRV2 : pas de questions faciles) et temps pour buzzer."
+};
 function giveContract(k){
   if(!PH.on || !G.saboteur || !CONTRACTS[k] || !G.sab) return;
-  [0,1].forEach(t => { const pid = G.sab[t]; if(!pid) return; const g = LOG().given; g[pid] = g[pid] || []; if(!g[pid].includes(k)) g[pid].push(k); PH.net.setPlayer(pid, {contract:CONTRACTS[k].t}); });
+  TT().forEach(t => { const pid = G.sab[t]; if(!pid) return; const g = LOG().given; g[pid] = g[pid] || []; if(!g[pid].includes(k)) g[pid].push(k); PH.net.setPlayer(pid, {contract:CONTRACTS[k].t}); });
 }
 function screenHowto(k){
   giveContract(k);
@@ -925,6 +997,7 @@ function screenHowto(k){
   <div class="grow center" style="gap:clamp(14px,2.4vh,28px)">
     <div style="color:var(--amber)">${gameIcon(k,72)}</div>
     <h2 class="neon-p" style="font-size:clamp(34px,5vw,68px)">${esc(GAMES[k].nom)}</h2>
+    <div class="center" style="gap:6px"><div class="modes" role="group" aria-label="Niveau de l'épreuve">${LEVELS.map(([v,n]) => `<button class="btn" aria-pressed="${G.level === v}" data-lv="${v}">${n}</button>`).join("")}</div><span class="note">Le niveau change : ${esc(LVFX[k] || "le niveau des questions.")}</span></div>
     <div class="howto">
       <div class="panel glow-p" style="text-align:left"><ul>${h.rules.map(r=>`<li>${r}</li>`).join("")}</ul></div>
       <div class="panel glow-c ctl-list" style="text-align:left">${h.ctl.map(([a,b])=>`<div class="ctl"><span class="kbd">${a}</span><span>${b}</span></div>`).join("")}
@@ -933,6 +1006,7 @@ function screenHowto(k){
     <button class="btn big pink" id="gobtn">Prêts ? <span class="kbd">Espace</span></button>
   </div>`);
   $("#gobtn").onclick = go;
+  document.querySelectorAll("[data-lv]").forEach(b => b.onclick = () => { G.level = b.dataset.lv; SFX.blip(); screenHowto(k); });
   if(h.qr){ try{ new QRCode($("#qrbox"), {text:MANUEL_URL, width:140, height:140, correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const b = $("#qrbox"); if(b) b.hidden = true; } }
 }
 
@@ -943,7 +1017,7 @@ const RUN = {};
 RUN.coins = function(){
   const before = G.teams.map(t=>t.pts); const qs = pickQ(G.qPer, false, {minOpts:3}); let i = 0;
   const show = () => {
-    const q = qs[i]; let revealed = false; const got = [0,0], given = [0,0]; const rk = "c" + G.step + "-" + i; const answers = {};
+    const q = qs[i]; let revealed = false; const got = TT().map(()=>0), given = TT().map(()=>0); const rk = "c" + G.step + "-" + i; const answers = {};
     const award = (t) => { const n = Math.max(1, G.teams[t].players); const pts = Math.round(3 * Math.min(got[t], n) / n); addPts(t, pts - given[t]); given[t] = pts; const e = $("#cnt"+t); if(e) e.textContent = got[t]; const g = $("#gain"+t); if(g) g.textContent = "+" + pts; };
     CUR = { q, onKey:(k)=>{ if(k===" "){ revealed ? next() : reveal(); } },
       onPhone:(ev)=>{ if(ev.type === "ans" && ev.round === rk && !revealed){ answers[ev.pid] = {a:+ev.a, team:ev.team}; live(); } } };
@@ -957,21 +1031,21 @@ RUN.coins = function(){
     </div>
     <div class="row" style="justify-content:center"><button class="btn big pink" id="rv">Révéler la réponse <span class="kbd">Espace</span></button><span class="live" id="live"></span></div>`);
     $("#rv").onclick = () => revealed ? next() : reveal();
-    startTimer(20, () => { SFX.buzz(1); });
+    startTimer(secs(20), () => { SFX.buzz(1); });
     pub("vote", {round:rk, q:q.q, o:q.o, t:q.t}); live();
     botAct(pid => { if(!revealed && CUR && CUR.onPhone){ const a = Math.random() < .65 ? q.c : Math.floor(Math.random()*q.o.length); CUR.onPhone({type:"ans", round:rk, a, pid, team:+PH.players[pid].team}); } });
     function reveal(){
       revealed = true; stopTimer(); SFX.good();
       q.o.forEach((_,j)=>$("#cn"+j).classList.add(j===q.c?"good":"dim"));
       $("#after").innerHTML = `${q.e?`<p class="expl">${esc(q.e)}</p>`:""}
-        <div class="count" style="margin-top:12px">${[0,1].map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams[t].name)} ${PH.on ? ": bonnes réponses" : "dans le bon coin"}</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span style="font-size:22px;font-weight:700"><span id="cnt${t}">0</span> / ${G.teams[t].players}</span><button aria-label="Plus" data-cn="${t}|1">+</button></span><span class="pts" id="gain${t}">+0</span></div>`).join("")}</div>`;
+        <div class="count" style="margin-top:12px">${TT().map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams.length > 2 ? shortName(t) : G.teams[t].name)} ${PH.on ? ": bonnes réponses" : "dans le bon coin"}</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span style="font-size:22px;font-weight:700"><span id="cnt${t}">0</span> / ${G.teams[t].players}</span><button aria-label="Plus" data-cn="${t}|1">+</button></span><span class="pts" id="gain${t}">+0</span></div>`).join("")}</div>`;
       document.querySelectorAll("[data-cn]").forEach(b => b.onclick = () => {
         const [t,d] = b.dataset.cn.split("|").map(Number);
         const v = Math.min(G.teams[t].players, Math.max(0, got[t] + d)); if(v === got[t]) return;
         got[t] = v; award(t); SFX.blip();
       });
       if(PH.on){
-        [0,1].forEach(t => { got[t] = Object.values(answers).filter(x => x.team === t && x.a === q.c).length; award(t); });
+        TT().forEach(t => { got[t] = Object.values(answers).filter(x => x.team === t && x.a === q.c).length; award(t); });
         Object.entries(answers).forEach(([pid, x]) => { if(x.a !== q.c) bump(LOG().coinsWrong, pid); });
         pub("reveal", {round:rk, q:q.q, o:q.o, c:q.c});
       }
@@ -987,12 +1061,13 @@ RUN.coins = function(){
 /* ---- Tabou ---- */
 RUN.tabou = function(){
   const before = G.teams.map(t=>t.pts); const deck = shuffle(TABOU); let turn = 0, ci = 0;
-  G.tabIdx = G.tabIdx || [0,0];
+  if(!G.tabIdx || G.tabIdx.length !== G.teams.length) G.tabIdx = TT().map(()=>0);
   const startTurn = () => {
     let found = 0, active = false, lastWord = "";
     const tp = PH.on ? teamPlayers(turn) : []; const sp = tp.length ? tp[(G.tabIdx[turn]++) % tp.length] : null;
     const spPid = sp ? sp[0] : "", spName = sp ? sp[1].name : "";
-    const pubT = () => { const [w, f] = deck[ci % deck.length]; pub("tabou", {turn, speaker:spPid, spName, ci, active, found, word: active ? w : "", f: active ? f : []}); };
+    const NF = {decouverte:3, ca:4, prv2:5, mix:4}[G.level] || 4;
+    const pubT = () => { const [w, f0] = deck[ci % deck.length]; const f = f0.slice(0, NF); pub("tabou", {turn, speaker:spPid, spName, ci, active, found, word: active ? w : "", f: active ? f : []}); };
     CUR = { onKey:(k)=>{ if(!active && (k===" "||k==="Enter")) begin(); else if(active && k==="v") hit(); else if(active && k==="s") pass(); },
             onBuzz:(t)=>{ if(active && t !== turn) foul(); },
             onPhone:(ev)=>{ if(!active || +ev.ci !== ci) return;
@@ -1006,16 +1081,16 @@ RUN.tabou = function(){
     $("#bg").onclick = begin;
     pubT();
     function card(){
-      const [w, f] = deck[ci % deck.length];
+      const [w, f0] = deck[ci % deck.length]; const f = f0.slice(0, NF);
       $("#tz").innerHTML = `<span class="timer" id="timer"></span>
-        ${sp ? `<div class="panel tabou-card ${turn?"glow-c":"glow-p"}"><span class="muted">La carte est sur le téléphone de</span><span class="tabou-word">${esc(spName)}</span>${lastWord ? `<span class="muted">Dernier mot trouvé : <strong style="color:var(--lime)">${esc(lastWord)}</strong></span>` : ""}</div>`
-        : `<div class="panel tabou-card ${turn?"glow-c":"glow-p"}"><span class="tabou-word">${esc(w)}</span><div class="forbid">${f.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>`}
+        ${sp ? `<div class="panel tabou-card ${GLOW[turn]}"><span class="muted">La carte est sur le téléphone de</span><span class="tabou-word">${esc(spName)}</span>${lastWord ? `<span class="muted">Dernier mot trouvé : <strong style="color:var(--lime)">${esc(lastWord)}</strong></span>` : ""}</div>`
+        : `<div class="panel tabou-card ${GLOW[turn]}"><span class="tabou-word">${esc(w)}</span><div class="forbid">${f.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>`}
         <div class="row" style="justify-content:center"><button class="btn ok" id="th">Trouvé <span class="kbd">V</span></button><button class="btn" id="tp">Passer <span class="kbd">S</span></button><button class="btn no" id="tf">Mot interdit</button></div>
         <span class="muted">Trouvés : <strong id="tfound">${found}</strong></span>`;
       $("#th").onclick = hit; $("#tp").onclick = pass; $("#tf").onclick = foul;
       pubT();
     }
-    function begin(){ active = true; card(); startTimer(60, finish);
+    function begin(){ active = true; card(); startTimer(secs(60), finish);
       if(isBot(spPid)){ const iv = setInterval(() => { if(!active || !document.body.contains($("#tz"))) return clearInterval(iv); Math.random() < .75 ? hit() : pass(); }, 5500); }
       botAct(pid => { if(active && +PH.players[pid].team !== turn && Math.random() < .3) foul(); }); }
     function hit(){ found++; lastWord = deck[ci % deck.length][0]; addPts(turn, 1); SFX.good(); ci++; card(); }
@@ -1023,9 +1098,9 @@ RUN.tabou = function(){
     function foul(){ SFX.bad(); addPts(turn, -1); bump(LOG().tabouFoul, turn); ci++; card(); }
     function finish(){
       active = false; SFX.buzz(0); pub("wait", {title:"Temps écoulé !", msg:found + " mot" + (found>1?"s":"") + " trouvé" + (found>1?"s":"") + " pour " + G.teams[turn].name});
-      $("#tz").innerHTML = `<h3 style="font-size:28px">Temps écoulé : ${found} mot${found>1?"s":""} trouvé${found>1?"s":""}</h3><button class="btn big cyan" id="nx">${turn===0?"Au tour de " + esc(G.teams[1].name):"Fin de l'épreuve"} <span class="kbd">Espace</span></button>`;
+      $("#tz").innerHTML = `<h3 style="font-size:28px">Temps écoulé : ${found} mot${found>1?"s":""} trouvé${found>1?"s":""}</h3><button class="btn big cyan" id="nx">${turn+1 < G.teams.length?"Au tour de " + esc(G.teams[turn+1].name):"Fin de l'épreuve"} <span class="kbd">Espace</span></button>`;
       CUR.onKey = (k)=>{ if(k===" "||k==="Enter") nx(); };
-      const nx = () => { turn++; turn < 2 ? startTurn() : endGame(before); };
+      const nx = () => { turn++; turn < G.teams.length ? startTurn() : endGame(before); };
       $("#nx").onclick = nx;
     }
     refreshRegie();
@@ -1035,9 +1110,9 @@ RUN.tabou = function(){
 
 /* ---- Money Drop ---- */
 RUN.money = function(){
-  const before = G.teams.map(t=>t.pts); const qs = pickQ(3, false, {minOpts:3}); let i = 0; const bank = [10,10];
+  const before = G.teams.map(t=>t.pts); const qs = pickQ(3, false, {minOpts:3}); let i = 0; const bank = TT().map(()=>10);
   const show = () => {
-    const q = qs[i]; const bet = [q.o.map(()=>0), q.o.map(()=>0)]; let opened = false; const rk = "m" + G.step + "-" + i;
+    const q = qs[i]; const bet = TT().map(() => q.o.map(()=>0)); let opened = false; const rk = "m" + G.step + "-" + i;
     const pubM = () => pub("money", {round:rk, q:q.q, o:q.o, bets:bet, bank, opened, c: opened ? q.c : -1});
     CUR = { q, onKey:(k)=>{ if(k===" "){ opened ? next() : open(); } },
       onPhone:(ev)=>{ if(ev.type === "bet" && ev.round === rk) change(ev.team, +ev.slot, +ev.d > 0); } };
@@ -1047,7 +1122,7 @@ RUN.money = function(){
       <p class="qtext">${esc(q.q)}</p>
       <div class="answers">${q.o.map((o,j)=>`<div class="ans c${j}" id="an${j}"><span class="let">${LETTERS[j]}</span><span>${esc(o)}</span></div>`).join("")}</div>
     </div>
-    <div class="md">${[0,1].map(t=>`<div class="panel md-team ${t?"glow-c":"glow-p"}">
+    <div class="md">${TT().map(t=>`<div class="panel md-team ${GLOW[t]}">
       <div class="md-head"><span>${esc(G.teams[t].name)}</span><span>À placer : <span id="left${t}" style="color:var(--amber)">${bank[t]}</span></span></div>
       <div class="md-slots" style="grid-template-columns:repeat(${q.o.length},minmax(0,1fr))">${q.o.map((_,j)=>`<div class="slot c${j}" id="sl${t}${j}"><span class="let" style="font-weight:700;color:var(--c)">${LETTERS[j]}</span><span class="n" id="n${t}${j}">0</span><div class="chips" id="ch${t}${j}"></div><span class="pm"><button aria-label="Retirer un jeton sur ${LETTERS[j]}" data-bet="${t}${j}-">−</button><button aria-label="Ajouter un jeton sur ${LETTERS[j]}" data-bet="${t}${j}+">+</button></span></div>`).join("")}</div>
     </div>`).join("")}</div>
@@ -1063,11 +1138,11 @@ RUN.money = function(){
     document.querySelectorAll("[data-bet]").forEach(b => b.onclick = () => change(+b.dataset.bet[0], +b.dataset.bet[1], b.dataset.bet[2] === "+"));
     pubM();
     $("#op").onclick = () => opened ? next() : open();
-    startTimer(45, () => { SFX.buzz(0); $("#warn").textContent = "Temps écoulé ! Les jetons non placés seront perdus."; });
+    startTimer(secs(45), () => { SFX.buzz(0); $("#warn").textContent = "Temps écoulé ! Les jetons non placés seront perdus."; });
     function open(){
       opened = true; stopTimer(); SFX.drop();
       q.o.forEach((_,j)=>$("#an"+j).classList.add(j===q.c?"good":"dim"));
-      [0,1].forEach(t => { q.o.forEach((_,j) => { if(j < q.o.length && j !== q.c) $("#sl"+t+j).classList.add("drop"); }); const loss = bank[t] - bet[t][q.c]; LOG().moneyLoss[t] = Math.max(LOG().moneyLoss[t]||0, loss); bank[t] = bet[t][q.c]; $("#left"+t).textContent = bank[t] + " jetons sauvés"; });
+      TT().forEach(t => { q.o.forEach((_,j) => { if(j < q.o.length && j !== q.c) $("#sl"+t+j).classList.add("drop"); }); const loss = bank[t] - bet[t][q.c]; LOG().moneyLoss[t] = Math.max(LOG().moneyLoss[t]||0, loss); bank[t] = bet[t][q.c]; $("#left"+t).textContent = bank[t] + " jetons sauvés"; });
       setTimeout(SFX.good, 700);
       $("#op").innerHTML = (i+1 < qs.length ? "Question suivante" : "Encaisser les jetons") + ' <span class="kbd">Espace</span>';
       if(q.e) $("#warn").textContent = q.e;
@@ -1094,7 +1169,7 @@ const ARENA = {
   rooms:[["Hall d'accueil",265,225],["Cuisine",265,680],["Salle de spectacle",800,90],["Restaurant",1340,210],["Hôtel",1340,690]],
   hyd:[[70,830],[1530,70],[800,470],[1530,830],[70,70]],
   fires:[[265,620],[800,260],[1300,250],[1350,720],[300,250],[820,760],[1200,620],[600,450]],
-  spawn:[[260,330],[1340,560]]
+  spawn:[[260,330],[1340,560],[300,720],[1340,170]]
 };
 function wallHit(x, y, r){
   for(const [wx,wy,ww,wh] of ARENA.walls){
@@ -1123,10 +1198,10 @@ function lineFree(ax, ay, bx, by){ const d = Math.hypot(bx-ax, by-ay), n = Math.
 RUN.lances = function(){
   const before = G.teams.map(t=>t.pts);
   if(!PH.on){ return endGame(before); }
-  const DUR = 150, MAXW = 10, R0 = 22;
+  const DUR = 150, MAXW = ({decouverte:12, prv2:7})[G.level] || 10, REFILL = ({decouverte:5, prv2:3})[G.level] || 4, R0 = 22;
   const P = {}; let t0 = performance.now(), last = t0, left = DUR, over = false, lastPub = 0, lastSig = "";
-  const drops = [], feed = []; const fires = []; const score = [0,0];
-  [0,1].forEach(t => teamPlayers(t).forEach(([pid,p], i) => { const [sx,sy] = ARENA.spawn[t]; P[pid] = {pid, team:t, name:p.name, x:sx + (i%3)*50 - 50, y:sy + Math.floor(i/3)*55, fx: t ? -1 : 1, fy:0, ix:0, iy:0, fire:false, w:MAXW, fz:0, inv:0, q:null, hy:-1, cool:0, wrong:0, acc:0, ai:{}}; }));
+  const drops = [], feed = []; const fires = []; const score = TT().map(()=>0);
+  TT().forEach(t => teamPlayers(t).forEach(([pid,p], i) => { const [sx,sy] = ARENA.spawn[t]; P[pid] = {pid, team:t, name:p.name, x:sx + (i%3)*50 - 50, y:sy + Math.floor(i/3)*55, fx: t % 2 ? -1 : 1, fy:0, ix:0, iy:0, fire:false, w:MAXW, fz:0, inv:0, q:null, hy:-1, cool:0, wrong:0, acc:0, ai:{}}; }));
   const addFire = () => { const free = ARENA.fires.filter(([x,y]) => !fires.some(f => Math.hypot(f.x-x, f.y-y) < 50)); if(!free.length) return; const [x,y] = free[Math.floor(Math.random()*free.length)]; fires.push({x, y, hp:100, born:performance.now()}); };
   addFire(); addFire(); addFire();
   const say = (txt, t) => { feed.unshift({txt, t, at:performance.now()}); feed.length = Math.min(feed.length, 5); };
@@ -1135,15 +1210,14 @@ RUN.lances = function(){
     onPhone:(ev) => { const pl = P[ev.pid]; if(!pl) return; if(ev.type === "lq" && pl.q && ev.k === pl.q.k) answer(pl, +ev.a); if(ev.type === "leave"){ pl.q = null; pl.hy = -1; pl.cool = 2; } },
     onKey:(k) => { if(over && (k === " " || k === "Enter")) endGame(before); } };
   function answer(pl, a){
-    if(a === pl.q.c){ pl.w = Math.min(MAXW, pl.w + 4); SFX.good(); } else { pl.wrong = 1.5; SFX.bad(); }
+    if(a === pl.q.c){ pl.w = Math.min(MAXW, pl.w + REFILL); SFX.good(); } else { pl.wrong = 1.5; SFX.bad(); }
     pl.q = null;
     if(pl.w >= MAXW){ pl.hy = -1; pl.cool = 1.5; }
   }
   render(`${topbar("Guerre des lances")}
   <div class="row" style="justify-content:space-between;flex-wrap:nowrap">
-    <div class="score t0" style="flex:1"><span class="name">${esc(G.teams[0].name)}</span><span class="pts" id="ls0">0</span></div>
     <span class="timer" id="ltimer" style="padding:0 14px">2:30</span>
-    <div class="score t1" style="flex:1"><span class="name">${esc(G.teams[1].name)}</span><span class="pts" id="ls1">0</span></div>
+    ${TT().map(t => `<div class="score t${t}" style="flex:1"><span class="name">${esc(G.teams[t].name)}</span><span class="pts" id="ls${t}">0</span></div>`).join("")}
   </div>
   <div class="arena"><canvas id="cv" width="1600" height="900" aria-label="Arène de la Guerre des lances"></canvas><div class="feed" id="feed"></div></div>`);
   const cv = $("#cv"), cx = cv.getContext("2d");
@@ -1207,11 +1281,11 @@ RUN.lances = function(){
       for(let i = fires.length - 1; i >= 0; i--){ const f = fires[i]; if(f.hp <= 0){ fires.splice(i, 1); score[f.by] += 2; addPts(f.by, 2); const by = P[f.byp]; say(`${by ? by.name : "?"} a éteint un foyer ! +2`, f.by); SFX.good(); setTimeout(addFire, 2500); } else f.hp = Math.min(100, f.hp + dt*3); }
       if(left <= 0){ over = true; finish(); }
       // publication vers les téléphones
-      const st = {}; for(const pl of Object.values(P)) st[pl.pid] = {w:Math.ceil(pl.w), fz:Math.ceil(pl.fz), q: pl.q ? {q:pl.q.q, o:pl.q.o, k:pl.q.k} : null, wr: pl.wrong > 0 ? 1 : 0};
+      const st = {}; for(const pl of Object.values(P)) st[pl.pid] = {w:Math.ceil(pl.w*10/MAXW), fz:Math.ceil(pl.fz), q: pl.q ? {q:pl.q.q, o:pl.q.o, k:pl.q.k} : null, wr: pl.wrong > 0 ? 1 : 0};
       const sig = JSON.stringify(st) + Math.ceil(left);
       if(sig !== lastSig && now - lastPub > 150 || now - lastPub > 1000){ lastSig = sig; lastPub = now; pub("lances", {left:Math.ceil(left), sc:score, st}); }
       const e = $("#ltimer"); if(e){ const L = Math.ceil(left); e.textContent = Math.floor(L/60) + ":" + String(L%60).padStart(2,"0"); e.classList.toggle("low", L <= 10); }
-      [0,1].forEach(t => { const s3 = $("#ls"+t); if(s3) s3.textContent = score[t]; });
+      TT().forEach(t => { const s3 = $("#ls"+t); if(s3) s3.textContent = score[t]; });
       const fd = $("#feed"); if(fd) fd.innerHTML = feed.filter(f => now - f.at < 5000).map(f => `<span style="color:${TCOL[f.t]}">${esc(f.txt)}</span>`).join("");
     }
     draw(now);
@@ -1238,7 +1312,7 @@ RUN.lances = function(){
     cx.fillStyle = "rgba(124,208,255,.9)";
     for(const d of drops){ cx.beginPath(); cx.arc(d.x, d.y, 4, 0, Math.PI*2); cx.fill(); }
     for(const pl of Object.values(P)){
-      const col = pl.team ? "#2EF2FF" : "#FF2E88";
+      const col = THEX[pl.team];
       if(pl.inv > 0 && pl.fz <= 0 && Math.floor(now/120) % 2) cx.globalAlpha = .45;
       cx.fillStyle = col; cx.shadowColor = col; cx.shadowBlur = 14;
       cx.beginPath(); cx.arc(pl.x, pl.y, R0, 0, Math.PI*2); cx.fill(); cx.shadowBlur = 0;
@@ -1249,10 +1323,10 @@ RUN.lances = function(){
       cx.fillStyle = "#fff"; cx.font = "700 15px 'Chakra Petch', sans-serif"; cx.fillText(pl.name + (pl.fz > 0 ? " · trempé" : pl.q ? " · au poteau" : ""), pl.x, pl.y - 34);
       cx.fillStyle = "#26263E"; cx.fillRect(pl.x - 22, pl.y + 28, 44, 6); cx.fillStyle = "#2E9BFF"; cx.fillRect(pl.x - 22, pl.y + 28, 44*pl.w/MAXW, 6);
     }
-    if(over){ cx.fillStyle = "rgba(7,7,15,.7)"; cx.fillRect(0, 0, 1600, 900); cx.fillStyle = "#fff"; cx.font = "700 72px 'Chakra Petch', sans-serif"; cx.fillText("FIN DE LA BATAILLE", 800, 430); cx.font = "600 32px 'Chakra Petch', sans-serif"; cx.fillText(`${G.teams[0].name} ${score[0]}  ·  ${score[1]} ${G.teams[1].name}`, 800, 490); }
+    if(over){ cx.fillStyle = "rgba(7,7,15,.7)"; cx.fillRect(0, 0, 1600, 900); cx.fillStyle = "#fff"; cx.font = "700 72px 'Chakra Petch', sans-serif"; cx.fillText("FIN DE LA BATAILLE", 800, 430); cx.font = "600 32px 'Chakra Petch', sans-serif"; cx.fillText(TT().map(t => G.teams[t].name + " " + score[t]).join("  ·  "), 800, 490); }
   }
   function finish(){
-    SFX.fanfare(); pub("wait", {title:"Fin de la bataille !", msg:G.teams[0].name + " " + score[0] + " · " + score[1] + " " + G.teams[1].name});
+    SFX.fanfare(); pub("wait", {title:"Fin de la bataille !", msg:TT().map(t => G.teams[t].name + " " + score[t]).join(" · ")});
     const b = document.createElement("div"); b.className = "row"; b.style.justifyContent = "center";
     b.innerHTML = `<button class="btn big cyan" id="lnx">Voir les résultats <span class="kbd">Espace</span></button>`; $("#app").appendChild(b); $("#lnx").onclick = () => endGame(before);
   }
@@ -1276,7 +1350,7 @@ function makeAlarm(){
 }
 RUN.desamorcage = function(){
   const before = G.teams.map(t=>t.pts);
-  const order = [0,1,0,1]; let r = 0;
+  const order = [...TT(), ...TT()]; let r = 0;
   const intro = () => {
     if(r >= order.length) return endGame(before);
     const t = order[r];
@@ -1331,7 +1405,7 @@ RUN.desamorcage = function(){
     <div id="dres"></div>`);
     draw();
     pub("desam", {team:t});
-    startTimer(90, () => finish(false, "Temps écoulé"));
+    startTimer(secs(90), () => finish(false, "Temps écoulé"));
     function fault(btn){
       strikes++; bump(LOG().desWrong, t); SFX.bad(); if(btn){ btn.classList.remove("err"); void btn.offsetWidth; btn.classList.add("err"); }
       if(strikes >= 3){ draw(); return finish(false, "Trois fausses manœuvres"); }
@@ -1396,10 +1470,10 @@ RUN.desamorcage = function(){
    Avec téléphones : chaque joueur vote, la réponse de l'équipe est la majorité.
    Sans téléphone : l'animateur saisit le choix de chaque équipe avec les pastilles. */
 function teamChoice(box, cfg, onReveal, onNext){
-  const sel = [new Set(), new Set()], votes = {}; let revealed = false, pts = [0,0];
+  const sel = TT().map(() => new Set()), votes = {}; let revealed = false, pts = TT().map(()=>0);
   const recompute = () => {
     if(!PH.on) return;
-    [0,1].forEach(t => {
+    TT().forEach(t => {
       const vs = Object.values(votes).filter(v => v.team === t); sel[t] = new Set();
       if(!vs.length) return;
       const cnt = cfg.o.map((_,j) => vs.filter(v => v.a.includes(j)).length);
@@ -1407,11 +1481,11 @@ function teamChoice(box, cfg, onReveal, onNext){
       else { const mx = Math.max(...cnt); if(mx > 0 && cnt.filter(n => n === mx).length === 1) sel[t].add(cnt.indexOf(mx)); }
     });
   };
-  const live = () => { const e = box.querySelector(".tclive"); if(e) e.textContent = PH.on ? [0,1].map(t => G.teams[t].name + " : " + Object.values(votes).filter(v => v.team === t).length + " / " + teamPlayers(t).length + " votes").join(" · ") : "Cliquez sur la pastille de chaque équipe pour saisir son choix."; };
+  const live = () => { const e = box.querySelector(".tclive"); if(e) e.textContent = PH.on ? TT().map(t => G.teams[t].name + " : " + Object.values(votes).filter(v => v.team === t).length + " / " + teamPlayers(t).length + " votes").join(" · ") : "Cliquez sur la pastille de chaque équipe pour saisir son choix."; };
   const draw = () => {
     box.innerHTML = `<p class="tc-q">${esc(cfg.prompt)}</p>${cfg.multi ? `<p class="note" style="margin:-4px 0 8px">Plusieurs réponses possibles.</p>` : ""}
-      <div class="tc-opts">${cfg.o.map((o,j) => `<div class="tc-opt c${j%4} ${revealed ? (cfg.c.includes(j) ? "good" : "dim") : ""}"><span class="let">${LETTERS[j]}</span><span class="tx">${esc(o)}</span><span class="tc-chips">${[0,1].map(t => `<button class="tc-chip t${t} ${sel[t].has(j) ? "on" : ""}" data-tc="${t}|${j}" ${revealed || PH.on ? "disabled" : ""} aria-pressed="${sel[t].has(j)}" title="${esc(G.teams[t].name)}">${esc(G.teams[t].name)}</button>`).join("")}</span></div>`).join("")}</div>
-      ${revealed ? `<div class="row" style="justify-content:space-around;margin-top:8px">${[0,1].map(t => `<span class="live" style="color:${TCOL[t]}">${esc(G.teams[t].name)} : +${pts[t]}</span>`).join("")}</div>${cfg.after ? cfg.after : ""}` : ""}
+      <div class="tc-opts">${cfg.o.map((o,j) => `<div class="tc-opt c${j%4} ${revealed ? (cfg.c.includes(j) ? "good" : "dim") : ""}"><span class="let">${LETTERS[j]}</span><span class="tx">${esc(o)}</span><span class="tc-chips">${TT().map(t => `<button class="tc-chip t${t} ${sel[t].has(j) ? "on" : ""}" data-tc="${t}|${j}" ${revealed || PH.on ? "disabled" : ""} aria-pressed="${sel[t].has(j)}" title="${esc(G.teams[t].name)}">${esc(shortName(t))}</button>`).join("")}</span></div>`).join("")}</div>
+      ${revealed ? `<div class="row" style="justify-content:space-around;margin-top:8px">${TT().map(t => `<span class="live" style="color:${TCOL[t]}">${esc(G.teams[t].name)} : +${pts[t]}</span>`).join("")}</div>${cfg.after ? cfg.after : ""}` : ""}
       <div class="row" style="justify-content:space-between;margin-top:8px"><span class="note tclive"></span><span class="timer" id="timer"></span><button class="btn big pink tcgo">${revealed ? "Suite" : "Révéler"} <span class="kbd">Espace</span></button></div>`;
     box.querySelectorAll("[data-tc]").forEach(b => b.onclick = () => {
       const [t, j] = b.dataset.tc.split("|").map(Number);
@@ -1423,7 +1497,7 @@ function teamChoice(box, cfg, onReveal, onNext){
   };
   function reveal(){
     revealed = true; stopTimer(); recompute();
-    pts = [0,1].map(t => cfg.score(sel[t]));
+    pts = TT().map(t => cfg.score(sel[t]));
     pts.forEach((p,t) => { if(p) addPts(t, p); });
     pts[0] + pts[1] ? SFX.good() : SFX.bad();
     if(onReveal) onReveal(sel, pts);
@@ -1435,7 +1509,7 @@ function teamChoice(box, cfg, onReveal, onNext){
     onKey:(k) => { if(k === " " || k === "Enter") go(); },
     onPhone:(ev) => { if(ev.type === "tc" && ev.round === cfg.round && !revealed){ votes[ev.pid] = {team:ev.team, a:(ev.a || []).map(Number)}; recompute(); draw(); } } };
   draw();
-  startTimer(cfg.time || 60, () => SFX.buzz(1));
+  startTimer(secs(cfg.time || 60), () => SFX.buzz(1));
   pub("tc", {round:cfg.round, prompt:cfg.prompt, o:cfg.o, multi:!!cfg.multi});
   botAct(pid => { if(revealed || !CUR || !CUR.onPhone) return; const right = Math.random() < .6; const a = cfg.multi ? cfg.o.map((_,j) => j).filter(j => right ? cfg.c.includes(j) : Math.random() < .4) : [right ? cfg.c[0] : Math.floor(Math.random()*cfg.o.length)]; CUR.onPhone({type:"tc", round:cfg.round, pid, team:+PH.players[pid].team, a}); });
   refreshRegie();
@@ -1492,7 +1566,7 @@ RUN.faussepiste = function(){
     render(`${topbar("Fausse piste · intervention " + (si+1) + " / " + scen.length)}${scorebar()}
     <div class="fp">
       <div class="fp-left"><div class="lcd" style="font-size:clamp(16px,1.7vw,24px)">${S.ecs}<small>${S.ecs2}</small></div><div id="fpplan">${fpPlan(S, false)}</div>
-        <div class="clues">${S.clues.map(([w,t]) => `<div class="clue"><b>${esc(w)}</b>${esc(t)}</div>`).join("")}</div></div>
+        <div class="clues" style="${G.level === "prv2" ? "grid-template-columns:repeat(2,minmax(0,1fr))" : ""}">${S.clues.filter(([w]) => !(G.level === "prv2" && /Registre/.test(w))).map(([w,t]) => `<div class="clue"><b>${esc(w)}</b>${esc(t)}</div>`).join("")}</div></div>
       <div class="fp-right"><div class="panel" id="tcbox"></div></div>
     </div>`);
     const qs = [
@@ -1504,7 +1578,7 @@ RUN.faussepiste = function(){
       if(qi >= qs.length){ si++; return play(); }
       const Q = qs[qi];
       teamChoice($("#tcbox"), {...Q, round:"fp" + G.step + "-" + si + "-" + qi, time:qi === 0 ? 75 : 45}, (sel) => {
-        if(qi === 0){ $("#fpplan").innerHTML = fpPlan(S, true); [0,1].forEach(t => { if(!sel[t].has(Q.c[0])) bump(LOG().fpWrong, t); }); }
+        if(qi === 0){ $("#fpplan").innerHTML = fpPlan(S, true); TT().forEach(t => { if(!sel[t].has(Q.c[0])) bump(LOG().fpWrong, t); }); }
       }, () => { qi++; ask(); });
     };
     ask();
@@ -1515,17 +1589,18 @@ RUN.faussepiste = function(){
 /* ---- Le Tribunal : la traçabilité au registre de sécurité ---- */
 const TRIB = {
   rows:[["02/06","09:10","Vérification des extincteurs","Société Extinctor","RAS"],
-        ["14/06","21:42","Alarme feu ZD6 (réserve)","",""],
-        ["20/06","08:30","Exercice d'évacuation","Directeur","Évacuation en 3 min 40"],
-        ["03/07","23:05","Incendie réserve","SDIS","Porte coupe-feu cuisine restée ouverte (DAS hors service)"]],
+        ["14/06","21:42","Alarme feu ZD6 (réserve)","SSIAP (M. Leroy)","Levée de doute : fumée. Appel 18. SDIS sur place à 21 h 55."],
+        ["20/06","08:30","Exercice d'évacuation","Directeur","3 min 40. Porte de la cuisine manœuvrée."],
+        ["03/07","23:05","Incendie réserve","SDIS","Porte coupe-feu de la cuisine restée ouverte."]],
   qs:[
-    {prompt:"Le juge : « Le 14 juin à 21 h 42, qui a réarmé le SSI ? »", o:["Les sapeurs-pompiers","L'agent SSIAP","Impossible à dire : rien n'est noté au registre","Le mainteneur"], c:[2]},
-    {prompt:"Le juge : « Qu'auriez-vous dû faire inscrire au registre ce soir-là ? »", o:["L'heure, la cause, les actions sur le SSI (réarmement, DAS) et qui les a faites","Rien : le registre ne concerne que l'exploitant","Seulement le nom du chef d'agrès","Seulement si l'incendie était réel"], c:[0]},
-    {prompt:"Le juge : « Le 3 juillet, la porte coupe-feu de la cuisine n'a pas fermé. Que montre le registre ? »", o:["Que l'état du DAS après le 14 juin n'a jamais été noté ni vérifié","Que l'exercice d'évacuation était trop long","Que les extincteurs n'étaient pas vérifiés","Rien d'anormal"], c:[0]}
+    {prompt:"Le juge : « Après votre départ le 14 juin, le SSI était-il réarmé, et dans quel état ? »", o:["Oui : l'agent SSIAP a fait la levée de doute, c'est donc lui qui a réarmé","Oui : les sapeurs-pompiers réarment toujours avant de quitter les lieux","On ne peut pas l'établir : ni le réarmement ni l'état du SSI ne sont notés","Non : le SDIS est arrivé à 21 h 55, après le réarmement automatique"], c:[2]},
+    {prompt:"Le juge : « Votre chef d'agrès affirme avoir remis les DAS en position de veille le 14 juin. Comment le prouver ? »", o:["Par son témoignage devant le tribunal","Par une mention datée et signée au registre de sécurité, absente ici","Par le compte rendu de l'exercice du 20 juin","Par la vérification des extincteurs du 2 juin"], c:[1]},
+    {prompt:"Le juge : « La porte coupe-feu de la cuisine n'a pas fermé le 3 juillet. Depuis quand le DAS était-il défaillant ? »", o:["Depuis l'exercice du 20 juin, où la porte a été manœuvrée","Depuis le 3 juillet : l'incendie l'a endommagé","Depuis le 2 juin : la vérification n'a porté que sur les extincteurs","Impossible à dater : aucun essai ni aucune anomalie n'est noté entre le 14 juin et le 3 juillet"], c:[3]},
+    {prompt:"Le juge : « Qu'auriez-vous dû faire, le 14 juin, avant de quitter l'établissement ? »", o:["Informer oralement l'exploitant des anomalies constatées","Faire inscrire au registre l'heure, la cause, les actions sur le SSI (réarmement, DAS) et les anomalies, puis faire signer","Rien de plus : le compte rendu d'intervention du SDIS suffit","Demander à l'agent SSIAP de prévenir le mainteneur le lendemain"], c:[1]}
   ]
 };
 RUN.tribunal = function(){
-  const before = G.teams.map(t=>t.pts); let qi = 0; const ok = [0,0];
+  const before = G.teams.map(t=>t.pts); let qi = 0; const ok = TT().map(()=>0);
   render(`${topbar("Le Tribunal")}${scorebar()}
   <div class="fp">
     <div class="fp-left">
@@ -1540,17 +1615,17 @@ RUN.tribunal = function(){
     if(qi >= TRIB.qs.length) return verdict();
     const Q = TRIB.qs[qi];
     teamChoice($("#tcbox"), {...Q, round:"tr" + G.step + "-" + qi, time:45, score:scoreSingle(Q.c, 2)}, (sel) => {
-      [0,1].forEach(t => { if(sel[t].has(Q.c[0])) ok[t]++; else bump(LOG().tribWrong, t); });
+      TT().forEach(t => { if(sel[t].has(Q.c[0])) ok[t]++; else bump(LOG().tribWrong, t); });
     }, () => { qi++; ask(); });
   };
   function verdict(){
     CUR = { onKey:(k) => { if(k === " " || k === "Enter") endGame(before); } };
     $("#tcbox").innerHTML = `<p class="tc-q">Le verdict</p>
-      ${[0,1].map(t => `<p class="verdict" style="color:${TCOL[t]}">${esc(G.teams[t].name)} : ${ok[t] >= 2 ? "relaxe" : "mise en cause"}</p><p class="note">${ok[t]} bonne(s) réponse(s) sur 3</p>`).join("")}
+      ${TT().map(t => `<p class="verdict" style="color:${TCOL[t]}">${esc(G.teams[t].name)} : ${ok[t] >= 3 ? "relaxe" : "mise en cause"}</p><p class="note">${ok[t]} bonne(s) réponse(s) sur ${TRIB.qs.length}</p>`).join("")}
       <div class="lesson"><b>À retenir</b><br>En intervention dans un ERP, faites noter au registre de sécurité l'heure, la cause de l'alarme, les actions sur le SSI (réarmement, DAS remis en position) et qui les a faites. Cette traçabilité protège l'exploitant… et vous.</div>
       <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn big cyan" id="trnx">Fin de l'épreuve <span class="kbd">Espace</span></button></div>`;
     $("#trnx").onclick = () => endGame(before);
-    pub("wait", {title:"Le verdict", msg:[0,1].map(t => G.teams[t].name + " : " + (ok[t] >= 2 ? "relaxe" : "mise en cause")).join(" · ")});
+    pub("wait", {title:"Le verdict", msg:TT().map(t => G.teams[t].name + " : " + (ok[t] >= 3 ? "relaxe" : "mise en cause")).join(" · ")});
     SFX.stamp();
   }
   ask();
@@ -1558,11 +1633,11 @@ RUN.tribunal = function(){
 
 /* ---- Le Saboteur : révélation après la finale ---- */
 RUN.saboteur = function(){
-  const done = [null,null]; const votes = {}; const nm = pid => (PH.players[pid] && PH.players[pid].name) || "?";
+  const done = TT().map(()=>null); const votes = {}; const benef = t => (t + 1) % G.teams.length; const nm = pid => (PH.players[pid] && PH.players[pid].name) || "?";
   const auto = PH.on && G.sab;
   const contracts = t => { const pid = auto ? G.sab[t] : null; if(!pid) return null; const g = (LOG().given[pid] || []); return g.map(k => ({k, t:CONTRACTS[k].t, ok:!!CONTRACTS[k].ok(pid, t)})); };
-  const manual = [0,0];
-  const vc = () => [0,1].forEach(t => { const e = $("#vc"+t); if(e) e.textContent = "Votes : " + Object.values(votes).filter(v=>v.team===t).length + " / " + teamPlayers(t).length; });
+  const manual = TT().map(()=>0);
+  const vc = () => TT().forEach(t => { const e = $("#vc"+t); if(e) e.textContent = "Votes : " + Object.values(votes).filter(v=>v.team===t).length + " / " + teamPlayers(t).length; });
   CUR = PH.on ? { onPhone:(ev)=>{ if(ev.type === "vote" && done[ev.team] === null){ votes[ev.pid] = {team:ev.team, target:ev.target}; vc(); } } } : { onKey:()=>{} };
   narrate("saboteur");
   render(`${topbar("La révélation")}${scorebar()}
@@ -1570,7 +1645,7 @@ RUN.saboteur = function(){
     <h2 class="neon-p" style="font-size:clamp(30px,4.4vw,60px)">Qui était le saboteur ?</h2>
     <p class="muted" style="font-size:clamp(16px,1.7vw,20px);max-width:66ch">Depuis le début, un joueur de chaque équipe travaillait en secret pour l'adversaire, avec un contrat à chaque épreuve. Chaque équipe a 1 minute pour désigner son suspect${PH.on ? " sur les téléphones" : ""}.</p>
     <span class="timer" id="timer"></span>
-    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}">${avatar(t,72)}<strong style="font-size:20px">${esc(G.teams[t].name)}</strong>${PH.on ? `<span class="live" id="vc${t}"></span>` : ""}<div class="row" style="justify-content:center" id="sb${t}"><button class="btn ok" data-sab="${t}-1">Démasqué</button><button class="btn no" data-sab="${t}-0">Pas démasqué</button></div>
+    <div class="res">${TT().map(t=>`<div class="panel ${GLOW[t]}">${avatar(t,72)}<strong style="font-size:20px">${esc(G.teams[t].name)}</strong>${PH.on ? `<span class="live" id="vc${t}"></span>` : ""}<div class="row" style="justify-content:center" id="sb${t}"><button class="btn ok" data-sab="${t}-1">Démasqué</button><button class="btn no" data-sab="${t}-0">Pas démasqué</button></div>
       ${auto ? "" : `<div class="stepper"><span class="muted">Contrats réussis</span><button aria-label="Un contrat de moins" data-mc="${t}|-1">−</button><span id="mc${t}" style="font-size:22px;min-width:1.2em">0</span><button aria-label="Un contrat de plus" data-mc="${t}|1">+</button></div>`}</div>`).join("")}</div>
     <div class="row" style="justify-content:center">${PH.on ? `<button class="btn big pink" id="sbauto">Dépouiller les votes</button>` : ""}<button class="btn big cyan" id="sbn" disabled>Voir le podium</button></div>
     <p class="note" style="max-width:70ch">Saboteur démasqué : +3 pour son équipe et ses contrats sont annulés. Pas démasqué : chaque contrat réussi rapporte 2 points à l'équipe adverse.</p>
@@ -1579,23 +1654,23 @@ RUN.saboteur = function(){
   document.querySelectorAll("[data-mc]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.mc.split("|").map(Number); manual[t] = Math.max(0, Math.min(9, manual[t] + d)); $("#mc"+t).textContent = manual[t]; SFX.blip(); });
   function decide(t, ok, extra){
     if(done[t] !== null) return;
-    if(auto && !G.sab[t]){ done[t] = false; $("#sb"+t).innerHTML = `<strong style="color:var(--muted);font-size:18px">Pas de saboteur dans cette équipe (pas assez de joueurs).</strong>`; if(done[0] !== null && done[1] !== null){ stopTimer(); $("#sbn").disabled = false; const a3 = $("#sbauto"); if(a3) a3.disabled = true; } return; }
+    if(auto && !G.sab[t]){ done[t] = false; $("#sb"+t).innerHTML = `<strong style="color:var(--muted);font-size:18px">Pas de saboteur dans cette équipe (pas assez de joueurs).</strong>`; if(TT().every(x => done[x] !== null)){ stopTimer(); $("#sbn").disabled = false; const a3 = $("#sbauto"); if(a3) a3.disabled = true; } return; }
     done[t] = ok;
     const list = contracts(t); const n = list ? list.filter(x => x.ok).length : manual[t];
     const lines = list && list.length ? `<ul style="margin:6px 0 0;padding-left:1.1em;text-align:left;font-size:14px;line-height:1.35">${list.map(x => `<li style="color:${x.ok ? "var(--lime)" : "var(--muted)"}">${x.ok ? "Réussi" : "Raté"} : ${esc(x.t)}</li>`).join("")}</ul>` : "";
     if(ok){ addPts(t, 3); SFX.good(); $("#sb"+t).innerHTML = `<div><strong style="color:var(--lime);font-size:20px">Saboteur démasqué ! +3</strong>${extra||""}<p class="note">${n} contrat(s) réussi(s), annulé(s).</p>${lines}</div>`; }
-    else { if(n) addPts(1-t, 2*n); SFX.bad(); $("#sb"+t).innerHTML = `<div><strong style="color:var(--amber);font-size:20px">Pas démasqué : titre de « Cabinet de complaisance »</strong>${extra||""}<p class="note">${n} contrat(s) réussi(s) : +${2*n} pour ${esc(G.teams[1-t].name)}.</p>${lines}</div>`; }
+    else { if(n) addPts(benef(t), 2*n); SFX.bad(); $("#sb"+t).innerHTML = `<div><strong style="color:var(--amber);font-size:20px">Pas démasqué : titre de « Cabinet de complaisance »</strong>${extra||""}<p class="note">${n} contrat(s) réussi(s) : +${2*n} pour ${esc(G.teams[benef(t)].name)}.</p>${lines}</div>`; }
     const m = $("#mc"+t); if(m) m.parentElement.remove();
-    if(done[0] !== null && done[1] !== null){ stopTimer(); $("#sbn").disabled = false; const a2 = $("#sbauto"); if(a2) a2.disabled = true; pub("wait", {title:"La révélation", msg:[0,1].map(x => G.teams[x].name + (done[x] ? " : saboteur démasqué !" : " : saboteur pas démasqué")).join(" · ")}); }
+    if(TT().every(x => done[x] !== null)){ stopTimer(); $("#sbn").disabled = false; const a2 = $("#sbauto"); if(a2) a2.disabled = true; pub("wait", {title:"La révélation", msg:TT().map(x => G.teams[x].name + (done[x] ? " : saboteur démasqué !" : " : saboteur pas démasqué")).join(" · ")}); }
   }
   document.querySelectorAll("[data-sab]").forEach(b => b.onclick = () => { const [t, ok] = b.dataset.sab.split("-").map(Number); decide(t, !!ok); });
   $("#sbn").onclick = () => screenEnd();
   if(PH.on){
-    const roster = [0,1].map(t => teamPlayers(t).map(([pid,p]) => ({pid, name:p.name})));
+    const roster = TT().map(t => teamPlayers(t).map(([pid,p]) => ({pid, name:p.name})));
     pub("sabvote", {players:roster}); vc();
     botAct(pid => { const t = +PH.players[pid].team; const mates = roster[t].filter(x => x.pid !== pid); if(mates.length && CUR && CUR.onPhone) CUR.onPhone({type:"vote", pid, team:t, target:mates[Math.floor(Math.random()*mates.length)].pid}); });
     $("#sbauto").onclick = () => {
-      [0,1].forEach(t => {
+      TT().forEach(t => {
         const tally = {}; Object.values(votes).filter(v => v.team === t).forEach(v => tally[v.target] = (tally[v.target]||0) + 1);
         const best = Object.entries(tally).sort((a,b)=>b[1]-a[1]); const top = best[0] && (!best[1] || best[0][1] > best[1][1]) ? best[0][0] : null;
         const sab = (G.sab||[])[t];
@@ -1609,28 +1684,28 @@ RUN.saboteur = function(){
 /* ---- Finale : le Coup de tampon ---- */
 RUN.finale = function(){
   const before = G.teams.map(t=>t.pts);
-  const lead = G.teams[0].pts - G.teams[1].pts;
-  const duel = [0,0]; if(lead !== 0){ duel[lead > 0 ? 0 : 1] = Math.abs(lead) >= 10 ? 2 : 1; }
-  const qs = pickQ(14, true, {allLevels:true}); let i = 0;
+  const ranked = TT().slice().sort((a,b) => G.teams[b].pts - G.teams[a].pts);
+  const duel = TT().map(()=>0); const lead = G.teams[ranked[0]].pts - G.teams[ranked[1]].pts; if(lead > 0) duel[ranked[0]] = lead >= 10 ? 2 : 1;
+  const qs = pickQ(14, true, {allLevels: G.level !== "prv2"}); let i = 0;
   const show = () => {
-    const q = qs[i % qs.length]; let hand = null, tried = [false,false], answered = false; const rk = "f" + i;
+    const q = qs[i % qs.length]; let hand = null, tried = TT().map(()=>false), answered = false; const rk = "f" + i;
     const pubF = () => pub("buzz", {round:rk, open: hand === null && !answered, tried, hand: hand === null ? -1 : hand});
     CUR = { q,
       onBuzz:(t)=>{ if(hand === null && !answered && !tried[t]) take(t); },
       onPhone:(ev)=>{ if(ev.type === "buzz" && ev.round === rk && hand === null && !answered && !tried[ev.team]) take(ev.team); },
       onKey:(k)=>{ if(k==="v" && hand !== null) judge(true); else if(k==="x" && hand !== null) judge(false); else if(k===" " && (answered || hand === null)) { answered ? next() : reveal(); } } };
     render(`${topbar("Le Coup de tampon · finale")}
-    <div class="duel">${[0,1].map(t=>`<div class="lane t${t}" id="ln${t}">${avatar(t,44)}<strong style="font-size:clamp(15px,1.6vw,20px)">${esc(G.teams[t].name)}</strong><span class="pips">${[0,1,2,3,4].map(p=>`<span class="pip ${p<duel[t]?"on":""}"></span>`).join("")}</span></div>`).join("")}</div>
+    <div class="duel">${TT().map(t=>`<div class="lane t${t}" id="ln${t}">${avatar(t,44)}<strong style="font-size:clamp(15px,1.6vw,20px)">${esc(G.teams[t].name)}</strong><span class="pips">${[0,1,2,3,4].map(p=>`<span class="pip ${p<duel[t]?"on":""}"></span>`).join("")}</span></div>`).join("")}</div>
     <div class="qcard grow">
       <div class="qmeta"><span>Question ${i+1} · niveau ${q.n||1}</span><span class="timer" id="timer"></span></div>
       <p class="qtext">${esc(q.q)}</p>
       <div class="answers">${q.o.map((o,j)=>`<div class="ans c${j}" id="an${j}"><span class="let">${LETTERS[j]}</span><span>${esc(o)}</span></div>`).join("")}</div>
-      <p class="hand" id="hand">${PH.on ? "Buzzez sur vos téléphones !" : 'Buzzez ! <span class="kbd">A</span> ou <span class="kbd">P</span>'}</p>
+      <p class="hand" id="hand">${PH.on ? "Buzzez sur vos téléphones !" : "Buzzez ! " + TT().map(t => `<span class="kbd">${BUZZ_KEYS[t]}</span>`).join(" ")}</p>
       <p class="expl" id="fexp"></p>
     </div>
     <div class="row" style="justify-content:center" id="fctl"><button class="btn" id="fskip">Personne ne trouve : révéler <span class="kbd">Espace</span></button></div>`);
     $("#fskip").onclick = () => reveal();
-    startTimer(20, () => { if(hand === null) reveal(); });
+    startTimer(secs(20), () => { if(hand === null) reveal(); });
     pubF();
     botAct(pid => { if(Math.random() < .5 && CUR && CUR.onPhone) CUR.onPhone({type:"buzz", round:rk, pid, team:+PH.players[pid].team}); });
     function take(t){
@@ -1639,7 +1714,7 @@ RUN.finale = function(){
       $("#hand").innerHTML = `<span class="${TCLS[t]}">${esc(G.teams[t].name)} a la main !</span>`;
       $("#fctl").innerHTML = `<button class="btn ok big" id="fv">Bonne réponse <span class="kbd">V</span></button><button class="btn no big" id="fx">Mauvaise <span class="kbd">X</span></button>`;
       $("#fv").onclick = () => judge(true); $("#fx").onclick = () => judge(false);
-      startTimer(10, () => judge(false));
+      startTimer(secs(10), () => judge(false));
       pubF();
       refreshRegie();
     }
@@ -1652,14 +1727,16 @@ RUN.finale = function(){
         if(duel[t] >= 5){ CUR = null; $("#fctl").innerHTML = ""; setTimeout(() => win(t), 1100); return; }
       } else {
         SFX.bad();
-        if(!tried[1-t]){ $("#hand").innerHTML = `Raté ! La main passe à <span class="${TCLS[1-t]}">${esc(G.teams[1-t].name)}</span>`; take(1-t); }
-        else reveal();
+        const rest = TT().filter(x => !tried[x]);
+        if(!rest.length) reveal();
+        else if(rest.length === 1){ $("#hand").innerHTML = `Raté ! La main passe à <span class="${TCLS[rest[0]]}">${esc(G.teams[rest[0]].name)}</span>`; take(rest[0]); }
+        else { $("#hand").innerHTML = "Raté ! Les autres équipes peuvent buzzer."; $("#fctl").innerHTML = `<button class="btn" id="fskip">Personne ne trouve : révéler <span class="kbd">Espace</span></button>`; $("#fskip").onclick = () => reveal(); startTimer(10, () => { if(hand === null) reveal(); }); pubF(); }
       }
     }
     function reveal(silent){
       answered = true; stopTimer(); if(!silent) SFX.blip();
       q.o.forEach((_,j)=>$("#an"+j).classList.add(j===q.c?"good":"dim"));
-      [0,1].forEach(t => $("#ln"+t).querySelectorAll(".pip").forEach((p,k)=>p.classList.toggle("on", k < duel[t])));
+      TT().forEach(t => $("#ln"+t).querySelectorAll(".pip").forEach((p,k)=>p.classList.toggle("on", k < duel[t])));
       $("#fexp").textContent = q.e || "";
       if(!silent) $("#hand").textContent = "Réponse :";
       $("#fctl").innerHTML = `<button class="btn big pink" id="fn">Question suivante <span class="kbd">Espace</span></button>`;
@@ -1690,13 +1767,13 @@ RUN.finale = function(){
 /* ---- Fin ---- */
 function screenEnd(){
   CUR = { onKey:(k)=>{ if(k==="Enter") { G = freshGame(); screenTitle(); } } };
-  const w = G.teams[0].pts === G.teams[1].pts ? -1 : (G.teams[0].pts > G.teams[1].pts ? 0 : 1);
-  pub("end", {winner:w}); narrate("end");
+  const w = bestTeam(G.teams.map(t => t.pts));
+  pub("end", {winner:w}); narrate("end"); clearSnap();
   render(`${topbar("Podium")}
   <div class="grow center" style="gap:24px">
     <span class="eyebrow">Le Complexe des Dunes peut ouvrir</span>
     <h2 class="${w<0?"neon-c":TCLS[w]}" style="font-size:clamp(30px,4.6vw,64px)">${w<0 ? "Égalité parfaite !" : "Victoire : " + esc(G.teams[w].name)}</h2>
-    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}"><div class="${t===w?"bounce":""}">${avatar(t, t===w?120:84)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">${G.teams[t].pts}</span><span class="muted">points</span></div>`).join("")}</div>
+    <div class="res">${TT().map(t=>`<div class="panel ${GLOW[t]}"><div class="${t===w?"bounce":""}">${avatar(t, t===w?120:84)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">${G.teams[t].pts}</span><span class="muted">points</span></div>`).join("")}</div>
     <div class="row" style="justify-content:center"><button class="btn big pink" data-act="again">Rejouer avec les mêmes équipes</button><button class="btn" data-act="newgame">Nouvelle partie</button></div>
   </div>`);
 }
@@ -1730,7 +1807,7 @@ const NARR = {
   desamorcage:["Désamorçage (à refondre)","Version actuelle : un opérateur manipule le tableau SSI, son équipe lit le manuel. Ton retour : le sapeur-pompier ne manipule pas le SSI, il doit le lire, le confronter au plan et fiabiliser l'information. Cette épreuve sera refondue en ce sens."],
   saboteur:["La révélation du saboteur","Le saboteur est le fil rouge de toute la partie. À chaque épreuve, il a reçu un contrat secret sur son téléphone, vérifié automatiquement par le jeu. Après la finale, chaque équipe vote pour son suspect. Saboteur démasqué : plus trois pour son équipe et ses contrats sont annulés. Sinon, chaque contrat réussi rapporte deux points à l'équipe adverse. Le podium se fait ensuite aux points."],
   faussepiste:["Fausse piste","Le sapeur-pompier ne manipule pas le SSI : il le lit, le confronte au plan d'intervention et aux témoignages pour fiabiliser l'information. L'écran montre le message de l'ECS, le plan avec ses erreurs et trois indices. Trois questions par intervention : où est vraiment le feu, quelles informations du plan sont fausses, où engager le premier engin. Chaque équipe vote sur ses téléphones, ou l'animateur saisit le choix de chaque équipe."],
-  tribunal:["Le Tribunal","Trois semaines après votre intervention, un incendie touche le Complexe des Dunes. Le juge examine le registre de sécurité : votre passage n'y figure pas. Trois questions du juge, deux points par bonne réponse, puis le verdict : relaxe ou mise en cause. Message clé : en intervention dans un ERP, je fais noter au registre l'heure, la cause, les actions sur le SSI et qui les a faites."],
+  tribunal:["Le Tribunal","Trois semaines après votre intervention, un incendie touche le Complexe des Dunes. Le juge examine le registre de sécurité : votre passage n'y figure pas. Quatre questions du juge, deux points par bonne réponse, puis le verdict : relaxe à partir de trois bonnes réponses, sinon mise en cause. Message clé : en intervention dans un ERP, je fais noter au registre l'heure, la cause, les actions sur le SSI et qui les a faites."],
   finale:["Le Coup de tampon","Duel au buzzer : chaque téléphone devient un buzzer. Le premier qui appuie donne la main à son équipe, qui répond à voix haute. L'animateur valide avec V ou X. Première équipe à cinq bonnes réponses. L'équipe qui mène au score part avec une ou deux réponses d'avance."],
   results:["Résultats de l'épreuve","Les points gagnés pendant l'épreuve. Retour au plateau avec Espace."],
   end:["Le podium","Fin de l'émission : le podium s'affiche sur l'écran et sur chaque téléphone."]
@@ -1782,9 +1859,10 @@ async function fbDb(){
   await loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-database-compat.js");
   firebase.initializeApp(FIREBASE_CONFIG); FB_DB = firebase.database(); return FB_DB;
 }
-async function fbHost(code){
+async function fbHost(code, resume){
   const db = await fbDb(); const room = db.ref("rooms/" + code);
-  await room.set({createdAt: firebase.database.ServerValue.TIMESTAMP});
+  if(resume){ const ex = await room.child("createdAt").get(); if(!ex.exists()) await room.set({createdAt: firebase.database.ServerValue.TIMESTAMP}); }
+  else await room.set({createdAt: firebase.database.ServerValue.TIMESTAMP});
   const cursor = room.child("events").push().key;
   return {
     setState:(st) => room.child("state").set(st),
@@ -1824,13 +1902,39 @@ function localJoin(code){
   setTimeout(() => bc.postMessage({k:"hello"}), 60);
   return { onState:(cb) => scb.push(cb), onMe:(pid, cb) => { mcb[pid] = cb; }, setMe:(pid, o) => bc.postMessage({k:"me", pid, o}), push:(ev) => bc.postMessage({k:"ev", ev}), setInput:(pid, o) => bc.postMessage({k:"in", pid, o}) };
 }
-async function phoneStart(){
-  PH.code = newCode(); PH.players = {}; PH.k = 0;
-  PH.net = NET_LOCAL ? localHost(PH.code) : await fbHost(PH.code);
+async function phoneStart(resumeCode){
+  PH.code = resumeCode || newCode(); PH.players = {}; PH.k = resumeCode ? Date.now() % 100000 : 0;
+  PH.net = NET_LOCAL ? localHost(PH.code) : await fbHost(PH.code, !!resumeCode);
   PH.on = true;
-  PH.net.onPlayers(p => { PH.players = p || {}; [0,1].forEach(t => { const n = teamPlayers(t).length; if(n) G.teams[t].players = n; }); if(CUR && CUR.onPlayers) CUR.onPlayers(); });
+  PH.net.onPlayers(p => { PH.players = p || {}; autoAssign(); TT().forEach(t => { const n = teamPlayers(t).length; if(n) G.teams[t].players = n; }); if(CUR && CUR.onPlayers) CUR.onPlayers(); });
   PH.net.onEvent(ev => { if(!ev || !ev.type || !ev.pid) return; const p = PH.players[ev.pid]; if(!p) return; ev.team = +p.team; if(CUR && CUR.onPhone) CUR.onPhone(ev); });
   PH.net.onInput((pid, o) => { if(CUR && CUR.onInput && o) CUR.onInput(pid, o); });
+}
+/* Sauvegarde de la partie, pour la reprendre après une fermeture ou un plantage */
+function saveSnap(){ if(ADMIN) return; try{ localStorage.setItem("af-host", JSON.stringify({G, code: PH.on ? PH.code : "", local: NET_LOCAL, at: Date.now()})); }catch(e){} }
+function readSnap(){ try{ const x = JSON.parse(localStorage.getItem("af-host") || "null"); if(x && x.G && Date.now() - x.at < 12*3600*1000 && x.G.step < (x.G.plan||[]).length) return x; }catch(e){} return null; }
+function clearSnap(){ try{ localStorage.removeItem("af-host"); }catch(e){} }
+async function resumeGame(){
+  const x = readSnap(); if(!x) return screenTitle();
+  G = x.G; if(G.inGame && G.ptsAtStep){ G.teams.forEach((t,i) => t.pts = G.ptsAtStep[i] ?? t.pts); G.inGame = false; }
+  if(x.code && phoneAvailable()){
+    PH.want = true;
+    render(`${topbar("Reprise")}<div class="grow center"><p class="ph-big">Reconnexion à la partie ${esc(x.code)}…</p></div>`);
+    try{ await phoneStart(x.code); }
+    catch(e){ phoneStop(); render(`${topbar("Reprise")}<div class="grow center" style="gap:18px"><p class="ph-big">Impossible de rejoindre la salle des téléphones.</p><p class="muted">Vérifiez la connexion internet, ou continuez sans téléphone.</p><div class="row" style="justify-content:center"><button class="btn big" data-act="resume">Réessayer</button><button class="btn big pink" data-act="resumenophone">Continuer sans téléphone</button></div></div>`); return; }
+  }
+  SFX.go(); screenBoard();
+}
+function autoAssign(){
+  if(!PH.on || !PH.net) return; const N = G.teams.length;
+  const loose = Object.entries(PH.players).filter(([,p]) => p && p.name && (p.team === undefined || p.team === null || +p.team < 0 || +p.team >= N));
+  if(!loose.length) return;
+  const cnt = TT().map(t => teamPlayers(t).length);
+  loose.forEach(([pid]) => { const mn = Math.min(...cnt); const opts = TT().filter(t => cnt[t] === mn); const t = opts[Math.floor(Math.random()*opts.length)]; cnt[t]++; PH.players[pid].team = t; PH.net.setPlayer(pid, {team:t}); });
+}
+function reshuffle(){
+  if(!PH.on) return; const ids = shuffle(Object.keys(PH.players).filter(k => PH.players[k] && PH.players[k].name));
+  ids.forEach((pid, i) => { const t = i % G.teams.length; PH.players[pid].team = t; PH.net.setPlayer(pid, {team:t}); });
 }
 function phoneStop(){ if(PH.net){ try{ PH.net.close(); }catch(e){} } PH.net = null; PH.on = false; }
 function joinURL(){ return location.origin + location.pathname + "?r=" + PH.code + (NET_LOCAL ? "&net=local" : ""); }
@@ -1842,12 +1946,12 @@ function pub(phase, data){
   try{ const r = PH.net.setState(st); if(r && r.catch) r.catch(()=>{}); }catch(e){}
 }
 function assignRoles(){
-  G.sab = [null, null];
+  G.sab = TT().map(() => null);
   G.log = null;
   if(!PH.on || !G.saboteur) return;
-  [0,1].forEach(t => {
+  TT().forEach(t => {
     const tp = teamPlayers(t); tp.forEach(([pid]) => PH.net.setPlayer(pid, {role:"eq", contract:""}));
-    if(tp.length >= 2){ const pick = tp[Math.floor(Math.random()*tp.length)][0]; G.sab[t] = pick; PH.net.setPlayer(pick, {role:"sab"}); }
+    if(tp.length >= 2){ const pick = tp[Math.floor(Math.random()*tp.length)][0]; G.sab[t] = pick; PH.net.setPlayer(pick, {role:"sab", for:G.teams[(t + 1) % G.teams.length].name}); }
   });
 }
 async function goTeams(){
@@ -1907,7 +2011,7 @@ function phoneApp(code){
     const [k, a, c] = b.dataset.ph.split(":"); const d = (S && S.data) || {};
     if(k === "home"){ location.href = location.pathname + (NET_LOCAL ? "?net=local" : ""); return; }
     if(k === "team"){ joinTeam = +a; draw(); return; }
-    if(k === "join"){ const n = ($("#pname").value || "").trim().slice(0, 18); if(!n || joinTeam === null){ $("#pmsg").textContent = "Choisissez votre équipe et tapez votre prénom."; return; } net.setMe(pid, {name:n, team:joinTeam, at:Date.now()}); me = {...(me||{}), name:n, team:joinTeam}; draw(); return; }
+    if(k === "join"){ const rnd = !!(S && S.data && S.data.random); const n = ($("#pname").value || "").trim().slice(0, 18); if(!n || (joinTeam === null && !rnd)){ $("#pmsg").textContent = rnd ? "Tapez votre prénom." : "Choisissez votre équipe et tapez votre prénom."; return; } const tm = rnd ? -1 : joinTeam; net.setMe(pid, {name:n, team:tm, at:Date.now()}); me = {...(me||{}), name:n, team:tm}; draw(); return; }
     if(k === "ans"){ my[d.round] = +a; send({type:"ans", round:d.round, a:+a}); draw(); return; }
     if(k === "bet"){ send({type:"bet", round:d.round, slot:+a, d:c === "+" ? 1 : -1}); return; }
     if(k === "hit" || k === "pass" || k === "foul"){ send({type:k, ci:d.ci}); return; }
@@ -1917,7 +2021,7 @@ function phoneApp(code){
     if(k === "tc"){ const key = "tc" + d.round, j = +a; let m = my[key] || []; m = d.multi ? (m.includes(j) ? m.filter(x => x !== j) : m.concat(j)) : [j]; my[key] = m; send({type:"tc", round:d.round, a:m}); draw(); return; }
     if(k === "leave"){ send({type:"leave"}); return; }
   });
-  const showSecret = on => { const el = $("#sec"); if(!el || !me) return; el.innerHTML = on ? (me.role === "sab" ? "Tu es le SABOTEUR : tu travailles en secret pour l'équipe adverse." + (me.contract ? "<br><br>Ton contrat pour cette épreuve : " + esc(me.contract) : "") + "<br><br>Chaque contrat réussi rapporte 2 points à l'adversaire… si personne ne te démasque après la finale." : "Tu es un équipier loyal. Un saboteur se cache peut-être parmi vous… Observe qui pousse les mauvaises réponses.") : "Maintiens le doigt ici pour voir ta mission secrète"; };
+  const showSecret = on => { const el = $("#sec"); if(!el || !me) return; el.innerHTML = on ? (me.role === "sab" ? "Tu es le SABOTEUR : tu travailles en secret pour " + esc(me.for || "l'équipe adverse") + "." + (me.contract ? "<br><br>Ton contrat pour cette épreuve : " + esc(me.contract) : "") + "<br><br>Chaque contrat réussi lui rapporte 2 points… si personne ne te démasque après la finale." : "Tu es un équipier loyal. Un saboteur se cache peut-être parmi vous… Observe qui pousse les mauvaises réponses.") : "Maintiens le doigt ici pour voir ta mission secrète"; };
   app.addEventListener("pointerdown", e => { if(e.target.closest("#sec")) showSecret(true); });
   ["pointerup","pointercancel","pointerleave"].forEach(ev => app.addEventListener(ev, () => showSecret(false)));
 
@@ -1933,7 +2037,7 @@ function phoneApp(code){
     fb.onpointerup = fb.onpointercancel = () => { inp.f = 0; fb.classList.remove("on"); sendIn(); };
   }
   function lancesStatus(st, d){
-    return st.fz > 0 ? "Trempé ! Gelé encore " + st.fz + " s" : st.w <= 0 ? "Réserve vide : file à un poteau rouge !" : st.wr ? "Mauvaise réponse… question suivante" : "Eau : " + st.w + " / 10 · " + d.left + " s";
+    return st.fz > 0 ? "Trempé ! Gelé encore " + st.fz + " s" : st.w <= 0 ? "Réserve vide : file à un poteau rouge !" : st.wr ? "Mauvaise réponse… question suivante" : "Réserve : " + (st.w*10) + " % · " + d.left + " s";
   }
   function joinForm(){
     const teams = (S && S.teams) || [{name:"Équipe 1"}, {name:"Équipe 2"}];
@@ -1941,7 +2045,7 @@ function phoneApp(code){
       <label for="pname" class="ph-big" style="font-size:22px">Ton prénom</label>
       <input type="text" id="pname" maxlength="18" autocomplete="off" value="${esc((me && me.name) || "")}">
       <span class="ph-big" style="font-size:22px">Ton équipe</span>
-      ${[0,1].map(t => `<button class="btn big" data-ph="team:${t}" style="border-color:${TCOL[t]};${joinTeam===t ? `box-shadow:0 0 22px ${TCOL[t]};color:${TCOL[t]}` : ""}">${esc(teams[t].name)}</button>`).join("")}
+      ${S && S.data && S.data.random ? `<p class="note" style="text-align:center">Les équipes sont tirées au sort par l'animateur.</p>` : teams.map((_,t) => `<button class="btn big" data-ph="team:${t}" style="border-color:${TCOL[t]};${joinTeam===t ? `box-shadow:0 0 22px ${TCOL[t]};color:${TCOL[t]}` : ""}">${esc(teams[t].name)}</button>`).join("")}
       <button class="btn big pink" data-ph="join">C'est parti !</button><p class="note" id="pmsg" role="status"></p>`);
   }
   function wait(title, msg, rules){
@@ -1950,6 +2054,7 @@ function phoneApp(code){
   }
   function draw(){
     if(!net) return;
+    if(me && me.name && +me.team < 0){ P(`${logo}<p class="ph-big">Bienvenue ${esc(me.name)} !</p><p class="muted" style="text-align:center;font-size:18px">Ton équipe va être tirée au sort. Regarde l'écran.</p>`); return; }
     if(!me || me.team === undefined || me.team === null || !me.name){
       const nm = $("#pname") ? $("#pname").value : null; joinForm(); if(nm !== null) $("#pname").value = nm; return;
     }
@@ -1979,10 +2084,10 @@ function phoneApp(code){
     else if(ph === "tabou"){
       const isSp = d.speaker === pid;
       if(!d.active) body = wait(isSp ? "C'est toi qui fais deviner !" : "Tabou : tour de " + ((teams[d.turn]||{}).name || ""), isSp ? "La carte s'affichera ici quand l'animateur lance le chrono." : (d.spName ? d.spName + " va faire deviner." : ""));
-      else if(isSp) body = `<div class="panel tabou-card ${d.turn ? "glow-c" : "glow-p"}" style="margin:0 auto"><span class="tabou-word">${esc(d.word)}</span><div class="forbid">${(d.f||[]).map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
+      else if(isSp) body = `<div class="panel tabou-card ${GLOW[d.turn] || "glow-p"}" style="margin:0 auto"><span class="tabou-word">${esc(d.word)}</span><div class="forbid">${(d.f||[]).map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
         <div class="row" style="justify-content:center"><button class="btn big ok" data-ph="hit">Trouvé !</button><button class="btn big" data-ph="pass">Passer</button></div><p class="live" style="text-align:center">Trouvés : ${d.found||0}</p>`;
       else if(t === d.turn) body = wait("Devine à voix haute !", (d.spName || "Ton coéquipier") + " te fait deviner un mot. Trouvés : " + (d.found||0));
-      else body = `<p class="ph-big">Écoute bien ${esc(d.spName || "l'orateur")}…</p><button class="foul" data-ph="foul">Mot interdit !</button><p class="note" style="text-align:center">Appuie seulement si tu entends un mot barré : −1 pour l'autre équipe.</p>`;
+      else body = `<p class="muted" style="text-align:center;margin:0">${esc(d.spName || "L'orateur")} fait deviner :</p><div class="panel tabou-card ${GLOW[d.turn] || "glow-p"}" style="margin:0 auto;padding:14px"><span class="tabou-word" style="font-size:30px">${esc(d.word)}</span><div class="forbid">${(d.f||[]).map(x => `<span style="font-size:18px">${esc(x)}</span>`).join("")}</div></div><button class="foul" data-ph="foul" style="min-height:110px">Mot interdit !</button><p class="note" style="text-align:center">Appuie dès que tu entends un mot barré : −1 pour l'équipe qui joue.</p>`;
     }
     else if(ph === "desam") body = d.team === t ? `<p class="ph-big" style="margin-top:3vh">Ton équipe est au PC sécurité</p><p class="muted" style="text-align:center;font-size:18px">Tourne le dos à l'écran et guide l'opérateur avec le manuel.</p><a class="btn big cyan" href="${MANUEL_URL}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">Ouvrir le manuel</a>` : wait("L'autre équipe est au PC sécurité", "Silence dans la salle !");
     else if(ph === "sabvote"){
@@ -2013,7 +2118,7 @@ function phoneApp(code){
       if(!st) body = wait("Bataille en cours", "Regarde l'écran : tu n'étais pas inscrit au début de la bataille.");
       else if(st.q){
         app.dataset.mode = "q";
-        body = `<div class="gauge"><i style="width:${st.w*10}%"></i></div><p class="live" style="text-align:center">Au poteau : +4 d'eau par bonne réponse</p><p class="ph-big" style="font-size:20px">${esc(st.q.q)}</p>
+        body = `<div class="gauge"><i style="width:${st.w*10}%"></i></div><p class="live" style="text-align:center">Au poteau : réponds juste pour recharger</p><p class="ph-big" style="font-size:20px">${esc(st.q.q)}</p>
           <div class="ph-ans">${(st.q.o||[]).map((x,j) => `<button class="ans c${j}" data-ph="lq:${st.q.k}:${j}"><span class="let">${LETTERS[j]}</span><span>${esc(x)}</span></button>`).join("")}</div>
           <button class="btn ghost" data-ph="leave">Quitter le poteau</button>`;
       } else {
@@ -2045,7 +2150,7 @@ function refreshRegie(){
   r.innerHTML = `<div class="row" style="justify-content:space-between"><h3>Régie animateur</h3><button class="btn ghost" data-act="regie">Fermer</button></div>
     <p class="note">Ouvrez la régie quand l'écran projeté ne la montre pas (écran étendu, ou projecteur en pause).</p>
     <div><h3>${CUR && CUR.regieHint ? "Réponse attendue" : "Bonne réponse"}</h3>${CUR && CUR.regieHint ? `<p class="note" style="font-size:16px;color:var(--fg)">${esc(CUR.regieHint())}</p>` : q ? `<p class="ans-key">${LETTERS[q.c]} · ${esc(q.o[q.c])}</p><p class="note">${esc(q.e||"")}</p>` : `<p class="note">Pas de question à l'écran.</p>`}</div>
-    <div><h3>Ajuster les points</h3>${[0,1].map(t=>`<div class="row" style="margin-top:8px"><span style="flex:1;color:${TCOL[t]};font-weight:700">${esc(G.teams[t].name)} : ${G.teams[t].pts}</span><button class="btn ghost" data-adj="${t}|-1">−1</button><button class="btn ghost" data-adj="${t}|1">+1</button></div>`).join("")}</div>
+    <div><h3>Ajuster les points</h3>${TT().map(t=>`<div class="row" style="margin-top:8px"><span style="flex:1;color:${TCOL[t]};font-weight:700">${esc(G.teams[t].name)} : ${G.teams[t].pts}</span><button class="btn ghost" data-adj="${t}|-1">−1</button><button class="btn ghost" data-adj="${t}|1">+1</button></div>`).join("")}</div>
     <div><h3>Raccourcis</h3><div class="keys"><span class="kbd">A</span><span>Buzzer équipe 1</span><span class="kbd">P</span><span>Buzzer équipe 2</span><span class="kbd">V</span><span>Bonne réponse / mot trouvé</span><span class="kbd">X</span><span>Mauvaise réponse</span><span class="kbd">S</span><span>Passer (Tabou)</span><span class="kbd">Espace</span><span>Révéler / continuer</span></div></div>
     <div class="row"><button class="btn ghost" data-act="skip">Passer l'épreuve</button><button class="btn ghost" data-act="board">Plateau</button><button class="btn ghost" data-act="home">Menu</button></div>`;
   r.querySelectorAll("[data-adj]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.adj.split("|").map(Number); addPts(t, d); });
@@ -2060,12 +2165,14 @@ const ACT = {
   joinform:screenJoinForm, admin:()=>{ location.href = location.pathname + "?net=local&admin=1"; }, goteams:goTeams, nophone:()=>{ PH.want = false; goTeams(); },
   bank:screenBank, kit:screenKit,
   resetbank:()=>{ if(TOURNEE){ BANK = TOURNEE; BANK_SRC = "tournee"; } else { BANK = DEMO_Q.map((r,i)=>({id:"d"+i,t:r[0],n:r[1],q:r[2],o:r[3],c:0,e:r[4]})); BANK_SRC = "demo"; } G.used = []; try{ localStorage.removeItem("af-bank"); }catch(e){} screenBank(); },
-  start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.tabIdx = [0,0]; assignRoles(); SFX.go(); if(G.single && G.plan.length === 1) return launch(); screenBoard(); },
+  start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.tabIdx = TT().map(()=>0); assignRoles(); SFX.go(); if(G.single && G.plan.length === 1) return launch(); screenBoard(); },
   free:()=>{ screenFree(); }, fmode0:()=>{ PH.want = false; screenFree(); }, fmode1:()=>{ PH.want = true; screenFree(); },
   launch, board:()=>{ $("#regie").hidden = true; screenBoard(); },
   skip:()=>{ $("#regie").hidden = true; if(G.step < G.plan.length){ G.step++; } screenBoard(); },
-  again:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.used = []; G.tabIdx = [0,0]; assignRoles(); if(G.single && G.plan.length === 1) return launch(); screenBoard(); },
-  newgame:()=>{ G = freshGame(); phoneStop(); screenTitle(); },
+  again:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.used = []; G.tabIdx = TT().map(()=>0); assignRoles(); if(G.single && G.plan.length === 1) return launch(); screenBoard(); },
+  newgame:()=>{ G = freshGame(); phoneStop(); clearSnap(); screenTitle(); },
+  resume:()=>{ resumeGame(); }, dropsnap:()=>{ clearSnap(); screenTitle(); }, resumenophone:()=>{ PH.want = false; screenBoard(); },
+  reshuffle:()=>{ reshuffle(); SFX.blip(); }, rand0:()=>{ G.randomTeams = false; screenTeams(); }, rand1:()=>{ G.randomTeams = true; if(PH.on) reshuffle(); screenTeams(); },
   regie:()=>{ const r = $("#regie"); r.hidden = !r.hidden; refreshRegie(); },
   sound:()=>{ SOUND = !SOUND; const b = $("#sndbtn"); if(b) b.textContent = SOUND ? "Son : oui" : "Son : non"; },
   full:()=>{ try{ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }catch(e){} }
@@ -2075,18 +2182,18 @@ function buzz(t){ if(CUR && CUR.onBuzz) CUR.onBuzz(t); }
 document.addEventListener("keydown", e => {
   if(e.target.closest && e.target.closest("input,select,textarea")) return;
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-  if(k === "a" || k === "q"){ e.preventDefault(); return buzz(0); }
-  if(k === "p" || k === "m"){ e.preventDefault(); return buzz(1); }
+  const BK = {"a":0,"q":0,"1":0,"&":0,"p":1,"m":1,"2":1,"é":1,"3":2,'"':2,"4":3,"'":3};
+  if(k in BK){ if(BK[k] < G.teams.length){ e.preventDefault(); return buzz(BK[k]); } return; }
   if(k === "r"){ return ACT.regie(); }
   if(CUR && CUR.onKey && ["v","x","s"," ","Enter"].includes(k)){ e.preventDefault(); CUR.onKey(k); }
 });
 /* Manettes : manette 1 = équipe 1, manette 2 = équipe 2, n'importe quel bouton. */
-const padPrev = [false,false];
+const padPrev = [false,false,false,false];
 (function poll(){
   try{
     const pads = navigator.getGamepads ? navigator.getGamepads() : [];
     const list = Array.from(pads || []).filter(Boolean);
-    [0,1].forEach(t => { const p = list[t]; const down = !!(p && p.buttons.some(b => b.pressed)); if(down && !padPrev[t]) buzz(t); padPrev[t] = down; });
+    [0,1,2,3].forEach(t => { const p = list[t]; const down = !!(p && p.buttons.some(b => b.pressed)); if(down && !padPrev[t] && t < G.teams.length) buzz(t); padPrev[t] = down; });
   }catch(e){}
   requestAnimationFrame(poll);
 })();
