@@ -209,6 +209,35 @@ th{color:var(--muted);font-weight:600}
 .scroll{overflow:auto;max-height:44vh}
 .note{font-size:14px;color:var(--muted);line-height:1.45}
 
+/* Mode téléphone */
+.codepill{font-weight:700;letter-spacing:.2em;border:2px solid var(--amber);color:var(--amber);border-radius:999px;padding:6px 14px;font-size:15px}
+.modes{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.modes .btn[aria-pressed=true]{border-color:var(--amber);color:var(--amber);box-shadow:0 0 14px rgba(255,201,60,.4)}
+.lobby{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(14px,2vw,28px);align-items:center}
+@media (max-width:720px){.lobby{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.bigcode{font-size:clamp(44px,7vw,92px);font-weight:700;letter-spacing:.18em;color:var(--amber);text-shadow:0 0 18px rgba(255,201,60,.5);line-height:1}
+.plist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:36px}
+.plist span{border:2px solid currentColor;border-radius:999px;padding:4px 12px;font-weight:600;font-size:15px}
+.live{font-weight:700;color:var(--amber);font-size:clamp(15px,1.6vw,20px)}
+.ph{max-width:520px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:14px}
+.ph-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700}
+.ph-team{border-radius:14px;padding:6px 12px;border:2px solid var(--tc);color:var(--tc)}
+.ph-big{font-size:clamp(22px,6vw,30px);font-weight:700;line-height:1.2;text-align:center;text-wrap:balance}
+.ph-ans{display:flex;flex-direction:column;gap:10px}
+.ph-ans .ans{cursor:pointer;width:100%;text-align:left;font-family:inherit;color:inherit;font-size:19px}
+.ph-ans .ans.sel{box-shadow:0 0 24px var(--c);transform:scale(1.02)}
+.ph-row{display:flex;align-items:center;gap:10px;border:3px solid var(--c);border-radius:14px;padding:8px 10px;background:var(--panel)}
+.ph-row .t{flex:1;min-width:0;font-weight:600}
+.ph-row .n{font-size:26px;font-weight:700;min-width:1.4em;text-align:center;font-variant-numeric:tabular-nums}
+.ph-row button{width:48px;height:48px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);font-size:24px;font-weight:700;cursor:pointer}
+.buzzer{width:min(72vw,300px);aspect-ratio:1;border-radius:50%;border:8px solid #fff;background:var(--tc);color:#07070F;font-family:inherit;font-size:34px;font-weight:700;box-shadow:0 0 40px var(--tc),inset 0 -14px 0 rgba(0,0,0,.25);cursor:pointer;margin:12px auto;display:flex;align-items:center;justify-content:center}
+.buzzer:active{transform:scale(.95)}
+.buzzer[disabled]{opacity:.3;box-shadow:none}
+.ph input[type=text]{background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:12px 14px;font-size:20px;font-weight:700;width:100%;text-transform:none}
+.secret{border:2px dashed var(--amber);border-radius:14px;padding:14px;text-align:center;color:var(--amber);font-weight:700;user-select:none;-webkit-user-select:none;touch-action:none;cursor:pointer}
+.foul{width:100%;min-height:160px;border-radius:24px;border:4px solid #fff;background:var(--bad);color:#fff;font-family:inherit;font-size:32px;font-weight:700;cursor:pointer;box-shadow:0 0 30px var(--bad)}
+.foul:active{transform:scale(.97)}
+
 /* Désamorçage : tableau SSI */
 .ssi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(10px,1.6vw,20px)}
 @media (max-width:860px){.ssi{grid-template-columns:1fr}}
@@ -421,7 +450,7 @@ function addPts(t, n){
   refreshRegie();
 }
 function topbar(label){
-  return `<div class="top"><span class="mini neon-p">Avis Favorable !</span><span class="eyebrow">${label||""}</span><span class="tools"><button class="btn ghost" data-act="regie">Régie <span class="kbd">R</span></button><button class="btn ghost" data-act="sound" id="sndbtn">${SOUND?"Son : oui":"Son : non"}</button><button class="btn ghost" data-act="full">Plein écran</button></span></div>`;
+  return `<div class="top"><span class="mini neon-p">Avis Favorable !</span><span class="eyebrow">${label||""}</span><span class="tools">${PH.on ? `<span class="codepill" title="Code de la partie pour les téléphones">Code ${PH.code}</span>` : ""}<button class="btn ghost" data-act="regie">Régie <span class="kbd">R</span></button><button class="btn ghost" data-act="sound" id="sndbtn">${SOUND?"Son : oui":"Son : non"}</button><button class="btn ghost" data-act="full">Plein écran</button></span></div>`;
 }
 function stopTimer(){ if(TIMER){ clearInterval(TIMER); TIMER = null; } }
 function startTimer(sec, onEnd){
@@ -466,12 +495,17 @@ function screenTitle(){
     <span class="eyebrow">Le jeu télé de la prévention</span>
     <h1 class="logo"><span class="logo-a neon-p" style="display:block">AVIS</span><span class="logo-b neon-c" style="display:block">FAVORABLE !</span></h1>
     <p class="muted" style="font-size:clamp(16px,1.8vw,21px);max-width:60ch;line-height:1.45">Deux équipes, un présentateur, des buzzers, et un seul établissement à faire ouvrir : le Complexe des Dunes.</p>
+    <div class="center" style="gap:8px">
+      <div class="modes" role="group" aria-label="Mode de jeu"><button class="btn" aria-pressed="${!PH.want}" data-act="mode0">Sans téléphone</button><button class="btn" aria-pressed="${PH.want}" data-act="mode1">Avec téléphones</button></div>
+      <span class="note">${PH.want ? (phoneAvailable() ? "Les joueurs rejoignent la partie avec un QR code, sans compte ni installation." : "Le mode téléphone n'est pas encore relié à son serveur (Firebase) : voir le README du dépôt.") : "Tout se joue à l'écran, avec le clavier ou des buzzers USB."}</span>
+    </div>
     <div class="menu">
       <button class="btn big pink" data-act="preset">Émission complète<small>6 épreuves, environ 50 minutes, prête à jouer</small></button>
       <button class="btn big cyan" data-act="compose">Composer ma séance<small>Choisir les épreuves, les thèmes et le niveau</small></button>
       <button class="btn" data-act="bank">Banque de questions<small>${BANK.length} questions ${bankLabel()}</small></button>
       <button class="btn" data-act="kit">Brancher les buzzers<small>Tester les touches et les manettes</small></button>
     </div>
+    <button class="btn ghost" data-act="joinform">Je suis joueur : rejoindre une partie avec mon téléphone</button>
   </div>`);
 }
 function screenKit(){
@@ -601,19 +635,25 @@ function screenCompose(){
 function screenTeams(){
   CUR = { onBuzz:(t)=>{ const b = $("#bz"+t); if(b){ b.classList.add("on"); b.textContent = "Buzzer prêt !"; } SFX.buzz(t); } };
   render(`${topbar("Les équipes")}
+  ${PH.on ? `<div class="panel glow-c lobby"><div class="qr" id="joinqr" aria-label="QR code pour rejoindre la partie"></div><div style="display:flex;flex-direction:column;gap:8px"><span class="eyebrow">Rejoignez la partie</span><span class="bigcode">${PH.code}</span><span class="note" style="font-size:16px">Scannez le QR code, ou ouvrez <strong style="color:var(--fg)">${esc(location.host + location.pathname)}</strong>, touchez « Je suis joueur » et tapez le code.</span><span class="live" id="pcount"></span></div></div>` : ""}
   <div class="teams">${[0,1].map(t=>`
     <div class="panel team-card ${t?"glow-c":"glow-p"}">
       <div class="bounce">${avatar(t,110)}</div>
       <label for="tn${t}" class="muted">Nom de l'équipe</label>
       <input type="text" id="tn${t}" value="${esc(G.teams[t].name)}" maxlength="24">
       <div class="emblems" style="color:${TCOL[t]}">${EMBLEMS.map((e,i)=>`<button class="emblem" aria-label="Emblème ${i+1}" aria-pressed="${G.teams[t].emb===i}" data-emb="${t}-${i}"><svg width="34" height="34" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">${e}</svg></button>`).join("")}</div>
-      <div class="stepper"><span class="muted">Joueurs</span><button aria-label="Un joueur de moins" data-pl="${t}|-1">−</button><span id="pl${t}" style="font-size:24px;min-width:1.2em">${G.teams[t].players}</span><button aria-label="Un joueur de plus" data-pl="${t}|1">+</button></div>
-      <span class="buzzcheck" id="bz${t}">Appuyez sur votre buzzer (<span class="kbd">${t?"P":"A"}</span>)</span>
+      ${PH.on ? `<span class="muted">Joueurs connectés</span><div class="plist" id="plist${t}" style="color:${TCOL[t]}"></div>` : `<div class="stepper"><span class="muted">Joueurs</span><button aria-label="Un joueur de moins" data-pl="${t}|-1">−</button><span id="pl${t}" style="font-size:24px;min-width:1.2em">${G.teams[t].players}</span><button aria-label="Un joueur de plus" data-pl="${t}|1">+</button></div>
+      <span class="buzzcheck" id="bz${t}">Appuyez sur votre buzzer (<span class="kbd">${t?"P":"A"}</span>)</span>`}
     </div>`).join("")}
   </div>
-  ${G.saboteur ? `<div class="panel" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><strong style="color:var(--amber)">Le Saboteur</strong><span class="note" style="flex:1 1 300px">Avant de commencer, chaque joueur tire une carte pliée. Une carte par équipe porte « Saboteur ». Son but : faire perdre son équipe sans se faire repérer. Vote juste avant la finale.</span></div>` : ""}
+  ${G.saboteur ? `<div class="panel" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><strong style="color:var(--amber)">Le Saboteur</strong><span class="note" style="flex:1 1 300px">${PH.on ? "Au lancement, un saboteur secret est tiré au sort dans chaque équipe : chacun découvre son rôle sur son téléphone. Vote juste avant la finale." : `Avant de commencer, chaque joueur tire une carte pliée. Une carte par équipe porte « Saboteur ». Son but : faire perdre son équipe sans se faire repérer. Vote juste avant la finale.`}</span></div>` : ""}
   <div class="row"><button class="btn" data-act="home">Retour</button><button class="btn big pink" data-act="start">C'est parti !</button></div>`);
-  [0,1].forEach(t => $("#tn"+t).oninput = e => G.teams[t].name = e.target.value || ("Équipe " + (t+1)));
+  [0,1].forEach(t => $("#tn"+t).oninput = e => { G.teams[t].name = e.target.value || ("Équipe " + (t+1)); pub("lobby", {}); });
+  if(PH.on){
+    try{ new QRCode($("#joinqr"), {text:joinURL(), width:180, height:180, correctLevel:QRCode.CorrectLevel.M}); }catch(e){}
+    const plist = () => { [0,1].forEach(t => { const el = $("#plist"+t); if(el) el.innerHTML = teamPlayers(t).map(([,p])=>`<span>${esc(p.name)}</span>`).join("") || '<span class="muted" style="border:0">En attente…</span>'; }); const c = $("#pcount"); if(c) c.textContent = Object.keys(PH.players).length + " joueur(s) connecté(s)"; };
+    CUR.onPlayers = plist; plist(); pub("lobby", {});
+  }
   document.querySelectorAll("[data-emb]").forEach(b => b.onclick = () => { const [t,i] = b.dataset.emb.split("-").map(Number); G.teams[t].emb = i; SFX.blip(); screenTeams(); });
   document.querySelectorAll("[data-pl]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.pl.split("|").map(Number); G.teams[t].players = Math.min(8, Math.max(1, G.teams[t].players + d)); $("#pl"+t).textContent = G.teams[t].players; SFX.blip(); });
 }
@@ -622,6 +662,7 @@ function screenTeams(){
 function screenBoard(){
   CUR = { onKey:(k)=>{ if(k==="Enter"||k===" ") launch(); } };
   if(G.step >= G.plan.length) return screenEnd();
+  pub("wait", {title:"Le plateau", msg:"Prochaine épreuve : " + GAMES[G.plan[G.step]].nom});
   render(`${topbar("Le plateau")}${scorebar()}
   <div class="panel grow" style="display:flex;flex-direction:column;justify-content:center;gap:20px">
     <h2 style="font-size:clamp(22px,2.6vw,34px);text-align:center">Tournée du Complexe des Dunes</h2>
@@ -638,6 +679,7 @@ function endGame(before){
   const win = gain[0] === gain[1] ? -1 : (gain[0] > gain[1] ? 0 : 1);
   SFX.fanfare();
   CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") screenBoard(); } };
+  pub("wait", {title: win<0 ? "Égalité !" : G.teams[win].name + " remporte l'épreuve !", msg:"Regardez l'écran"});
   render(`${topbar("Résultats")}
   <div class="grow center" style="gap:24px">
     <h2 style="font-size:clamp(28px,4vw,54px)" class="${win<0?"neon-c":TCLS[win]}">${win<0 ? "Égalité !" : esc(G.teams[win].name) + " remporte l'épreuve !"}</h2>
@@ -649,20 +691,32 @@ function endGame(before){
 /* ---- Comment jouer ---- */
 const HOWTO = {
   coins:{ rules:["Une question s'affiche avec quatre réponses.","Chaque réponse correspond à un coin de la salle.","Tout le monde se lève et va dans le coin de son choix avant la fin du chrono.","Chaque joueur dans le bon coin rapporte 1 point à son équipe."],
-          ctl:[["Espace","Révéler la réponse (animateur)"],["+ / −","Compter les joueurs dans le bon coin"]] },
+          ctl:[["Espace","Révéler la réponse (animateur)"],["+ / −","Compter les joueurs dans le bon coin"]],
+          rulesP:["Une question s'affiche avec quatre réponses, une par coin de la salle.","Chacun répond sur son téléphone avant la fin du chrono. Allez aussi dans votre coin !","Chaque bonne réponse rapporte 1 point à son équipe."],
+          ctlP:[["Téléphone","Choisir A, B, C ou D"],["Espace","Révéler la réponse (animateur)"]] },
   tabou:{ rules:["Un joueur fait deviner le mot à son équipe en 60 secondes.","Ses coéquipiers tournent le dos à l'écran.","Les quatre mots barrés sont interdits.","L'autre équipe surveille : si un mot interdit est dit, elle buzze."],
-          ctl:[["V","Mot trouvé : +1"],["S","Passer la carte"],["Buzzer adverse","Mot interdit : −1"]] },
+          ctl:[["V","Mot trouvé : +1"],["S","Passer la carte"],["Buzzer adverse","Mot interdit : −1"]],
+          rulesP:["Un orateur est désigné à chaque tour : la carte s'affiche sur son téléphone.","Il fait deviner le mot à son équipe en 60 secondes.","Les quatre mots barrés sont interdits.","L'équipe adverse appuie sur « Mot interdit ! » si elle en entend un."],
+          ctlP:[["Orateur","Trouvé ou Passer sur son téléphone"],["Adversaires","Mot interdit : −1"]] },
   money:{ rules:["Chaque équipe reçoit 10 jetons pour la manche.","À chaque question, placez tous vos jetons sur les réponses, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
-          ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]] },
+          ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]],
+          rulesP:["Chaque équipe reçoit 10 jetons pour la manche.","Placez vos jetons ensemble depuis vos téléphones, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
+          ctlP:[["Téléphone","+ / − sur chaque réponse"],["Espace","Ouvrir les trappes (animateur)"]] },
   desamorcage:{ rules:["Un opérateur s'assoit face au tableau SSI. Lui seul voit l'écran.","Ses coéquipiers tournent le dos à l'écran et lisent le manuel du PC sécurité.","L'opérateur décrit ce qu'il voit, l'équipe lui dicte les actions dans le bon ordre.","90 secondes par alarme. Au bout de 3 fausses manœuvres, c'est raté."],
-          ctl:[["Clic","L'opérateur clique les actions"],["Manuel","À imprimer, ou à ouvrir avec le QR code"],["+3","Alarme traitée (+1 sans faute)"]], qr:true },
+          ctl:[["Clic","L'opérateur clique les actions"],["Manuel","À imprimer, ou à ouvrir avec le QR code"],["+3","Alarme traitée (+1 sans faute)"]], qr:true,
+          rulesP:["Un opérateur s'assoit face au tableau SSI. Lui seul voit l'écran.","Ses coéquipiers tournent le dos à l'écran : le manuel s'ouvre sur leurs téléphones.","L'opérateur décrit ce qu'il voit, l'équipe lui dicte les actions dans le bon ordre.","90 secondes par alarme. Au bout de 3 fausses manœuvres, c'est raté."] },
   saboteur:{ rules:["Chaque équipe cache un saboteur depuis le début.","Discutez 1 minute, puis désignez un suspect.","Saboteur démasqué : +3 points pour l'équipe.","Raté : le saboteur repart avec le titre de « Cabinet de complaisance »."],
-          ctl:[["Clic","Valider ou non chaque suspect"]] },
+          ctl:[["Clic","Valider ou non chaque suspect"]],
+          rulesP:["Un saboteur secret a été tiré au sort dans chaque équipe au début de la partie.","Discutez 1 minute, puis votez pour un suspect sur votre téléphone.","Majorité sur le saboteur : +3 points pour l'équipe.","Raté : il repart avec le titre de « Cabinet de complaisance »."],
+          ctlP:[["Téléphone","Voter pour un suspect"],["Animateur","Dépouiller les votes"]] },
   finale:{ rules:["Duel au buzzer : la première équipe à 5 bonnes réponses gagne.","L'équipe qui mène au score part avec 1 réponse d'avance (2 si elle mène de 10 points ou plus).","Buzzer d'abord, réponse ensuite. Mauvaise réponse : la main passe à l'autre équipe.","Le capitaine vainqueur tamponne le PV : avis favorable !"],
-          ctl:[["A / P","Buzzer équipe 1 / équipe 2"],["V / X","Bonne / mauvaise réponse"],["Espace","Question suivante"]] }
+          ctl:[["A / P","Buzzer équipe 1 / équipe 2"],["V / X","Bonne / mauvaise réponse"],["Espace","Question suivante"]],
+          rulesP:["Duel au buzzer : la première équipe à 5 bonnes réponses gagne.","L'équipe qui mène au score part avec 1 réponse d'avance (2 si elle mène de 10 points ou plus).","Buzzez sur votre téléphone, puis répondez à voix haute. Mauvaise réponse : la main passe.","Le capitaine vainqueur tamponne le PV : avis favorable !"],
+          ctlP:[["Téléphone","Buzzer"],["V / X","Bonne / mauvaise réponse (animateur)"],["Espace","Question suivante"]] }
 };
 function screenHowto(k){
-  const h = HOWTO[k];
+  const h0 = HOWTO[k]; const h = PH.on && h0.rulesP ? {...h0, rules:h0.rulesP, ctl:h0.ctlP || h0.ctl} : h0;
+  pub("wait", {title:GAMES[k].nom, msg:"Écoutez les règles", rules:h.rules});
   CUR = { onKey:(key)=>{ if(key==="Enter"||key===" ") go(); } };
   const go = () => { CUR = null; countdown(() => RUN[k]()); };
   render(`${topbar("Comment jouer")}
@@ -687,8 +741,10 @@ const RUN = {};
 RUN.coins = function(){
   const before = G.teams.map(t=>t.pts); const qs = pickQ(G.qPer, false, {minOpts:3}); let i = 0;
   const show = () => {
-    const q = qs[i]; let revealed = false; const got = [0,0];
-    CUR = { q, onKey:(k)=>{ if(k===" "){ revealed ? next() : reveal(); } } };
+    const q = qs[i]; let revealed = false; const got = [0,0]; const rk = "c" + G.step + "-" + i; const answers = {};
+    CUR = { q, onKey:(k)=>{ if(k===" "){ revealed ? next() : reveal(); } },
+      onPhone:(ev)=>{ if(ev.type === "ans" && ev.round === rk && !revealed){ answers[ev.pid] = {a:+ev.a, team:ev.team}; live(); } } };
+    const live = () => { const e = $("#live"); if(e) e.textContent = PH.on ? "Réponses : " + Object.keys(answers).length + " / " + Object.keys(PH.players).length : ""; };
     render(`${topbar("Les 4 coins · " + (i+1) + " / " + qs.length)}${scorebar()}
     <div class="qcard grow">
       <div class="qmeta"><span>${esc(q.t)}</span><span class="timer" id="timer"></span></div>
@@ -696,19 +752,24 @@ RUN.coins = function(){
       <div class="room">${q.o.map((o,j)=>`<div class="corner c${j}" id="cn${j}"><span class="where">${LETTERS[j]} · ${CORNERS[j]}</span><span class="txt">${esc(o)}</span></div>`).join("")}</div>
       <div id="after"></div>
     </div>
-    <div class="row" style="justify-content:center"><button class="btn big pink" id="rv">Révéler la réponse <span class="kbd">Espace</span></button></div>`);
+    <div class="row" style="justify-content:center"><button class="btn big pink" id="rv">Révéler la réponse <span class="kbd">Espace</span></button><span class="live" id="live"></span></div>`);
     $("#rv").onclick = () => revealed ? next() : reveal();
     startTimer(20, () => { SFX.buzz(1); });
+    pub("vote", {round:rk, q:q.q, o:q.o, t:q.t}); live();
     function reveal(){
       revealed = true; stopTimer(); SFX.good();
       q.o.forEach((_,j)=>$("#cn"+j).classList.add(j===q.c?"good":"dim"));
       $("#after").innerHTML = `${q.e?`<p class="expl">${esc(q.e)}</p>`:""}
-        <div class="count" style="margin-top:12px">${[0,1].map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams[t].name)} dans le bon coin</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span class="pts" id="cnt${t}">0</span><button aria-label="Plus" data-cn="${t}|1">+</button></span></div>`).join("")}</div>`;
+        <div class="count" style="margin-top:12px">${[0,1].map(t=>`<div class="score t${t}"><span class="name">${esc(G.teams[t].name)} ${PH.on ? ": bonnes réponses" : "dans le bon coin"}</span><span class="stepper" style="margin-left:auto"><button aria-label="Moins" data-cn="${t}|-1">−</button><span class="pts" id="cnt${t}">0</span><button aria-label="Plus" data-cn="${t}|1">+</button></span></div>`).join("")}</div>`;
       document.querySelectorAll("[data-cn]").forEach(b => b.onclick = () => {
         const [t,d] = b.dataset.cn.split("|").map(Number);
         const v = Math.min(G.teams[t].players, Math.max(0, got[t] + d)); if(v === got[t]) return;
         addPts(t, v - got[t]); got[t] = v; $("#cnt"+t).textContent = v; SFX.blip();
       });
+      if(PH.on){
+        [0,1].forEach(t => { const n = Object.values(answers).filter(x => x.team === t && x.a === q.c).length; if(n){ addPts(t, n); got[t] = n; $("#cnt"+t).textContent = n; } });
+        pub("reveal", {round:rk, q:q.q, o:q.o, c:q.c});
+      }
       $("#rv").innerHTML = (i+1 < qs.length ? "Question suivante" : "Fin de l'épreuve") + ' <span class="kbd">Espace</span>';
       refreshRegie();
     }
@@ -721,31 +782,40 @@ RUN.coins = function(){
 /* ---- Tabou ---- */
 RUN.tabou = function(){
   const before = G.teams.map(t=>t.pts); const deck = shuffle(TABOU); let turn = 0, ci = 0;
+  G.tabIdx = G.tabIdx || [0,0];
   const startTurn = () => {
-    let found = 0, active = false;
+    let found = 0, active = false, lastWord = "";
+    const tp = PH.on ? teamPlayers(turn) : []; const sp = tp.length ? tp[(G.tabIdx[turn]++) % tp.length] : null;
+    const spPid = sp ? sp[0] : "", spName = sp ? sp[1].name : "";
+    const pubT = () => { const [w, f] = deck[ci % deck.length]; pub("tabou", {turn, speaker:spPid, spName, ci, active, found, word: active ? w : "", f: active ? f : []}); };
     CUR = { onKey:(k)=>{ if(!active && (k===" "||k==="Enter")) begin(); else if(active && k==="v") hit(); else if(active && k==="s") pass(); },
-            onBuzz:(t)=>{ if(active && t !== turn) foul(); } };
+            onBuzz:(t)=>{ if(active && t !== turn) foul(); },
+            onPhone:(ev)=>{ if(!active || +ev.ci !== ci) return;
+              if(ev.type === "hit" && ev.pid === spPid) hit(); else if(ev.type === "pass" && ev.pid === spPid) pass(); else if(ev.type === "foul" && ev.team !== turn) foul(); } };
     render(`${topbar("Tabou · tour de " + G.teams[turn].name)}${scorebar()}
     <div class="grow center" style="gap:18px">
       <h2 class="${TCLS[turn]}" style="font-size:clamp(26px,3.4vw,44px)">${esc(G.teams[turn].name)}, à vous !</h2>
-      <p class="muted" style="font-size:18px">Un joueur se place face à l'écran. Ses coéquipiers lui tournent le dos.</p>
+      <p class="muted" style="font-size:18px">${sp ? `<strong style="color:var(--fg)">${esc(spName)}</strong> fait deviner : la carte s'affiche sur son téléphone.` : "Un joueur se place face à l'écran. Ses coéquipiers lui tournent le dos."}</p>
       <div id="tz" class="center" style="gap:16px"><button class="btn big pink" id="bg">Lancer le chrono <span class="kbd">Espace</span></button></div>
     </div>`);
     $("#bg").onclick = begin;
+    pubT();
     function card(){
       const [w, f] = deck[ci % deck.length];
       $("#tz").innerHTML = `<span class="timer" id="timer"></span>
-        <div class="panel tabou-card ${turn?"glow-c":"glow-p"}"><span class="tabou-word">${esc(w)}</span><div class="forbid">${f.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>
+        ${sp ? `<div class="panel tabou-card ${turn?"glow-c":"glow-p"}"><span class="muted">La carte est sur le téléphone de</span><span class="tabou-word">${esc(spName)}</span>${lastWord ? `<span class="muted">Dernier mot trouvé : <strong style="color:var(--lime)">${esc(lastWord)}</strong></span>` : ""}</div>`
+        : `<div class="panel tabou-card ${turn?"glow-c":"glow-p"}"><span class="tabou-word">${esc(w)}</span><div class="forbid">${f.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>`}
         <div class="row" style="justify-content:center"><button class="btn ok" id="th">Trouvé <span class="kbd">V</span></button><button class="btn" id="tp">Passer <span class="kbd">S</span></button><button class="btn no" id="tf">Mot interdit</button></div>
         <span class="muted">Trouvés : <strong id="tfound">${found}</strong></span>`;
       $("#th").onclick = hit; $("#tp").onclick = pass; $("#tf").onclick = foul;
+      pubT();
     }
     function begin(){ active = true; card(); startTimer(60, finish); }
-    function hit(){ found++; addPts(turn, 1); SFX.good(); ci++; card(); }
+    function hit(){ found++; lastWord = deck[ci % deck.length][0]; addPts(turn, 1); SFX.good(); ci++; card(); }
     function pass(){ SFX.blip(); ci++; card(); }
     function foul(){ SFX.bad(); addPts(turn, -1); ci++; card(); }
     function finish(){
-      active = false; SFX.buzz(0);
+      active = false; SFX.buzz(0); pub("wait", {title:"Temps écoulé !", msg:found + " mot" + (found>1?"s":"") + " trouvé" + (found>1?"s":"") + " pour " + G.teams[turn].name});
       $("#tz").innerHTML = `<h3 style="font-size:28px">Temps écoulé : ${found} mot${found>1?"s":""} trouvé${found>1?"s":""}</h3><button class="btn big cyan" id="nx">${turn===0?"Au tour de " + esc(G.teams[1].name):"Fin de l'épreuve"} <span class="kbd">Espace</span></button>`;
       CUR.onKey = (k)=>{ if(k===" "||k==="Enter") nx(); };
       const nx = () => { turn++; turn < 2 ? startTurn() : endGame(before); };
@@ -760,8 +830,10 @@ RUN.tabou = function(){
 RUN.money = function(){
   const before = G.teams.map(t=>t.pts); const qs = pickQ(3, false, {minOpts:3}); let i = 0; const bank = [10,10];
   const show = () => {
-    const q = qs[i]; const bet = [q.o.map(()=>0), q.o.map(()=>0)]; let opened = false;
-    CUR = { q, onKey:(k)=>{ if(k===" "){ opened ? next() : open(); } } };
+    const q = qs[i]; const bet = [q.o.map(()=>0), q.o.map(()=>0)]; let opened = false; const rk = "m" + G.step + "-" + i;
+    const pubM = () => pub("money", {round:rk, q:q.q, o:q.o, bets:bet, bank, opened, c: opened ? q.c : -1});
+    CUR = { q, onKey:(k)=>{ if(k===" "){ opened ? next() : open(); } },
+      onPhone:(ev)=>{ if(ev.type === "bet" && ev.round === rk) change(ev.team, +ev.slot, +ev.d > 0); } };
     render(`${topbar("Money Drop · " + (i+1) + " / " + qs.length)}
     <div class="qcard">
       <div class="qmeta"><span>${esc(q.t)}</span><span class="timer" id="timer"></span></div>
@@ -774,13 +846,15 @@ RUN.money = function(){
     </div>`).join("")}</div>
     <div class="row" style="justify-content:center"><button class="btn big pink" id="op">Ouvrir les trappes <span class="kbd">Espace</span></button><span class="muted" id="warn"></span></div>`);
     const draw = (t) => { const s = bet[t].reduce((a,b)=>a+b,0); $("#left"+t).textContent = bank[t] - s; bet[t].forEach((v,j)=>{ $("#n"+t+j).textContent = v; $("#ch"+t+j).innerHTML = '<span class="chip"></span>'.repeat(v); }); };
-    document.querySelectorAll("[data-bet]").forEach(b => b.onclick = () => {
-      if(opened) return; const t = +b.dataset.bet[0], j = +b.dataset.bet[1], up = b.dataset.bet[2] === "+";
+    function change(t, j, up){
+      if(opened || !(t === 0 || t === 1) || !(j >= 0 && j < q.o.length)) return;
       const s = bet[t].reduce((a,x)=>a+x,0);
       if(up && s >= bank[t]) return; if(!up && bet[t][j] === 0) return;
       if(up && bet[t].filter((v,x)=>x!==j && v===0).length === 0 && bet[t][j] === 0){ $("#warn").textContent = "Au moins une trappe doit rester vide."; SFX.bad(); return; }
-      bet[t][j] += up ? 1 : -1; $("#warn").textContent = ""; SFX.blip(); draw(t);
-    });
+      bet[t][j] += up ? 1 : -1; $("#warn").textContent = ""; SFX.blip(); draw(t); pubM();
+    }
+    document.querySelectorAll("[data-bet]").forEach(b => b.onclick = () => change(+b.dataset.bet[0], +b.dataset.bet[1], b.dataset.bet[2] === "+"));
+    pubM();
     $("#op").onclick = () => opened ? next() : open();
     startTimer(45, () => { SFX.buzz(0); $("#warn").textContent = "Temps écoulé ! Les jetons non placés seront perdus."; });
     function open(){
@@ -790,6 +864,7 @@ RUN.money = function(){
       setTimeout(SFX.good, 700);
       $("#op").innerHTML = (i+1 < qs.length ? "Question suivante" : "Encaisser les jetons") + ' <span class="kbd">Espace</span>';
       if(q.e) $("#warn").textContent = q.e;
+      pubM();
       refreshRegie();
     }
     function next(){
@@ -824,10 +899,11 @@ RUN.desamorcage = function(){
     if(r >= order.length) return endGame(before);
     const t = order[r];
     CUR = { onKey:(k)=>{ if(k===" "||k==="Enter") play(); } };
+    pub("wait", {title:"Désamorçage", msg:G.teams[t].name + " au PC sécurité : désignez un opérateur."});
     render(`${topbar("Désamorçage · alarme " + (r+1) + " / " + order.length)}${scorebar()}
     <div class="grow center" style="gap:20px">
       <h2 class="${TCLS[t]}" style="font-size:clamp(28px,3.8vw,50px)">${esc(G.teams[t].name)} au PC sécurité</h2>
-      <p class="muted" style="font-size:clamp(17px,1.8vw,22px);max-width:56ch;line-height:1.45">${r < 2 ? "Désignez un opérateur." : "Changez d'opérateur."} Il s'assoit face à l'écran. Les autres se retournent, manuel en main.</p>
+      <p class="muted" style="font-size:clamp(17px,1.8vw,22px);max-width:56ch;line-height:1.45">${r < 2 ? "Désignez un opérateur." : "Changez d'opérateur."} Il s'assoit face à l'écran. Les autres se retournent, manuel en main${PH.on ? " ou sur le téléphone" : ""}.</p>
       <button class="btn big pink" id="dgo">Déclencher l'alarme <span class="kbd">Espace</span></button>
     </div>`);
     $("#dgo").onclick = play;
@@ -872,6 +948,7 @@ RUN.desamorcage = function(){
     <div id="dz" class="grow"></div>
     <div id="dres"></div>`);
     draw();
+    pub("desam", {team:t});
     startTimer(90, () => finish(false, "Temps écoulé"));
     function fault(btn){
       strikes++; SFX.bad(); if(btn){ btn.classList.remove("err"); void btn.offsetWidth; btn.classList.add("err"); }
@@ -915,6 +992,7 @@ RUN.desamorcage = function(){
       const pts = ok ? 3 + (strikes === 0 ? 1 : 0) : 0;
       if(pts) addPts(t, pts);
       ok ? SFX.fanfare() : SFX.drop();
+      pub("wait", {title: ok ? "Alarme maîtrisée ! +" + pts : "Alarme ratée", msg:"Regardez l'écran"});
       draw();
       const expl = A.type === "D" ? `Dérangement en ${A.z.id} (${esc(A.z.nom)}) : acquitter, appeler le mainteneur et lancer une ronde, puis noter au registre.`
         : A.real ? `Feu confirmé en ${A.z.id} (${esc(A.z.nom)}) : acquitter, levée de doute, évacuation générale et appel des secours${A.das ? ", commande des DAS" : ""}, puis guidage par : ${esc(A.z.acces)}.`
@@ -934,23 +1012,39 @@ RUN.desamorcage = function(){
 
 /* ---- Le Saboteur ---- */
 RUN.saboteur = function(){
-  const before = G.teams.map(t=>t.pts); const done = [null,null];
-  CUR = null;
+  const before = G.teams.map(t=>t.pts); const done = [null,null]; const votes = {};
+  const vc = () => [0,1].forEach(t => { const e = $("#vc"+t); if(e) e.textContent = "Votes : " + Object.values(votes).filter(v=>v.team===t).length + " / " + teamPlayers(t).length; });
+  CUR = PH.on ? { onPhone:(ev)=>{ if(ev.type === "vote" && done[ev.team] === null){ votes[ev.pid] = {team:ev.team, target:ev.target}; vc(); } } } : null;
   render(`${topbar("Le Saboteur")}${scorebar()}
   <div class="grow center" style="gap:22px">
     <h2 class="neon-p" style="font-size:clamp(30px,4.4vw,60px)">Qui est le saboteur ?</h2>
     <p class="muted" style="font-size:19px;max-width:60ch">Chaque équipe a 1 minute pour désigner un suspect. Le suspect retourne sa carte.</p>
     <span class="timer" id="timer"></span>
-    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}">${avatar(t,80)}<strong style="font-size:20px">${esc(G.teams[t].name)}</strong><div class="row" style="justify-content:center" id="sb${t}"><button class="btn ok" data-sab="${t}-1">Démasqué : +3</button><button class="btn no" data-sab="${t}-0">Raté</button></div></div>`).join("")}</div>
-    <button class="btn big cyan" id="sbn" disabled>Continuer</button>
+    <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}">${avatar(t,80)}<strong style="font-size:20px">${esc(G.teams[t].name)}</strong>${PH.on ? `<span class="live" id="vc${t}"></span>` : ""}<div class="row" style="justify-content:center" id="sb${t}"><button class="btn ok" data-sab="${t}-1">Démasqué : +3</button><button class="btn no" data-sab="${t}-0">Raté</button></div></div>`).join("")}</div>
+    <div class="row" style="justify-content:center">${PH.on ? `<button class="btn big pink" id="sbauto">Dépouiller les votes</button>` : ""}<button class="btn big cyan" id="sbn" disabled>Continuer</button></div>
   </div>`);
   startTimer(60, () => SFX.buzz(1));
-  document.querySelectorAll("[data-sab]").forEach(b => b.onclick = () => {
-    const [t, ok] = b.dataset.sab.split("-").map(Number); if(done[t] !== null) return; done[t] = ok;
-    if(ok){ addPts(t, 3); SFX.good(); $("#sb"+t).innerHTML = '<strong style="color:var(--lime);font-size:20px">Saboteur démasqué !</strong>'; }
-    else { SFX.bad(); $("#sb"+t).innerHTML = '<strong style="color:var(--amber);font-size:20px">Titre décerné : Cabinet de complaisance</strong>'; }
-    if(done[0] !== null && done[1] !== null){ stopTimer(); $("#sbn").disabled = false; }
-  });
+  function decide(t, ok, extra){
+    if(done[t] !== null) return; done[t] = ok;
+    if(ok){ addPts(t, 3); SFX.good(); $("#sb"+t).innerHTML = '<strong style="color:var(--lime);font-size:20px">Saboteur démasqué !</strong>' + (extra||""); }
+    else { SFX.bad(); $("#sb"+t).innerHTML = '<strong style="color:var(--amber);font-size:20px">Titre décerné : Cabinet de complaisance</strong>' + (extra||""); }
+    if(done[0] !== null && done[1] !== null){ stopTimer(); $("#sbn").disabled = false; pub("wait", {title:"Le Saboteur", msg:[0,1].map(x => G.teams[x].name + (done[x] ? " : saboteur démasqué !" : " : saboteur pas démasqué")).join(" · ")}); }
+  }
+  document.querySelectorAll("[data-sab]").forEach(b => b.onclick = () => { const [t, ok] = b.dataset.sab.split("-").map(Number); decide(t, !!ok); });
+  if(PH.on){
+    const roster = [0,1].map(t => teamPlayers(t).map(([pid,p]) => ({pid, name:p.name})));
+    pub("sabvote", {players:roster}); vc();
+    $("#sbauto").onclick = () => {
+      [0,1].forEach(t => {
+        const tally = {}; Object.values(votes).filter(v => v.team === t).forEach(v => tally[v.target] = (tally[v.target]||0) + 1);
+        const best = Object.entries(tally).sort((a,b)=>b[1]-a[1]); const top = best[0] && (!best[1] || best[0][1] > best[1][1]) ? best[0][0] : null;
+        const sab = (G.sab||[])[t]; const nm = pid => (PH.players[pid] && PH.players[pid].name) || "?";
+        const extra = `<p class="note" style="margin-top:6px">${top ? "Suspect désigné : " + esc(nm(top)) + ". " : "Pas de majorité. "}${sab ? "Le saboteur était " + esc(nm(sab)) + "." : "Pas de saboteur dans cette équipe."}</p>`;
+        decide(t, !!(sab && top === sab), extra);
+      });
+      $("#sbauto").disabled = true;
+    };
+  }
   $("#sbn").onclick = () => endGame(before);
 };
 
@@ -961,9 +1055,11 @@ RUN.finale = function(){
   const duel = [0,0]; if(lead !== 0){ duel[lead > 0 ? 0 : 1] = Math.abs(lead) >= 10 ? 2 : 1; }
   const qs = pickQ(14, true, {allLevels:true}); let i = 0;
   const show = () => {
-    const q = qs[i % qs.length]; let hand = null, tried = [false,false], answered = false;
+    const q = qs[i % qs.length]; let hand = null, tried = [false,false], answered = false; const rk = "f" + i;
+    const pubF = () => pub("buzz", {round:rk, open: hand === null && !answered, tried, hand: hand === null ? -1 : hand});
     CUR = { q,
       onBuzz:(t)=>{ if(hand === null && !answered && !tried[t]) take(t); },
+      onPhone:(ev)=>{ if(ev.type === "buzz" && ev.round === rk && hand === null && !answered && !tried[ev.team]) take(ev.team); },
       onKey:(k)=>{ if(k==="v" && hand !== null) judge(true); else if(k==="x" && hand !== null) judge(false); else if(k===" " && (answered || hand === null)) { answered ? next() : reveal(); } } };
     render(`${topbar("Le Coup de tampon · finale")}
     <div class="duel">${[0,1].map(t=>`<div class="lane t${t}" id="ln${t}">${avatar(t,44)}<strong style="font-size:clamp(15px,1.6vw,20px)">${esc(G.teams[t].name)}</strong><span class="pips">${[0,1,2,3,4].map(p=>`<span class="pip ${p<duel[t]?"on":""}"></span>`).join("")}</span></div>`).join("")}</div>
@@ -971,12 +1067,13 @@ RUN.finale = function(){
       <div class="qmeta"><span>Question ${i+1} · niveau ${q.n||1}</span><span class="timer" id="timer"></span></div>
       <p class="qtext">${esc(q.q)}</p>
       <div class="answers">${q.o.map((o,j)=>`<div class="ans c${j}" id="an${j}"><span class="let">${LETTERS[j]}</span><span>${esc(o)}</span></div>`).join("")}</div>
-      <p class="hand" id="hand">Buzzez ! <span class="kbd">A</span> ou <span class="kbd">P</span></p>
+      <p class="hand" id="hand">${PH.on ? "Buzzez sur vos téléphones !" : 'Buzzez ! <span class="kbd">A</span> ou <span class="kbd">P</span>'}</p>
       <p class="expl" id="fexp"></p>
     </div>
     <div class="row" style="justify-content:center" id="fctl"><button class="btn" id="fskip">Personne ne trouve : révéler <span class="kbd">Espace</span></button></div>`);
-    $("#fskip").onclick = reveal;
+    $("#fskip").onclick = () => reveal();
     startTimer(20, () => { if(hand === null) reveal(); });
+    pubF();
     function take(t){
       hand = t; stopTimer(); SFX.buzz(t);
       $("#ln"+t).classList.add("buzz");
@@ -984,6 +1081,7 @@ RUN.finale = function(){
       $("#fctl").innerHTML = `<button class="btn ok big" id="fv">Bonne réponse <span class="kbd">V</span></button><button class="btn no big" id="fx">Mauvaise <span class="kbd">X</span></button>`;
       $("#fv").onclick = () => judge(true); $("#fx").onclick = () => judge(false);
       startTimer(10, () => judge(false));
+      pubF();
       refreshRegie();
     }
     function judge(ok){
@@ -1007,13 +1105,14 @@ RUN.finale = function(){
       if(!silent) $("#hand").textContent = "Réponse :";
       $("#fctl").innerHTML = `<button class="btn big pink" id="fn">Question suivante <span class="kbd">Espace</span></button>`;
       $("#fn").onclick = next;
+      pubF();
       refreshRegie();
     }
     function next(){ i++; show(); }
     refreshRegie();
   };
   function win(t){
-    G.winner = t; addPts(t, 0);
+    G.winner = t; addPts(t, 0); pub("wait", {title:"Victoire : " + G.teams[t].name + " !", msg:"Le capitaine tamponne le PV"});
     CUR = { onKey:(k)=>{ if(k===" "||k==="Enter") endGame(before); } };
     render(`<div class="grow center" style="gap:30px">
       <h2 class="${TCLS[t]}" style="font-size:clamp(28px,4vw,52px)">${esc(G.teams[t].name)}, au tampon !</h2>
@@ -1033,6 +1132,7 @@ RUN.finale = function(){
 function screenEnd(){
   CUR = { onKey:(k)=>{ if(k==="Enter") { G = freshGame(); screenTitle(); } } };
   const w = G.winner ?? (G.teams[0].pts === G.teams[1].pts ? -1 : (G.teams[0].pts > G.teams[1].pts ? 0 : 1));
+  pub("end", {winner:w});
   render(`${topbar("Podium")}
   <div class="grow center" style="gap:24px">
     <span class="eyebrow">Le Complexe des Dunes peut ouvrir</span>
@@ -1040,6 +1140,220 @@ function screenEnd(){
     <div class="res">${[0,1].map(t=>`<div class="panel ${t?"glow-c":"glow-p"}"><div class="${t===w?"bounce":""}">${avatar(t, t===w?120:84)}</div><strong style="font-size:20px">${esc(G.teams[t].name)}</strong><span class="gain" style="color:${TCOL[t]}">${G.teams[t].pts}</span><span class="muted">points</span></div>`).join("")}</div>
     <div class="row" style="justify-content:center"><button class="btn big pink" data-act="again">Rejouer avec les mêmes équipes</button><button class="btn" data-act="newgame">Nouvelle partie</button></div>
   </div>`);
+}
+
+/* ============ MODE TÉLÉPHONE ============ */
+/* Configuration Firebase (Realtime Database) : à coller ici, voir le README. */
+const FIREBASE_CONFIG = null;
+const PARAMS = new URLSearchParams(location.search);
+const NET_LOCAL = PARAMS.get("net") === "local";      // test sur un seul ordinateur : ?net=local
+const PH = { want:false, on:false, net:null, code:"", players:{}, k:0 };
+const phoneAvailable = () => !!FIREBASE_CONFIG || NET_LOCAL;
+const CODE_ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+const newCode = () => Array.from({length:4}, () => CODE_ABC[Math.floor(Math.random()*CODE_ABC.length)]).join("");
+function loadScript(src){ return new Promise((ok, ko) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = ko; document.head.appendChild(s); }); }
+let FB_DB = null;
+async function fbDb(){
+  if(FB_DB) return FB_DB;
+  await loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js");
+  await loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-database-compat.js");
+  firebase.initializeApp(FIREBASE_CONFIG); FB_DB = firebase.database(); return FB_DB;
+}
+async function fbHost(code){
+  const db = await fbDb(); const room = db.ref("rooms/" + code);
+  await room.set({createdAt: firebase.database.ServerValue.TIMESTAMP});
+  const cursor = room.child("events").push().key;
+  return {
+    setState:(st) => room.child("state").set(st),
+    setPlayer:(pid, patch) => room.child("players/" + pid).update(patch),
+    onPlayers:(cb) => room.child("players").on("value", sn => cb(sn.val() || {})),
+    onEvent:(cb) => room.child("events").orderByKey().startAt(cursor).on("child_added", sn => cb(sn.val())),
+    close:() => { room.child("players").off(); room.child("events").off(); }
+  };
+}
+async function fbJoin(code){
+  const db = await fbDb(); const room = db.ref("rooms/" + code);
+  const ex = await room.child("createdAt").get(); if(!ex.exists()) throw new Error("absent");
+  return {
+    onState:(cb) => room.child("state").on("value", sn => cb(sn.val())),
+    onMe:(pid, cb) => room.child("players/" + pid).on("value", sn => cb(sn.val())),
+    setMe:(pid, o) => room.child("players/" + pid).update(o),
+    push:(ev) => room.child("events").push(ev)
+  };
+}
+function localHost(code){
+  const bc = new BroadcastChannel("af-" + code); let state = null, players = {}; const pcb = [], ecb = [];
+  const send = m => bc.postMessage(m); const fire = () => { send({k:"players", p:players}); pcb.forEach(f => f(players)); };
+  bc.onmessage = ({data:m}) => {
+    if(m.k === "hello"){ send({k:"state", s:state}); send({k:"players", p:players}); }
+    if(m.k === "me"){ players[m.pid] = {...(players[m.pid]||{}), ...m.o}; fire(); }
+    if(m.k === "ev") ecb.forEach(f => f(m.ev));
+  };
+  return { setState:(st) => { state = st; send({k:"state", s:st}); }, setPlayer:(pid, patch) => { players[pid] = {...(players[pid]||{}), ...patch}; fire(); },
+    onPlayers:(cb) => { pcb.push(cb); cb(players); }, onEvent:(cb) => ecb.push(cb), close:() => bc.close() };
+}
+function localJoin(code){
+  const bc = new BroadcastChannel("af-" + code); const scb = [], mcb = {};
+  bc.onmessage = ({data:m}) => { if(m.k === "state") scb.forEach(f => f(m.s)); if(m.k === "players") Object.entries(mcb).forEach(([pid, f]) => f((m.p||{})[pid] || null)); };
+  setTimeout(() => bc.postMessage({k:"hello"}), 60);
+  return { onState:(cb) => scb.push(cb), onMe:(pid, cb) => { mcb[pid] = cb; }, setMe:(pid, o) => bc.postMessage({k:"me", pid, o}), push:(ev) => bc.postMessage({k:"ev", ev}) };
+}
+async function phoneStart(){
+  PH.code = newCode(); PH.players = {}; PH.k = 0;
+  PH.net = NET_LOCAL ? localHost(PH.code) : await fbHost(PH.code);
+  PH.on = true;
+  PH.net.onPlayers(p => { PH.players = p || {}; [0,1].forEach(t => { const n = teamPlayers(t).length; if(n) G.teams[t].players = n; }); if(CUR && CUR.onPlayers) CUR.onPlayers(); });
+  PH.net.onEvent(ev => { if(!ev || !ev.type || !ev.pid) return; const p = PH.players[ev.pid]; if(!p) return; ev.team = +p.team; if(CUR && CUR.onPhone) CUR.onPhone(ev); });
+}
+function phoneStop(){ if(PH.net){ try{ PH.net.close(); }catch(e){} } PH.net = null; PH.on = false; }
+function joinURL(){ return location.origin + location.pathname + "?r=" + PH.code + (NET_LOCAL ? "&net=local" : ""); }
+function teamPlayers(t){ return Object.entries(PH.players || {}).filter(([,p]) => p && +p.team === t && p.name).sort((a,b) => (a[1].at||0) - (b[1].at||0)); }
+function pub(phase, data){
+  if(!PH.on || !PH.net) return;
+  PH.k++;
+  const st = JSON.parse(JSON.stringify({phase, k:PH.k, data:data||{}, teams:G.teams.map(t => ({name:t.name, emb:t.emb, pts:t.pts}))}));
+  try{ const r = PH.net.setState(st); if(r && r.catch) r.catch(()=>{}); }catch(e){}
+}
+function assignRoles(){
+  G.sab = [null, null];
+  if(!PH.on || !G.plan.includes("saboteur")) return;
+  [0,1].forEach(t => {
+    const tp = teamPlayers(t); tp.forEach(([pid]) => PH.net.setPlayer(pid, {role:"eq"}));
+    if(tp.length >= 2){ const pick = tp[Math.floor(Math.random()*tp.length)][0]; G.sab[t] = pick; PH.net.setPlayer(pick, {role:"sab"}); }
+  });
+}
+async function goTeams(){
+  if(PH.want && !PH.on){
+    if(!phoneAvailable()){ PH.want = false; }
+    else {
+      render(`${topbar("Connexion")}<div class="grow center"><p class="ph-big">Ouverture de la partie…</p></div>`);
+      try{ await phoneStart(); }
+      catch(e){
+        phoneStop();
+        render(`${topbar("Connexion")}<div class="grow center" style="gap:18px"><p class="ph-big">Impossible de joindre le serveur des téléphones.</p><p class="muted" style="max-width:56ch">Vérifiez la connexion internet de cet ordinateur, ou jouez sans téléphone.</p><div class="row" style="justify-content:center"><button class="btn big" data-act="goteams">Réessayer</button><button class="btn big pink" data-act="nophone">Jouer sans téléphone</button></div></div>`);
+        return;
+      }
+    }
+  }
+  if(!PH.want && PH.on) phoneStop();
+  screenTeams();
+}
+function screenJoinForm(){
+  CUR = null;
+  render(`<div class="ph" style="padding-top:6vh">
+    <span class="logo neon-p" style="font-size:40px">AVIS FAVORABLE !</span>
+    <label for="jcode" class="ph-big">Code de la partie</label>
+    <input type="text" id="jcode" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="ABCD" style="text-align:center;letter-spacing:.3em;font-size:34px;text-transform:uppercase">
+    <button class="btn big pink" id="jgo">Rejoindre</button>
+    <button class="btn ghost" data-act="home">Retour</button>
+  </div>`);
+  const go = () => { const c = $("#jcode").value.toUpperCase().replace(/[^A-Z]/g, ""); if(c.length === 4) location.href = location.pathname + "?r=" + c + (NET_LOCAL ? "&net=local" : ""); };
+  $("#jgo").onclick = go; $("#jcode").onkeydown = e => { if(e.key === "Enter") go(); };
+  $("#jcode").focus();
+}
+
+/* ---- Écran du joueur, sur téléphone ---- */
+function phoneApp(code){
+  code = (code || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
+  document.title = "Avis Favorable ! · " + code;
+  const app = $("#app");
+  let pid = NET_LOCAL ? PARAMS.get("pid") : null; if(!pid){ try{ pid = localStorage.getItem("af-pid-" + code); }catch(e){} }
+  if(!pid){ pid = Math.random().toString(36).slice(2, 10); try{ localStorage.setItem("af-pid-" + code, pid); }catch(e){} }
+  let net = null, S = null, me = null, joinTeam = null; const my = {};
+  const P = h => { app.innerHTML = `<div class="ph">${h}</div>`; };
+  const send = ev => { if(!net) return; try{ const r = net.push({...ev, pid, at:Date.now()}); if(r && r.catch) r.catch(()=>{}); }catch(e){} try{ navigator.vibrate && navigator.vibrate(30); }catch(e){} };
+  const logo = `<span class="logo neon-p" style="font-size:34px;margin-top:4vh">AVIS FAVORABLE !</span>`;
+  const retry = msg => P(`${logo}<p class="ph-big">${msg}</p><button class="btn big pink" data-ph="home">Saisir un autre code</button>`);
+  if(code.length !== 4) return screenJoinForm();
+  if(!phoneAvailable()) return retry("Le mode téléphone n'est pas encore configuré sur ce site.");
+  P(`${logo}<p class="ph-big">Connexion à la partie ${esc(code)}…</p>`);
+  (NET_LOCAL ? Promise.resolve(localJoin(code)) : fbJoin(code)).then(n => {
+    net = n; net.onMe(pid, v => { me = v; draw(); }); net.onState(st => { S = st; draw(); }); draw();
+  }).catch(() => retry(`Partie ${esc(code)} introuvable. Vérifiez le code affiché à l'écran.`));
+
+  app.addEventListener("click", e => {
+    const b = e.target.closest("[data-ph]"); if(!b || b.disabled) return;
+    const [k, a, c] = b.dataset.ph.split(":"); const d = (S && S.data) || {};
+    if(k === "home"){ location.href = location.pathname + (NET_LOCAL ? "?net=local" : ""); return; }
+    if(k === "team"){ joinTeam = +a; draw(); return; }
+    if(k === "join"){ const n = ($("#pname").value || "").trim().slice(0, 18); if(!n || joinTeam === null){ $("#pmsg").textContent = "Choisissez votre équipe et tapez votre prénom."; return; } net.setMe(pid, {name:n, team:joinTeam, at:Date.now()}); me = {...(me||{}), name:n, team:joinTeam}; draw(); return; }
+    if(k === "ans"){ my[d.round] = +a; send({type:"ans", round:d.round, a:+a}); draw(); return; }
+    if(k === "bet"){ send({type:"bet", round:d.round, slot:+a, d:c === "+" ? 1 : -1}); return; }
+    if(k === "hit" || k === "pass" || k === "foul"){ send({type:k, ci:d.ci}); return; }
+    if(k === "vote"){ my["vote"] = a; send({type:"vote", target:a}); draw(); return; }
+    if(k === "buzz"){ my["buzz" + d.round] = 1; send({type:"buzz", round:d.round}); draw(); return; }
+  });
+  const showSecret = on => { const el = $("#sec"); if(!el || !me) return; el.innerHTML = on ? (me.role === "sab" ? "Tu es le SABOTEUR. Fais perdre ton équipe sans te faire repérer. Si personne ne te démasque, tu gagnes le titre de Cabinet de complaisance." : "Tu es un équipier loyal. Un saboteur se cache peut-être parmi vous…") : "Maintiens le doigt ici pour voir ta mission secrète"; };
+  app.addEventListener("pointerdown", e => { if(e.target.closest("#sec")) showSecret(true); });
+  ["pointerup","pointercancel","pointerleave"].forEach(ev => app.addEventListener(ev, () => showSecret(false)));
+
+  function joinForm(){
+    const teams = (S && S.teams) || [{name:"Équipe 1"}, {name:"Équipe 2"}];
+    P(`${logo}<p class="muted" style="text-align:center">Partie ${esc(code)}</p>
+      <label for="pname" class="ph-big" style="font-size:22px">Ton prénom</label>
+      <input type="text" id="pname" maxlength="18" autocomplete="off" value="${esc((me && me.name) || "")}">
+      <span class="ph-big" style="font-size:22px">Ton équipe</span>
+      ${[0,1].map(t => `<button class="btn big" data-ph="team:${t}" style="border-color:${TCOL[t]};${joinTeam===t ? `box-shadow:0 0 22px ${TCOL[t]};color:${TCOL[t]}` : ""}">${esc(teams[t].name)}</button>`).join("")}
+      <button class="btn big pink" data-ph="join">C'est parti !</button><p class="note" id="pmsg" role="status"></p>`);
+  }
+  function wait(title, msg, rules){
+    return `<p class="ph-big" style="margin-top:3vh">${esc(title)}</p>${msg ? `<p class="muted" style="text-align:center;font-size:18px">${esc(msg)}</p>` : ""}
+      ${rules && rules.length ? `<div class="panel"><ul style="margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px;font-size:17px;line-height:1.4">${rules.map(r => `<li>${esc(r)}</li>`).join("")}</ul></div>` : ""}`;
+  }
+  function draw(){
+    if(!net) return;
+    if(!me || me.team === undefined || me.team === null || !me.name){
+      const nm = $("#pname") ? $("#pname").value : null; joinForm(); if(nm !== null) $("#pname").value = nm; return;
+    }
+    const t = +me.team, teams = (S && S.teams) || [{name:"Équipe 1", pts:0}, {name:"Équipe 2", pts:0}], T = teams[t] || {name:"", pts:0};
+    const ph = S ? S.phase : "lobby", d = (S && S.data) || {};
+    let body = "";
+    if(ph === "lobby") body = wait("Tu es dans l'équipe !", "La partie va commencer. Regarde l'écran.");
+    else if(ph === "vote" || ph === "reveal"){
+      const mine = my[d.round], o = d.o || [];
+      if(ph === "reveal"){
+        const ok = mine === d.c;
+        body = `<p class="ph-big">${mine === undefined ? "Pas de réponse" : ok ? "Bonne réponse ! +1" : "Raté !"}</p><p class="muted" style="text-align:center">${esc(d.q)}</p>
+          <div class="ph-ans">${o.map((x,j) => `<div class="ans c${j} ${j===d.c ? "good" : "dim"}"><span class="let">${LETTERS[j]}</span><span>${esc(x)}</span></div>`).join("")}</div>`;
+      } else {
+        body = `<p class="ph-big" style="font-size:22px">${esc(d.q)}</p><div class="ph-ans">${o.map((x,j) => `<button class="ans c${j} ${mine===j ? "sel" : ""}" data-ph="ans:${j}"><span class="let">${LETTERS[j]}</span><span>${esc(x)}</span></button>`).join("")}</div>
+          <p class="muted" style="text-align:center">${mine === undefined ? "Touche ta réponse." : "Réponse " + LETTERS[mine] + " envoyée. Tu peux changer jusqu'à la révélation."}</p>`;
+      }
+    }
+    else if(ph === "money"){
+      const o = d.o || [], bets = (d.bets || [[],[]])[t] || [], bank = (d.bank || [10,10])[t] || 0, used = bets.reduce((a,b) => a + (b||0), 0);
+      body = `<p class="ph-big" style="font-size:21px">${esc(d.q)}</p>
+        ${d.opened ? `<p class="ph-big">${(bets[d.c]||0)} jeton${(bets[d.c]||0) > 1 ? "s" : ""} sauvé${(bets[d.c]||0) > 1 ? "s" : ""}</p>` : `<p class="live" style="text-align:center">Jetons à placer : ${bank - used}</p>`}
+        <div class="ph-ans">${o.map((x,j) => `<div class="ph-row c${j}" style="${d.opened ? (j===d.c ? "box-shadow:0 0 20px var(--c)" : "opacity:.3") : ""}"><span class="let" style="font-weight:700;color:var(--c)">${LETTERS[j]}</span><span class="t">${esc(x)}</span>${d.opened ? "" : `<button aria-label="Retirer un jeton" data-ph="bet:${j}:-">−</button>`}<span class="n">${bets[j]||0}</span>${d.opened ? "" : `<button aria-label="Ajouter un jeton" data-ph="bet:${j}:+">+</button>`}</div>`).join("")}</div>
+        ${d.opened ? "" : `<p class="note" style="text-align:center">Toute l'équipe peut placer les jetons. Laissez au moins une trappe vide.</p>`}`;
+    }
+    else if(ph === "tabou"){
+      const isSp = d.speaker === pid;
+      if(!d.active) body = wait(isSp ? "C'est toi qui fais deviner !" : "Tabou : tour de " + ((teams[d.turn]||{}).name || ""), isSp ? "La carte s'affichera ici quand l'animateur lance le chrono." : (d.spName ? d.spName + " va faire deviner." : ""));
+      else if(isSp) body = `<div class="panel tabou-card ${d.turn ? "glow-c" : "glow-p"}" style="margin:0 auto"><span class="tabou-word">${esc(d.word)}</span><div class="forbid">${(d.f||[]).map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
+        <div class="row" style="justify-content:center"><button class="btn big ok" data-ph="hit">Trouvé !</button><button class="btn big" data-ph="pass">Passer</button></div><p class="live" style="text-align:center">Trouvés : ${d.found||0}</p>`;
+      else if(t === d.turn) body = wait("Devine à voix haute !", (d.spName || "Ton coéquipier") + " te fait deviner un mot. Trouvés : " + (d.found||0));
+      else body = `<p class="ph-big">Écoute bien ${esc(d.spName || "l'orateur")}…</p><button class="foul" data-ph="foul">Mot interdit !</button><p class="note" style="text-align:center">Appuie seulement si tu entends un mot barré : −1 pour l'autre équipe.</p>`;
+    }
+    else if(ph === "desam") body = d.team === t ? `<p class="ph-big" style="margin-top:3vh">Ton équipe est au PC sécurité</p><p class="muted" style="text-align:center;font-size:18px">Tourne le dos à l'écran et guide l'opérateur avec le manuel.</p><a class="btn big cyan" href="${MANUEL_URL}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">Ouvrir le manuel</a>` : wait("L'autre équipe est au PC sécurité", "Silence dans la salle !");
+    else if(ph === "sabvote"){
+      const list = ((d.players || [[],[]])[t] || []).filter(p => p.pid !== pid);
+      body = `<p class="ph-big">Qui est le saboteur ?</p><div class="ph-ans">${list.map(p => `<button class="btn big" data-ph="vote:${p.pid}" style="${my.vote === p.pid ? "border-color:var(--amber);color:var(--amber);box-shadow:0 0 18px rgba(255,201,60,.5)" : ""}">${esc(p.name)}</button>`).join("") || `<p class="muted">Pas d'autre joueur dans ton équipe.</p>`}</div>
+        <p class="muted" style="text-align:center">${my.vote ? "Vote enregistré. Tu peux changer d'avis jusqu'au dépouillement." : "Discutez, puis votez."}</p>`;
+    }
+    else if(ph === "buzz"){
+      const tried = d.tried || [false,false];
+      if(d.hand === t) body = wait("Ton équipe a la main !", "Répondez à voix haute.");
+      else if(d.hand === 0 || d.hand === 1) body = wait("L'autre équipe a la main", "Attends la suite…");
+      else body = `<p class="ph-big">${tried[t] ? "Ton équipe a déjà répondu" : d.open ? "Buzze dès que tu connais la réponse !" : "Regarde l'écran"}</p><button class="buzzer" style="--tc:${TCOL[t]}" data-ph="buzz" ${(!d.open || tried[t]) ? "disabled" : ""}>BUZZ</button>`;
+    }
+    else if(ph === "end"){
+      body = `<p class="ph-big" style="margin-top:3vh">${d.winner === t ? "Victoire !" : d.winner === -1 ? "Égalité !" : "Bien joué !"}</p>${teams.map((x,j) => `<div class="score t${j}"><span class="name">${esc(x.name)}</span><span class="pts">${x.pts||0}</span></div>`).join("")}<p class="muted" style="text-align:center">Le Complexe des Dunes peut ouvrir. Merci d'avoir joué !</p>`;
+    }
+    else body = wait(d.title || "Regarde l'écran", d.msg || "", d.rules);
+    const secret = me.role && (ph === "lobby" || ph === "wait") ? `<div class="secret" id="sec">Maintiens le doigt ici pour voir ta mission secrète</div>` : "";
+    P(`<div class="ph-head"><span class="ph-team" style="--tc:${TCOL[t]}">${esc(T.name)} · ${T.pts||0} pts</span><span class="muted">${esc(me.name)}</span></div>${body}${secret}`);
+  }
 }
 
 /* ============ RÉGIE ============ */
@@ -1058,15 +1372,17 @@ function refreshRegie(){
 /* ============ ACTIONS & ENTRÉES ============ */
 const ACT = {
   home:()=>{ $("#regie").hidden = true; screenTitle(); },
-  preset:()=>{ G.plan = PRESET.slice(); G.saboteur = true; G.themes = []; G.level = "ca"; screenTeams(); },
-  compose:screenCompose, toteams:()=>{ if(!G.plan.length){ return; } screenTeams(); },
+  preset:()=>{ G.plan = PRESET.slice(); G.saboteur = true; G.themes = []; G.level = "ca"; goTeams(); },
+  compose:screenCompose, toteams:()=>{ if(!G.plan.length){ return; } goTeams(); },
+  mode0:()=>{ PH.want = false; screenTitle(); }, mode1:()=>{ PH.want = true; screenTitle(); },
+  joinform:screenJoinForm, goteams:goTeams, nophone:()=>{ PH.want = false; goTeams(); },
   bank:screenBank, kit:screenKit,
   resetbank:()=>{ if(TOURNEE){ BANK = TOURNEE; BANK_SRC = "tournee"; } else { BANK = DEMO_Q.map((r,i)=>({id:"d"+i,t:r[0],n:r[1],q:r[2],o:r[3],c:0,e:r[4]})); BANK_SRC = "demo"; } G.used = []; try{ localStorage.removeItem("af-bank"); }catch(e){} screenBank(); },
-  start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; SFX.go(); screenBoard(); },
+  start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.tabIdx = [0,0]; assignRoles(); SFX.go(); screenBoard(); },
   launch, board:()=>{ $("#regie").hidden = true; screenBoard(); },
   skip:()=>{ $("#regie").hidden = true; if(G.step < G.plan.length){ G.step++; } screenBoard(); },
-  again:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.used = []; screenBoard(); },
-  newgame:()=>{ G = freshGame(); screenTitle(); },
+  again:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.used = []; G.tabIdx = [0,0]; assignRoles(); screenBoard(); },
+  newgame:()=>{ G = freshGame(); phoneStop(); screenTitle(); },
   regie:()=>{ const r = $("#regie"); r.hidden = !r.hidden; refreshRegie(); },
   sound:()=>{ SOUND = !SOUND; const b = $("#sndbtn"); if(b) b.textContent = SOUND ? "Son : oui" : "Son : non"; },
   full:()=>{ try{ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }catch(e){} }
@@ -1094,11 +1410,12 @@ const padPrev = [false,false];
 
 /* Démarrage (et reprise après mise à jour de la page) */
 function boot(data){
-  if(data && data.G){ G = data.G; screenBoard(); } else screenTitle();
+  if(PARAMS.get("r")) return phoneApp(PARAMS.get("r"));
+  if(data && data.G && !PH.on){ G = data.G; screenTitle(); } else screenTitle();
 }
 window.claude?.hot?.snapshot?.(() => ({ G }));
 window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
-loadTournee();
+if(!PARAMS.get("r")) loadTournee();
 </script>
 
 </body>
