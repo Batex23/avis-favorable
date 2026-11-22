@@ -16,10 +16,12 @@ Séance collective de 45 min à 1 h, de 6 à 12 joueurs, du chef d'agrès au PRV
 - **Money Drop** : 10 jetons à répartir, les mauvaises réponses tombent dans la trappe.
 - **Guerre des lances** (avec téléphones) : bataille en 2D vue de dessus dans le Complexe des Dunes. Joystick et bouton « Arroser » sur le téléphone, foyers à éteindre (+2), adversaires à tremper (+1, gelés 3 s), réserve d'eau à recharger aux poteaux incendie en répondant aux questions.
 - **Désamorçage** : un opérateur face au tableau SSI, son équipe dos à l'écran avec le manuel du PC sécurité.
-- **Le Saboteur** : un traître caché par équipe, à démasquer avant la finale.
-- **Le Coup de tampon** (finale) : duel au buzzer, le capitaine gagnant tamponne le PV.
+- **Fausse piste** : lire le SSI, le confronter au plan d'intervention (qui peut être faux) et aux indices, trouver le vrai local, repérer les erreurs, choisir où engager le premier engin.
+- **Le Tribunal** : le juge examine le registre de sécurité après un incendie ; la traçabilité des actions sur le SSI.
+- **Le Saboteur (fil rouge)** : un joueur par équipe travaille en secret pour l'adversaire, avec un contrat à chaque épreuve. Révélation après la finale : démasqué, +3 pour son équipe ; sinon chaque contrat réussi rapporte 2 points à l'adversaire. Sans téléphone : `cartes.html`, à imprimer.
+- **Le Coup de tampon** (finale) : duel au buzzer, le capitaine gagnant tamponne le PV et gagne +5. Le podium se fait aux points.
 
-À venir : Premier sur les lieux, le Tribunal.
+Toujours disponible dans « Composer ma séance » : le Désamorçage (manipulation du tableau SSI, avec `manuel.html`).
 
 ## Mode test concepteur
 
@@ -41,9 +43,10 @@ Des buzzers USB réglés sur les touches A et P fonctionnent directement.
 
 - `index.html` : le jeu.
 - `manuel.html` : le manuel du PC sécurité pour le Désamorçage, à imprimer en 2 exemplaires ou à ouvrir sur téléphone (QR code dans le jeu).
+- `cartes.html` : les cartes du Saboteur pour le mode sans téléphone.
 - `questions.json` : la banque de questions, reprise de La Tournée du Préventionniste. Les questions sont à faire valider par un PRV2.
 
-Un formateur peut aussi importer son propre fichier CSV depuis le menu « Banque de questions ».
+Dans « Banque de questions », le formateur peut ajouter ses propres questions directement dans l'interface (enregistrées dans le navigateur, exportables en CSV) ou importer un fichier CSV.
 
 ## Mode téléphone : Firebase
 
