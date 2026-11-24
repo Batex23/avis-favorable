@@ -1,10 +1,4 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Avis Favorable ! Le jeu télé de la prévention incendie, en équipe, à projeter.">
-<title>Avis Favorable !</title>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Avis Favorable !</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Monoton&family=Chakra+Petch:wght@400;500;600;700&display=swap">
@@ -385,9 +379,7 @@ body.admin #app{margin-right:min(540px,45vw)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 </style>
 
-</head>
-<body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head><body><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <div id="app" aria-live="polite"></div>
 <div id="overlay" hidden><div class="cd neon-p" id="cdtext"></div></div>
 <aside id="regie" hidden aria-label="Régie de l'animateur"></aside>
@@ -626,13 +618,16 @@ function addPts(t, n){
 function topbar(label){
   return `<div class="top"><span class="mini neon-p">Avis Favorable !</span><span class="eyebrow">${label||""}</span><span class="tools">${PH.on ? `<span class="codepill" title="Code de la partie pour les téléphones">Code ${PH.code}</span>` : ""}<button class="btn ghost" data-act="regie">Régie <span class="kbd">R</span></button><button class="btn ghost" data-act="sound" id="sndbtn">${SOUND?"Son : oui":"Son : non"}</button><button class="btn ghost" data-act="full">Plein écran</button></span></div>`;
 }
-function stopTimer(){ if(TIMER){ clearInterval(TIMER); TIMER = null; } }
+let TCTL = null;
+function stopTimer(){ if(TIMER){ clearInterval(TIMER); TIMER = null; } TCTL = null; }
+function addTime(s){ if(CUR && CUR.addTime){ CUR.addTime(s); SFX.blip(); } else if(TCTL){ TCTL.add(s); SFX.blip(); } }
 function startTimer(sec, onEnd){
   stopTimer(); let left = sec; const el = () => $("#timer");
   const draw = () => { const e = el(); if(e){ e.textContent = left + " s"; e.classList.toggle("low", left <= 5); } };
   draw();
   TIMER = setInterval(()=>{ left--; if(left <= 5 && left > 0) SFX.tick(); draw(); if(left <= 0){ stopTimer(); onEnd && onEnd(); } }, 1000);
-  return { add:(s)=>{ left += s; draw(); } };
+  TCTL = { add:(s)=>{ left = Math.max(1, left + s); draw(); } };
+  return TCTL;
 }
 function countdown(done){
   const ov = $("#overlay"), tx = $("#cdtext"); ov.hidden = false;
@@ -947,7 +942,7 @@ const HOWTO = {
           ctl:[["+ / −","Placer les jetons (l'animateur clique)"],["Espace","Ouvrir les trappes"]],
           rulesP:["Chaque équipe reçoit 10 jetons pour la manche.","Placez vos jetons ensemble depuis vos téléphones, en laissant au moins une trappe vide.","Les jetons posés sur les mauvaises réponses tombent dans la trappe.","Les jetons restants à la fin deviennent des points."],
           ctlP:[["Téléphone","+ / − sur chaque réponse"],["Espace","Ouvrir les trappes (animateur)"]] },
-  lances:{ rules:["Chaque joueur dirige un pompier dans le Complexe des Dunes avec son téléphone.","Arrosez les foyers pour les éteindre (+2) et arrosez les adversaires pour les tremper (+1) : un joueur trempé est gelé 3 secondes.","Votre réserve d'eau est limitée. Pour la remplir, allez à un poteau incendie (rouge) et répondez aux questions : chaque bonne réponse recharge la lance.","Attention : au poteau, vous êtes immobile. 2 min 30 de bataille."],
+  lances:{ rules:["Chaque joueur dirige un pompier dans le Complexe des Dunes avec son téléphone.","Arrosez les foyers pour les éteindre (+2) et arrosez les adversaires pour les tremper (+1) : un joueur trempé est gelé 3 secondes.","Votre réserve d'eau est limitée. Pour la remplir, allez à un poteau incendie (rouge) et répondez aux questions : chaque bonne réponse recharge la lance.","Entrez dans le cercle rouge d'un poteau quand votre réserve est basse : vous restez immobile jusqu'à la réserve pleine ou « Quitter le poteau ». Pour y revenir, éloignez-vous d'abord."],
           ctl:[["Joystick","Se déplacer (gauche du téléphone)"],["Arroser","Maintenir le bouton bleu"],["Poteau","Répondre aux questions pour recharger"]] },
   faussepiste:{ rules:["Le SSI signale un feu au Complexe des Dunes. L'écran montre le message de l'ECS, le plan d'intervention et trois indices.","Attention : le plan ou le SSI peut être faux. Croisez les informations avant de décider.","Par intervention : où est vraiment le feu (+2), quelles informations sont fausses (+1 par erreur trouvée, −1 par erreur inventée), où engager le premier engin (+2).","Deux interventions. Chaque équipe annonce ses choix à l'animateur."],
           ctl:[["Clic","L'animateur saisit le choix de chaque équipe"],["Espace","Révéler, puis suite"]],
@@ -972,7 +967,10 @@ const HOWTO = {
 /* Niveaux : choisis sur la carte « Comment jouer » de chaque épreuve */
 const LEVELS = [["decouverte","Découverte"],["ca","Chef d'agrès"],["prv2","PRV2"],["mix","Tous niveaux"]];
 const TF = () => ({decouverte:1.3, ca:1, prv2:0.75, mix:1})[G.level] || 1;
-const secs = n => Math.round(n * TF());
+const TIMES = [[0.75,"Court"],[1,"Normal"],[1.5,"Long"],[2,"Très long"]];
+const secs = n => Math.max(5, Math.round(n * TF() * (G.timeMul || 1)));
+const DURB = {coins:[20,"par question"], tabou:[60,"par tour"], money:[45,"par question"], lances:[150,"de bataille"], desamorcage:[90,"par alarme"], faussepiste:[45,"par question"], tribunal:[45,"par question"], finale:[20,"pour buzzer"]};
+const fmtS = n => n >= 90 ? Math.floor(n/60) + " min" + (n % 60 ? " " + String(n % 60).padStart(2,"0") : "") : n + " s";
 const LVFX = {
   coins:"Niveau des questions et temps de réponse.",
   tabou:"Nombre de mots interdits (3, 4 ou 5) et durée du tour.",
@@ -997,6 +995,7 @@ function screenHowto(k){
   <div class="grow center" style="gap:clamp(14px,2.4vh,28px)">
     <div style="color:var(--amber)">${gameIcon(k,72)}</div>
     <h2 class="neon-p" style="font-size:clamp(34px,5vw,68px)">${esc(GAMES[k].nom)}</h2>
+    <div class="center" style="gap:6px"><div class="modes" role="group" aria-label="Durée des chronos"><span class="muted" style="align-self:center">Chrono</span>${TIMES.map(([v,n]) => `<button class="btn" aria-pressed="${(G.timeMul || 1) === v}" data-tm="${v}">${n}</button>`).join("")}</div>${DURB[k] ? `<span class="note">Soit ${fmtS(k === "lances" ? Math.round(DURB[k][0] * (G.timeMul || 1)) : secs(DURB[k][0]))} ${DURB[k][1]}. En cours de jeu : touches <span class="kbd">+</span> et <span class="kbd">−</span> pour ajouter ou retirer 15 s.</span>` : ""}</div>
     <div class="center" style="gap:6px"><div class="modes" role="group" aria-label="Niveau de l'épreuve">${LEVELS.map(([v,n]) => `<button class="btn" aria-pressed="${G.level === v}" data-lv="${v}">${n}</button>`).join("")}</div><span class="note">Le niveau change : ${esc(LVFX[k] || "le niveau des questions.")}</span></div>
     <div class="howto">
       <div class="panel glow-p" style="text-align:left"><ul>${h.rules.map(r=>`<li>${r}</li>`).join("")}</ul></div>
@@ -1006,6 +1005,7 @@ function screenHowto(k){
     <button class="btn big pink" id="gobtn">Prêts ? <span class="kbd">Espace</span></button>
   </div>`);
   $("#gobtn").onclick = go;
+  document.querySelectorAll("[data-tm]").forEach(b => b.onclick = () => { G.timeMul = +b.dataset.tm; SFX.blip(); screenHowto(k); });
   document.querySelectorAll("[data-lv]").forEach(b => b.onclick = () => { G.level = b.dataset.lv; SFX.blip(); screenHowto(k); });
   if(h.qr){ try{ new QRCode($("#qrbox"), {text:MANUEL_URL, width:140, height:140, correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const b = $("#qrbox"); if(b) b.hidden = true; } }
 }
@@ -1167,7 +1167,7 @@ const ARENA = {
     [0,440,200,20],[330,440,200,20],[1090,420,200,20],[1430,420,170,20],
     [700,130,200,50],[640,620,60,60],[900,620,60,60]],
   rooms:[["Hall d'accueil",265,225],["Cuisine",265,680],["Salle de spectacle",800,90],["Restaurant",1340,210],["Hôtel",1340,690]],
-  hyd:[[70,830],[1530,70],[800,470],[1530,830],[70,70]],
+  hyd:[[120,790],[1480,110],[800,470],[1480,790],[120,110]],
   fires:[[265,620],[800,260],[1300,250],[1350,720],[300,250],[820,760],[1200,620],[600,450]],
   spawn:[[260,330],[1340,560],[300,720],[1340,170]]
 };
@@ -1198,7 +1198,7 @@ function lineFree(ax, ay, bx, by){ const d = Math.hypot(bx-ax, by-ay), n = Math.
 RUN.lances = function(){
   const before = G.teams.map(t=>t.pts);
   if(!PH.on){ return endGame(before); }
-  const DUR = 150, MAXW = ({decouverte:12, prv2:7})[G.level] || 10, REFILL = ({decouverte:5, prv2:3})[G.level] || 4, R0 = 22;
+  const DUR = Math.round(150 * (G.timeMul || 1)), MAXW = ({decouverte:12, prv2:7})[G.level] || 10, REFILL = ({decouverte:5, prv2:3})[G.level] || 4, R0 = 22;
   const P = {}; let t0 = performance.now(), last = t0, left = DUR, over = false, lastPub = 0, lastSig = "";
   const drops = [], feed = []; const fires = []; const score = TT().map(()=>0);
   TT().forEach(t => teamPlayers(t).forEach(([pid,p], i) => { const [sx,sy] = ARENA.spawn[t]; P[pid] = {pid, team:t, name:p.name, x:sx + (i%3)*50 - 50, y:sy + Math.floor(i/3)*55, fx: t % 2 ? -1 : 1, fy:0, ix:0, iy:0, fire:false, w:MAXW, fz:0, inv:0, q:null, hy:-1, cool:0, wrong:0, acc:0, ai:{}}; }));
@@ -1206,13 +1206,18 @@ RUN.lances = function(){
   addFire(); addFire(); addFire();
   const say = (txt, t) => { feed.unshift({txt, t, at:performance.now()}); feed.length = Math.min(feed.length, 5); };
   const newQ = (pl) => { const q = pickQ(1, false, {})[0]; pl.q = {...q, k:Math.random().toString(36).slice(2,7)}; };
-  CUR = { onInput:(pid, o) => { const pl = P[pid]; if(!pl || isBot(pid)) return; pl.ix = Math.max(-1, Math.min(1, +o.x || 0)); pl.iy = Math.max(-1, Math.min(1, +o.y || 0)); pl.fire = !!o.f; },
-    onPhone:(ev) => { const pl = P[ev.pid]; if(!pl) return; if(ev.type === "lq" && pl.q && ev.k === pl.q.k) answer(pl, +ev.a); if(ev.type === "leave"){ pl.q = null; pl.hy = -1; pl.cool = 2; } },
+  const JOY_DZ = .22, JOY_CURVE = 1.7;
+  CUR = { onInput:(pid, o) => { const pl = P[pid]; if(!pl || isBot(pid)) return;
+      let x = Math.max(-1, Math.min(1, +o.x || 0)), y = Math.max(-1, Math.min(1, +o.y || 0)); const m = Math.min(1, Math.hypot(x, y));
+      if(m < JOY_DZ){ x = 0; y = 0; } else { const k = Math.pow((m - JOY_DZ)/(1 - JOY_DZ), JOY_CURVE) / m; x *= k; y *= k; }
+      pl.ix = x; pl.iy = y; pl.fire = !!o.f; },
+    addTime:(s) => { t0 += s*1000; },
+    onPhone:(ev) => { const pl = P[ev.pid]; if(!pl) return; if(ev.type === "lq" && pl.q && ev.k === pl.q.k) answer(pl, +ev.a); if(ev.type === "leave"){ pl.q = null; pl.hy = -1; pl.armed = false; } },
     onKey:(k) => { if(over && (k === " " || k === "Enter")) endGame(before); } };
   function answer(pl, a){
     if(a === pl.q.c){ pl.w = Math.min(MAXW, pl.w + REFILL); SFX.good(); } else { pl.wrong = 1.5; SFX.bad(); }
     pl.q = null;
-    if(pl.w >= MAXW){ pl.hy = -1; pl.cool = 1.5; }
+    if(pl.w >= MAXW){ pl.hy = -1; pl.armed = false; }
   }
   render(`${topbar("Guerre des lances")}
   <div class="row" style="justify-content:space-between;flex-wrap:nowrap">
@@ -1250,19 +1255,21 @@ RUN.lances = function(){
       for(const pl of Object.values(P)){
         if(isBot(pl.pid)) bot(pl, dt);
         pl.fz = Math.max(0, pl.fz - dt); pl.inv = Math.max(0, pl.inv - dt); pl.cool = Math.max(0, pl.cool - dt); pl.wrong = Math.max(0, pl.wrong - dt);
-        const hIdx = ARENA.hyd.findIndex(([hx,hy]) => Math.hypot(hx-pl.x, hy-pl.y) < 55);
-        if(pl.q || (pl.hy >= 0 && hIdx === pl.hy && pl.w < MAXW)){
-          // au poteau : immobile ; on peut partir en poussant le joystick
-          const push = Math.hypot(pl.ix, pl.iy) > .6;
-          pl.acc = push ? pl.acc + dt : 0;
-          if(pl.acc > .5){ pl.q = null; pl.hy = -1; pl.cool = 2; pl.acc = 0; }
-          else { if(!pl.q && pl.wrong <= 0) newQ(pl); pl.fire = false; continue; }
+        const hDist = ARENA.hyd.map(([hx,hy]) => Math.hypot(hx-pl.x, hy-pl.y));
+        const hIdx = hDist.findIndex(d => d < 46);
+        if(Math.min(...hDist) > 95) pl.armed = true;            // il faut s'éloigner du poteau avant qu'il se déclenche à nouveau
+        if(pl.hy >= 0){
+          // au poteau : immobile, questions jusqu'à la réserve pleine ou « Quitter le poteau »
+          if(pl.w >= MAXW){ pl.q = null; pl.hy = -1; pl.armed = false; }
+          else { if(!pl.q && pl.wrong <= 0) newQ(pl); pl.fire = false; pl.vx = pl.vy = 0; continue; }
         }
-        if(hIdx >= 0 && pl.w < MAXW && pl.cool <= 0 && pl.fz <= 0 && !pl.q){ pl.hy = hIdx; newQ(pl); continue; }
+        if(hIdx >= 0 && pl.armed !== false && pl.w < MAXW * .7 && pl.fz <= 0){ pl.hy = hIdx; pl.armed = false; const [hx,hy] = ARENA.hyd[hIdx]; const a = Math.atan2(pl.y-hy, pl.x-hx); pl.x = hx + Math.cos(a)*40; pl.y = hy + Math.sin(a)*40; newQ(pl); continue; }
         if(pl.fz > 0) continue;
-        const m = Math.hypot(pl.ix, pl.iy);
-        if(m > .1){ const sp = 270 * Math.min(1, m); const nx = pl.x + pl.ix/m*sp*dt*Math.min(1,m), ny = pl.y + pl.iy/m*sp*dt*Math.min(1,m);
-          if(!wallHit(nx, pl.y, R0)) pl.x = nx; if(!wallHit(pl.x, ny, R0)) pl.y = ny; pl.fx = pl.ix/m; pl.fy = pl.iy/m; }
+        const lerp = Math.min(1, dt * 7); pl.vx = (pl.vx || 0) + (pl.ix - (pl.vx || 0)) * lerp; pl.vy = (pl.vy || 0) + (pl.iy - (pl.vy || 0)) * lerp;
+        const m = Math.hypot(pl.vx, pl.vy);
+        if(m > .03){ const sp = 230; const nx = pl.x + pl.vx*sp*dt, ny = pl.y + pl.vy*sp*dt;
+          if(!wallHit(nx, pl.y, R0)) pl.x = nx; if(!wallHit(pl.x, ny, R0)) pl.y = ny; }
+        const im = Math.hypot(pl.ix, pl.iy); if(im > .3){ pl.fx = pl.ix/im; pl.fy = pl.iy/im; }
         pl.sh = (pl.sh || 0) - dt;
         if(pl.fire && pl.w > 0 && pl.sh <= 0){ pl.sh = .07; pl.w = Math.max(0, pl.w - .1);
           const sprd = (Math.random()-.5)*.18, c = Math.cos(sprd), s2 = Math.sin(sprd); const dx = pl.fx*c - pl.fy*s2, dy = pl.fx*s2 + pl.fy*c;
@@ -1274,7 +1281,7 @@ RUN.lances = function(){
       for(let i = drops.length - 1; i >= 0; i--){
         const d = drops[i]; d.x += d.vx*dt; d.y += d.vy*dt; d.life -= dt;
         let dead = d.life <= 0 || !!wallHit(d.x, d.y, 3);
-        if(!dead) for(const o of Object.values(P)){ if(o.team !== d.team && o.fz <= 0 && o.inv <= 0 && Math.hypot(o.x-d.x, o.y-d.y) < R0+4){ o.fz = 3; o.inv = 4.5; o.q = null; o.hy = -1; dead = true; bump(LOG().wet, o.pid); score[d.team]++; addPts(d.team, 1); const by = P[d.by]; say(`${by ? by.name : "?"} a trempé ${o.name} !`, d.team); SFX.buzz(d.team); break; } }
+        if(!dead) for(const o of Object.values(P)){ if(o.team !== d.team && o.fz <= 0 && o.inv <= 0 && Math.hypot(o.x-d.x, o.y-d.y) < R0+4){ o.fz = 3; o.inv = 4.5; o.q = null; o.hy = -1; o.armed = false; dead = true; bump(LOG().wet, o.pid); score[d.team]++; addPts(d.team, 1); const by = P[d.by]; say(`${by ? by.name : "?"} a trempé ${o.name} !`, d.team); SFX.buzz(d.team); break; } }
         if(!dead) for(const f of fires){ if(Math.hypot(f.x-d.x, f.y-d.y) < 34){ f.hp -= 4; f.by = d.team; f.byp = d.by; dead = true; break; } }
         if(dead) drops.splice(i, 1);
       }
@@ -1302,7 +1309,7 @@ RUN.lances = function(){
     cx.fillStyle = "#2C2C4C"; cx.shadowColor = "#A47BFF"; cx.shadowBlur = 10;
     for(const [x,y,w,h] of ARENA.walls) cx.fillRect(x, y, w, h);
     cx.shadowBlur = 0;
-    for(const [x,y] of ARENA.hyd){ cx.fillStyle = "#FF3B3B"; cx.shadowColor = "#FF3B3B"; cx.shadowBlur = 16; cx.beginPath(); cx.arc(x, y, 16, 0, Math.PI*2); cx.fill(); cx.fillRect(x-22, y-5, 44, 10); cx.shadowBlur = 0; cx.fillStyle = "#fff"; cx.font = "700 12px 'Chakra Petch', sans-serif"; cx.fillText("PI", x, y+4); }
+    for(const [x,y] of ARENA.hyd){ cx.strokeStyle = "rgba(255,59,59,.45)"; cx.lineWidth = 2; cx.setLineDash([8,8]); cx.beginPath(); cx.arc(x, y, 46, 0, Math.PI*2); cx.stroke(); cx.setLineDash([]); cx.fillStyle = "#FF3B3B"; cx.shadowColor = "#FF3B3B"; cx.shadowBlur = 16; cx.beginPath(); cx.arc(x, y, 16, 0, Math.PI*2); cx.fill(); cx.fillRect(x-22, y-5, 44, 10); cx.shadowBlur = 0; cx.fillStyle = "#fff"; cx.font = "700 12px 'Chakra Petch', sans-serif"; cx.fillText("PI", x, y+4); }
     for(const f of fires){
       const k = .75 + .25*Math.sin(now/90 + f.x), r = 20 + 16*(f.hp/100);
       const g = cx.createRadialGradient(f.x, f.y, 2, f.x, f.y, r*1.8); g.addColorStop(0, "rgba(255,240,120,.95)"); g.addColorStop(.45, "rgba(255,120,30,.85)"); g.addColorStop(1, "rgba(255,40,0,0)");
@@ -2151,6 +2158,7 @@ function refreshRegie(){
     <p class="note">Ouvrez la régie quand l'écran projeté ne la montre pas (écran étendu, ou projecteur en pause).</p>
     <div><h3>${CUR && CUR.regieHint ? "Réponse attendue" : "Bonne réponse"}</h3>${CUR && CUR.regieHint ? `<p class="note" style="font-size:16px;color:var(--fg)">${esc(CUR.regieHint())}</p>` : q ? `<p class="ans-key">${LETTERS[q.c]} · ${esc(q.o[q.c])}</p><p class="note">${esc(q.e||"")}</p>` : `<p class="note">Pas de question à l'écran.</p>`}</div>
     <div><h3>Ajuster les points</h3>${TT().map(t=>`<div class="row" style="margin-top:8px"><span style="flex:1;color:${TCOL[t]};font-weight:700">${esc(G.teams[t].name)} : ${G.teams[t].pts}</span><button class="btn ghost" data-adj="${t}|-1">−1</button><button class="btn ghost" data-adj="${t}|1">+1</button></div>`).join("")}</div>
+    <div><h3>Chrono</h3><div class="row" style="margin-top:8px"><button class="btn ghost" data-act="tminus">−15 s</button><button class="btn ghost" data-act="tplus">+15 s</button><span class="note">ou touches + et −</span></div></div>
     <div><h3>Raccourcis</h3><div class="keys"><span class="kbd">A</span><span>Buzzer équipe 1</span><span class="kbd">P</span><span>Buzzer équipe 2</span><span class="kbd">V</span><span>Bonne réponse / mot trouvé</span><span class="kbd">X</span><span>Mauvaise réponse</span><span class="kbd">S</span><span>Passer (Tabou)</span><span class="kbd">Espace</span><span>Révéler / continuer</span></div></div>
     <div class="row"><button class="btn ghost" data-act="skip">Passer l'épreuve</button><button class="btn ghost" data-act="board">Plateau</button><button class="btn ghost" data-act="home">Menu</button></div>`;
   r.querySelectorAll("[data-adj]").forEach(b => b.onclick = () => { const [t,d] = b.dataset.adj.split("|").map(Number); addPts(t, d); });
@@ -2166,7 +2174,7 @@ const ACT = {
   bank:screenBank, kit:screenKit,
   resetbank:()=>{ if(TOURNEE){ BANK = TOURNEE; BANK_SRC = "tournee"; } else { BANK = DEMO_Q.map((r,i)=>({id:"d"+i,t:r[0],n:r[1],q:r[2],o:r[3],c:0,e:r[4]})); BANK_SRC = "demo"; } G.used = []; try{ localStorage.removeItem("af-bank"); }catch(e){} screenBank(); },
   start:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.tabIdx = TT().map(()=>0); assignRoles(); SFX.go(); if(G.single && G.plan.length === 1) return launch(); screenBoard(); },
-  free:()=>{ screenFree(); }, fmode0:()=>{ PH.want = false; screenFree(); }, fmode1:()=>{ PH.want = true; screenFree(); },
+  free:()=>{ screenFree(); }, tplus:()=>{ addTime(15); }, tminus:()=>{ addTime(-15); }, fmode0:()=>{ PH.want = false; screenFree(); }, fmode1:()=>{ PH.want = true; screenFree(); },
   launch, board:()=>{ $("#regie").hidden = true; screenBoard(); },
   skip:()=>{ $("#regie").hidden = true; if(G.step < G.plan.length){ G.step++; } screenBoard(); },
   again:()=>{ G.step = 0; G.teams.forEach(t=>t.pts=0); G.winner = null; G.used = []; G.tabIdx = TT().map(()=>0); assignRoles(); if(G.single && G.plan.length === 1) return launch(); screenBoard(); },
@@ -2183,6 +2191,7 @@ document.addEventListener("keydown", e => {
   if(e.target.closest && e.target.closest("input,select,textarea")) return;
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   const BK = {"a":0,"q":0,"1":0,"&":0,"p":1,"m":1,"2":1,"é":1,"3":2,'"':2,"4":3,"'":3};
+  if(k === "+" || k === "-" || k === "Add" || k === "Subtract"){ e.preventDefault(); return addTime(k === "+" || k === "Add" ? 15 : -15); }
   if(k in BK){ if(BK[k] < G.teams.length){ e.preventDefault(); return buzz(BK[k]); } return; }
   if(k === "r"){ return ACT.regie(); }
   if(CUR && CUR.onKey && ["v","x","s"," ","Enter"].includes(k)){ e.preventDefault(); CUR.onKey(k); }
@@ -2208,6 +2217,4 @@ window.claude?.hot?.snapshot?.(() => ({ G }));
 window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
 if(!PARAMS.get("r")) loadTournee();
 </script>
-
-</body>
-</html>
+</body></html>
