@@ -549,7 +549,18 @@ function loadTournee(){
 }
 let TOURNEE = null;
 let CUSTOM = []; try{ const c = JSON.parse(localStorage.getItem("af-custom") || "[]"); if(Array.isArray(c)) CUSTOM = c; }catch(e){}
-const bankAll = () => CUSTOM.length ? BANK.concat(CUSTOM) : BANK;
+let QSRC = "all"; try{ QSRC = localStorage.getItem("af-src") || "all"; }catch(e){}
+const setSrc = v => { QSRC = v; G.used = []; G.themes = []; try{ localStorage.setItem("af-src", v); }catch(e){} };
+const srcMode = () => (QSRC === "mine" && !CUSTOM.length) ? "all" : QSRC;
+const bankAll = () => ({mine: CUSTOM, bank: BANK})[srcMode()] || (CUSTOM.length ? BANK.concat(CUSTOM) : BANK);
+const SRC_LABEL = {all:"Banque + mes questions", bank:"Banque seule", mine:"Uniquement mes questions"};
+const QUIZ_NEED = 30; // questions à choix utilisées par une émission complète (4 coins, Money Drop, Lances, finale)
+function srcPicker(id){
+  return `<div style="display:flex;flex-direction:column;gap:6px"><span class="muted">Questions utilisées</span>
+  <div class="modes" role="group" aria-label="Questions utilisées" id="${id}">${["all","bank","mine"].map(v => `<button class="btn" aria-pressed="${srcMode() === v}" data-src="${v}" ${v === "mine" && !CUSTOM.length ? "disabled" : ""}>${SRC_LABEL[v]}${v === "mine" ? " (" + CUSTOM.length + ")" : ""}</button>`).join("")}</div>
+  <span class="note">${!CUSTOM.length ? "Pour jouer avec vos propres questions, ajoutez-les dans « Banque de questions »." : srcMode() === "mine" ? (CUSTOM.length < QUIZ_NEED ? `Attention : ${CUSTOM.length} questions. Une émission complète en pose environ ${QUIZ_NEED} ; en dessous, certaines reviendront. ` : "") + "Concerne 4 coins, Money Drop, Guerre des lances, Désamorçage et la finale ; Tabou, Fausse piste et Tribunal gardent leur contenu." : "Vos questions se mélangent à la banque."}</span></div>`;
+}
+function bindSrc(redraw){ document.querySelectorAll("[data-src]").forEach(b => b.onclick = () => { setSrc(b.dataset.src); SFX.blip(); redraw(); }); }
 const saveCustom = () => { try{ localStorage.setItem("af-custom", JSON.stringify(CUSTOM)); }catch(e){} };
 
 function freshGame(){
@@ -649,7 +660,7 @@ function pickQ(n, sortByLevel, opt){
   const lv = {mix:[1,2,3], decouverte:[1], ca:[1,2], prv2:[2,3]}[G.level] || [1,2,3];
   let p2 = opt.allLevels ? pool : pool.filter(q => lv.includes(+q.n || 1));
   if(p2.length < n) p2 = pool;
-  if(p2.length < n){ G.used = []; p2 = bankAll().slice(); }
+  if(p2.length < n){ G.used = []; p2 = bankAll().filter(q => !G.themes.length || G.themes.includes(q.t)); if(p2.length < n) p2 = bankAll().slice(); }
   let out = shuffle(p2).slice(0, n);
   if(sortByLevel) out.sort((a,b)=>(+a.n||1)-(+b.n||1));
   out.forEach(q => G.used.push(q.id));
@@ -675,7 +686,7 @@ function screenTitle(){
       <button class="btn big amber" data-act="free">Séance libre<small>Jouer un seul mini-jeu, tout de suite</small></button>
     </div>
     <div class="menu">
-      <button class="btn" data-act="bank">Banque de questions<small>${BANK.length} questions ${bankLabel()}${CUSTOM.length ? " + " + CUSTOM.length + " à vous" : ""}</small></button>
+      <button class="btn" data-act="bank">Banque de questions<small>${srcMode() === "mine" ? "Uniquement vos " + CUSTOM.length + " questions" : BANK.length + " questions " + bankLabel() + (CUSTOM.length ? (srcMode() === "bank" ? " (les vôtres de côté)" : " + " + CUSTOM.length + " à vous") : "")}</small></button>
       <button class="btn" data-act="kit">Brancher les buzzers<small>Tester les touches et les manettes</small></button>
     </div>
     <div class="row" style="justify-content:center"><button class="btn ghost" data-act="joinform">Je suis joueur : rejoindre une partie avec mon téléphone</button>${ADMIN ? "" : `<button class="btn ghost" data-act="admin" style="border-color:var(--amber);color:var(--amber)">Mode test concepteur</button>`}</div>
@@ -696,6 +707,7 @@ function screenKit(){
     <button class="btn big" data-act="home">Retour</button>
   </div>`);
 }
+let CEDIT = -1;
 function screenBank(){
   CUR = null;
   const byT = {}; BANK.forEach(q => byT[q.t] = (byT[q.t]||0) + 1);
@@ -717,7 +729,14 @@ function screenBank(){
   </div>
   <div class="panel" style="display:flex;flex-direction:column;gap:12px">
     <h2 style="font-size:24px">Mes questions <span class="muted" style="font-size:16px">(${CUSTOM.length})</span></h2>
-    <p class="note">Ajoutez vos propres questions : elles se mélangent à la banque dans toutes les épreuves. Elles sont enregistrées dans ce navigateur ; exportez-les en CSV pour les garder ou les partager (le fichier se réimporte avec « Importer votre base »).</p>
+    <p class="note">Vos questions restent privées : elles sont enregistrées dans ce navigateur, sur cet ordinateur, et ne sont stockées sur aucun serveur (en partie avec téléphones, seule la question en cours passe par le serveur de jeu, le temps de la manche). Pour les garder, les modifier dans Excel ou les emporter sur un autre ordinateur, exportez-les en fichier puis réimportez ce fichier ici. Le thème sert de « paquet » : donnez le même thème à une série de questions pour ne jouer qu'elle (choix des thèmes dans « Composer ma séance »).</p>
+    <div class="row" style="gap:10px">
+      <label class="btn cyan" for="cfile">Importer un fichier dans mes questions</label><input type="file" id="cfile" accept=".csv,text/csv" hidden>
+      <button class="btn ghost" id="ctpl">Modèle vide à remplir (Excel)</button>
+      ${CUSTOM.length ? `<button class="btn cyan" id="cexp">Exporter mes questions</button>` : ""}
+      <span class="note" id="cimsg" role="status"></span>
+    </div>
+    ${srcPicker("srcb")}
     <div class="form-grid" style="gap:10px">
       <div style="display:flex;flex-direction:column;gap:8px">
         <label for="cq" class="muted">Question</label><textarea id="cq" rows="3" style="background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:10px;font:inherit;color:inherit;font-size:16px"></textarea>
@@ -728,11 +747,11 @@ function screenBank(){
       <div style="display:flex;flex-direction:column;gap:8px">
         <span class="muted">Réponses (cochez la bonne, 2 à 4 réponses)</span>
         ${[0,1,2,3].map(j=>`<div class="row" style="gap:8px;flex-wrap:nowrap"><input type="radio" name="cc" id="cc${j}" value="${j}" ${j===0?"checked":""} style="width:22px;height:22px;accent-color:var(--lime)" aria-label="Bonne réponse ${LETTERS[j]}"><label for="co${j}" class="kbd">${LETTERS[j]}</label><input type="text" id="co${j}" style="flex:1;min-width:0;background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:8px 10px;font-size:16px"></div>`).join("")}
-        <div class="row"><button class="btn pink" id="cadd">Ajouter la question</button><span class="note" id="cmsg" role="status"></span></div>
+        <div class="row"><button class="btn pink" id="cadd">${CEDIT >= 0 ? "Enregistrer la modification" : "Ajouter la question"}</button>${CEDIT >= 0 ? `<button class="btn ghost" id="ccancel">Annuler</button>` : ""}<span class="note" id="cmsg" role="status"></span></div>
       </div>
     </div>
-    ${CUSTOM.length ? `<div class="scroll"><table><thead><tr><th>Question</th><th>Thème</th><th>Bonne réponse</th><th></th></tr></thead><tbody>${CUSTOM.map((q,i)=>`<tr><td>${esc(q.q)}</td><td>${esc(q.t)}</td><td>${esc(q.o[q.c])}</td><td><button class="btn ghost" data-cdel="${i}">Supprimer</button></td></tr>`).join("")}</tbody></table></div>
-    <div class="row"><button class="btn cyan" id="cexp">Exporter mes questions (CSV)</button></div>` : ""}
+    ${CUSTOM.length ? `<div class="scroll"><table><thead><tr><th>Question</th><th>Thème</th><th>Bonne réponse</th><th></th></tr></thead><tbody>${CUSTOM.map((q,i)=>`<tr><td>${esc(q.q)}</td><td>${esc(q.t)}</td><td>${esc(q.o[q.c])}</td><td style="white-space:nowrap"><button class="btn ghost" data-cedit="${i}">Modifier</button> <button class="btn ghost" data-cdel="${i}">Supprimer</button></td></tr>`).join("")}</tbody></table></div>
+    <div class="row"><button class="btn ghost" id="cclear" style="border-color:var(--red,#ff3b3b);color:var(--red,#ff3b3b)">Effacer toutes mes questions</button><span class="note" id="cclrmsg" role="status"></span></div>` : ""}
   </div>
   <div><button class="btn" data-act="home">Retour</button></div>`);
   $("#csvfile").addEventListener("change", importCSV);
@@ -743,15 +762,21 @@ function screenBank(){
     if(!q){ msg.textContent = "Écrivez la question."; return; }
     if(opts.length < 2){ msg.textContent = "Il faut au moins deux réponses."; return; }
     if(c < 0){ msg.textContent = "La réponse cochée est vide : cochez une réponse remplie."; return; }
-    CUSTOM.push({id:"u" + Date.now().toString(36), t:$("#ct").value.trim() || "Mes questions", n:+$("#cn").value, q, o:opts.map(x => x.v), c, e:$("#ce").value.trim()});
-    saveCustom(); SFX.good(); screenBank(); $("#cmsg").textContent = "Question ajoutée.";
+    const item = {id:"u" + Date.now().toString(36), t:$("#ct").value.trim() || "Mes questions", n:+$("#cn").value, q, o:opts.map(x => x.v), c, e:$("#ce").value.trim()};
+    const was = CEDIT; if(was >= 0){ item.id = CUSTOM[was].id; CUSTOM[was] = item; CEDIT = -1; } else CUSTOM.push(item);
+    saveCustom(); SFX.good(); screenBank(); $("#cmsg").textContent = was >= 0 ? "Question modifiée." : "Question ajoutée.";
   };
-  document.querySelectorAll("[data-cdel]").forEach(b => b.onclick = () => { CUSTOM.splice(+b.dataset.cdel, 1); saveCustom(); screenBank(); });
+  if(CEDIT >= 0 && CUSTOM[CEDIT]){ const q = CUSTOM[CEDIT]; $("#cq").value = q.q; $("#ct").value = q.t; $("#cn").value = String(q.n || 2); $("#ce").value = q.e || ""; q.o.forEach((o,j) => $("#co"+j).value = o); $("#cc"+q.c).checked = true; }
+  const cc = $("#ccancel"); if(cc) cc.onclick = () => { CEDIT = -1; screenBank(); };
+  document.querySelectorAll("[data-cedit]").forEach(b => b.onclick = () => { CEDIT = +b.dataset.cedit; screenBank(); const f = $("#cq"); f.scrollIntoView({block:"center"}); f.focus(); });
+  $("#cfile").addEventListener("change", importMine);
+  $("#ctpl").onclick = () => csvDownload([CSV_HEAD, ["Mon paquet","Quelle est la largeur minimale d'une UP ?","0,60 m","0,90 m","1,20 m","1,40 m","A","Art. CO 36 du règlement ERP","1"]], "modele-questions-avis-favorable.csv");
+  let clr = 0; const cl = $("#cclear"); if(cl) cl.onclick = () => { if(!clr){ clr = 1; cl.textContent = "Confirmer : tout effacer"; $("#cclrmsg").textContent = "Pensez à exporter avant, l'effacement est définitif."; return; } CUSTOM = []; CEDIT = -1; saveCustom(); if(QSRC === "mine") setSrc("all"); screenBank(); };
+  bindSrc(screenBank);
+  document.querySelectorAll("[data-cdel]").forEach(b => b.onclick = () => { CUSTOM.splice(+b.dataset.cdel, 1); CEDIT = -1; saveCustom(); screenBank(); });
   const ex = $("#cexp"); if(ex) ex.onclick = () => {
-    const cell = v => /[";\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
-    const rows = [["Thème","Question","A","B","C","D","Bonne réponse","Explication","Niveau"]].concat(CUSTOM.map(q => [q.t, q.q, q.o[0]||"", q.o[1]||"", q.o[2]||"", q.o[3]||"", LETTERS[q.c], q.e||"", q.n]));
-    const blob = new Blob(["\ufeff" + rows.map(r => r.map(cell).join(";")).join("\r\n")], {type:"text/csv;charset=utf-8"});
-    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "mes-questions-avis-favorable.csv"; document.body.appendChild(a); a.click(); a.remove();
+    csvDownload([CSV_HEAD].concat(CUSTOM.map(q => [q.t, q.q, q.o[0]||"", q.o[1]||"", q.o[2]||"", q.o[3]||"", LETTERS[q.c], q.e||"", q.n])), "mes-questions-avis-favorable-" + new Date().toISOString().slice(0,10) + ".csv");
+    $("#cimsg").textContent = "Fichier enregistré dans vos Téléchargements.";
   };
 }
 function parseCSV(txt){
@@ -769,17 +794,16 @@ function parseCSV(txt){
   if(cell || row.length){ row.push(cell); rows.push(row); }
   return rows.filter(r => r.some(c => c.trim()));
 }
-function importCSV(ev){
-  const f = ev.target.files[0]; if(!f) return;
+function readQFile(f, done){
   const rd = new FileReader();
   rd.onload = () => {
-    const rows = parseCSV(String(rd.result)); const msg = $("#impmsg");
-    if(rows.length < 2){ msg.textContent = "Le fichier est vide ou n'a pas de ligne d'en-têtes."; return; }
+    const rows = parseCSV(String(rd.result));
+    if(rows.length < 2) return done({err:"Le fichier est vide ou n'a pas de ligne d'en-têtes."});
     const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").trim();
     const H = rows[0].map(norm); const find = re => H.findIndex(h => re.test(h));
     const iq = find(/question|intitule|enonce/), it = find(/theme|categ/), ie = find(/expli|justif|commentaire/), inv = find(/niveau|level/), ic = find(/bonne|correct|solution/);
     let io = ["a","b","c","d"].map((l,k) => H.findIndex(h => h === l || h === "reponse "+l || h === "reponse"+(k+1) || h === "reponse "+(k+1) || h === "choix "+(k+1) || h === "option "+(k+1)));
-    if(iq < 0 || ic < 0 || io.filter(x=>x>=0).length < 2){ msg.textContent = "Colonnes introuvables. Il faut au moins Question, deux réponses (A, B…) et Bonne réponse."; return; }
+    if(iq < 0 || ic < 0 || io.filter(x=>x>=0).length < 2) return done({err:"Colonnes introuvables. Il faut au moins Question, deux réponses (A, B…) et Bonne réponse."});
     const out = []; let skip = 0;
     rows.slice(1).forEach((r,k) => {
       const opts = io.filter(x=>x>=0).map(x => (r[x]||"").trim()).filter(Boolean);
@@ -791,13 +815,36 @@ function importCSV(ev){
       if(!qs || opts.length < 2 || c < 0 || c >= opts.length){ skip++; return; }
       out.push({id:"i"+k, t:(it>=0 && r[it]?.trim()) || "Général", n:Math.min(3, Math.max(1, parseInt(inv>=0 ? r[inv] : 1) || 1)), q:qs, o:opts, c, e:(ie>=0 ? r[ie] : "") || ""});
     });
-    if(!out.length){ msg.textContent = "Aucune question valide trouvée (" + skip + " lignes ignorées)."; return; }
-    BANK = out; BANK_SRC = "import"; G.used = []; G.themes = [];
-    try{ localStorage.setItem("af-bank", JSON.stringify(out)); }catch(e){}
-    screenBank(); $("#impmsg").textContent = out.length + " questions importées" + (skip ? ", " + skip + " lignes ignorées (réponse manquante ou illisible)." : ".");
+    if(!out.length) return done({err:"Aucune question valide trouvée (" + skip + " lignes ignorées)."});
+    done({out, skip});
   };
   rd.readAsText(f, "utf-8");
 }
+function importCSV(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  readQFile(f, ({err, out, skip}) => {
+    const msg = $("#impmsg"); if(err){ msg.textContent = err; return; }
+    BANK = out; BANK_SRC = "import"; G.used = []; G.themes = [];
+    try{ localStorage.setItem("af-bank", JSON.stringify(out)); }catch(e){}
+    screenBank(); $("#impmsg").textContent = out.length + " questions importées" + (skip ? ", " + skip + " lignes ignorées (réponse manquante ou illisible)." : ".");
+  });
+}
+function importMine(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  readQFile(f, ({err, out, skip}) => {
+    if(err){ $("#cimsg").textContent = err; return; }
+    const key = q => q.q.toLowerCase().replace(/\s+/g, " ").trim(); const have = new Set(CUSTOM.map(key)); let dup = 0, add = 0;
+    out.forEach((q,k) => { if(have.has(key(q))){ dup++; return; } have.add(key(q)); CUSTOM.push({...q, id:"u" + Date.now().toString(36) + k}); add++; });
+    saveCustom(); screenBank();
+    $("#cimsg").textContent = add + " question(s) ajoutée(s) à vos questions" + (dup ? ", " + dup + " déjà présente(s)" : "") + (skip ? ", " + skip + " ligne(s) illisible(s)" : "") + ".";
+  });
+}
+function csvDownload(rows, name){
+  const cell = v => /[";\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+  const blob = new Blob(["\ufeff" + rows.map(r => r.map(cell).join(";")).join("\r\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+const CSV_HEAD = ["Thème","Question","A","B","C","D","Bonne réponse","Explication","Niveau"];
 
 /* ---- Composer ---- */
 function screenCompose(){
@@ -816,6 +863,7 @@ function screenCompose(){
     </div>
     <div class="panel" style="display:flex;flex-direction:column;gap:14px">
       <h2 style="font-size:24px">Questions</h2>
+      ${srcPicker("srcc")}
       <label for="lvl" class="muted">Niveau</label>
       <select id="lvl"><option value="ca">Chef d'agrès (niveaux 1-2)</option><option value="decouverte">Découverte (niveau 1)</option><option value="prv2">PRV2 (niveaux 2-3)</option><option value="mix">Tous niveaux</option></select>
       <label for="qper" class="muted">Questions par manche</label>
@@ -825,6 +873,7 @@ function screenCompose(){
     </div>
   </div>
   <div class="row"><button class="btn" data-act="home">Retour</button><button class="btn big pink" data-act="toteams">Créer les équipes</button></div>`);
+  bindSrc(screenCompose);
   $("#lvl").value = G.level;
   $("#lvl").onchange = e => G.level = e.target.value;
   $("#qper").onchange = e => G.qPer = +e.target.value;
@@ -853,7 +902,9 @@ function screenFree(){
   <div class="free">${list.map(([k,g]) => { const off = g.phoneOnly && !PH.want; return `<button class="fcard" data-free="${k}" ${off ? "disabled" : ""}>
     <span class="fh"><span style="color:var(--amber)">${gameIcon(k,40)}</span><strong>${esc(g.nom)}</strong><span class="fd">${off ? "avec téléphones" : "≈ " + g.min + " min"}</span></span>
     ${PITCH[k] ? `<span class="pt">${esc(PITCH[k][0])}</span><span class="po">Objectif : ${esc(PITCH[k][1])}</span>` : ""}</button>`; }).join("")}</div>
-  <div class="row"><button class="btn" data-act="home">Retour</button><span class="note">Le niveau des questions est celui de « Composer ma séance » (chef d'agrès par défaut). Le Saboteur ne se joue que sur une séance complète.</span></div>`);
+  ${CUSTOM.length ? `<div class="panel">${srcPicker("srcf")}</div>` : ""}
+  <div class="row"><button class="btn" data-act="home">Retour</button><span class="note">Le niveau se choisit sur l'écran de présentation du mini-jeu. Le Saboteur ne se joue que sur une séance complète.</span></div>`);
+  bindSrc(screenFree);
   document.querySelectorAll("[data-free]").forEach(b => b.onclick = () => { G.plan = [b.dataset.free]; G.saboteur = false; G.single = true; SFX.blip(); goTeams(); });
 }
 
